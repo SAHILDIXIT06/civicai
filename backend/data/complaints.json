@@ -1,0 +1,420 @@
+{
+  "complaints": [
+    {
+      "id": "391ec79e-6dc7-4694-b7b8-e99b188da967",
+      "createdAt": "2025-10-31T04:51:08.636Z",
+      "status": "Submitted",
+      "category": null,
+      "mainCategory": "road",
+      "subCategory": "pothole",
+      "description": "potholes on road",
+      "location": {
+        "latitude": 18.43313908181155,
+        "longitude": 73.86344824065611,
+        "accuracy": 149
+      },
+      "userPhone": "+917066444407",
+      "userId": "user_1761857243331",
+      "userName": null,
+      "image": {
+        "fileName": "391ec79e-6dc7-4694-b7b8-e99b188da967.png",
+        "originalName": "civic issue 2.png",
+        "mimeType": "image/png",
+        "url": "/uploads/391ec79e-6dc7-4694-b7b8-e99b188da967.png"
+      },
+      "analysis": {
+        "provider": null,
+        "suggestedCategory": null,
+        "suggestedMainCategory": null,
+        "suggestedSubCategory": null,
+        "suggestedDescription": null,
+        "confidence": null
+      }
+    },
+    {
+      "id": "2131a5f7-e9a5-4627-8154-d6c5ab00bad9",
+      "createdAt": "2025-10-30T14:16:27.937Z",
+      "status": "Submitted",
+      "category": "dead-animal",
+      "description": "A dead leopard is observed on the road. Please arrange for its immediate removal and investigate the cause of death.",
+      "location": {
+        "latitude": 18.433172834344077,
+        "longitude": 73.86339268560485,
+        "accuracy": 149
+      },
+      "userPhone": "+919011341175",
+      "userId": "user_1761833692955",
+      "userName": "warframe",
+      "image": {
+        "fileName": "2131a5f7-e9a5-4627-8154-d6c5ab00bad9.jpeg",
+        "originalName": "images.jpeg",
+        "mimeType": "image/jpeg",
+        "url": "/uploads/2131a5f7-e9a5-4627-8154-d6c5ab00bad9.jpeg"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": "dead-animal",
+        "suggestedDescription": "A dead leopard is observed on the road. Please arrange for its immediate removal and investigate the cause of death.",
+        "confidence": 1
+      }
+    },
+    {
+      "id": "a45bfa29-fea0-4212-a355-1a59367f7603",
+      "createdAt": "2025-10-10T09:08:59.721Z",
+      "status": "Submitted",
+      "category": "dead-animal",
+      "description": "A dead dog is located on the side of the road. Please arrange for its removal to prevent health hazards.",
+      "location": {
+        "latitude": 18.490699,
+        "longitude": 73.844961,
+        "accuracy": 178
+      },
+      "userPhone": "+917058346137",
+      "userId": "user_1760087256696",
+      "image": {
+        "fileName": "a45bfa29-fea0-4212-a355-1a59367f7603.avif",
+        "originalName": "7f439748-34ca-4224-a9f4-dffb73ebe310.avif",
+        "mimeType": "image/avif",
+        "url": "/uploads/a45bfa29-fea0-4212-a355-1a59367f7603.avif"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": "dead-animal",
+        "suggestedDescription": "A dead dog is located on the side of the road. Please arrange for its removal to prevent health hazards.",
+        "confidence": 1
+      }
+    },
+    {
+      "id": "db47485d-c7e8-44f9-b5bb-941fbb5c1e45",
+      "createdAt": "2025-10-10T06:11:34.634Z",
+      "status": "Submitted",
+      "category": "dead-animal",
+      "description": "A dead leopard has been found on the road. Please arrange for its safe removal and investigation by the appropriate authorities.",
+      "location": {
+        "latitude": 19.968871,
+        "longitude": 73.744071,
+        "accuracy": 500
+      },
+      "userPhone": "+917058346137",
+      "userId": "user_1760076397928",
+      "image": {
+        "fileName": "db47485d-c7e8-44f9-b5bb-941fbb5c1e45.jpeg",
+        "originalName": "images.jpeg",
+        "mimeType": "image/jpeg",
+        "url": "/uploads/db47485d-c7e8-44f9-b5bb-941fbb5c1e45.jpeg"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": "dead-animal",
+        "suggestedDescription": "A dead leopard has been found on the road. Please arrange for its safe removal and investigation by the appropriate authorities.",
+        "confidence": 1
+      }
+    },
+    {
+      "id": "055d3cd1-d5ff-4359-9519-a68354833671",
+      "createdAt": "2025-10-10T05:53:05.850Z",
+      "status": "Submitted",
+      "category": "dead-animal",
+      "description": "A dead dog is visible on the ground. Please arrange for its immediate removal to prevent health hazards.",
+      "location": {
+        "latitude": 18.490497,
+        "longitude": 73.843666,
+        "accuracy": 500
+      },
+      "userPhone": "+917058346137",
+      "userId": "user_1760075368684",
+      "image": {
+        "fileName": "055d3cd1-d5ff-4359-9519-a68354833671.avif",
+        "originalName": "vadodara-municipal-corporation-dead-animal-removal-vadodara-ho-vadodara-government-organisations-vpt4pi8lht.avif",
+        "mimeType": "image/avif",
+        "url": "/uploads/055d3cd1-d5ff-4359-9519-a68354833671.avif"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": "dead-animal",
+        "suggestedDescription": "A dead dog is visible on the ground. Please arrange for its immediate removal to prevent health hazards.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "id": "dd562c4e-2077-4ba3-98d1-d38108eb8e60",
+      "createdAt": "2025-10-10T03:40:08.398Z",
+      "status": "Submitted",
+      "category": "fallen-tree",
+      "description": "A large tree branch has fallen across the road, obstructing traffic. Please arrange for immediate removal to clear the roadway.",
+      "location": {
+        "latitude": 29.162801,
+        "longitude": 95.1783755,
+        "accuracy": 500
+      },
+      "userPhone": "+917058346137",
+      "userId": "user_1760067543045",
+      "image": {
+        "fileName": "dd562c4e-2077-4ba3-98d1-d38108eb8e60.webp",
+        "originalName": "fallen tree.webp",
+        "mimeType": "image/webp",
+        "url": "/uploads/dd562c4e-2077-4ba3-98d1-d38108eb8e60.webp"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": "fallen-tree",
+        "suggestedDescription": "A large tree branch has fallen across the road, obstructing traffic. Please arrange for immediate removal to clear the roadway.",
+        "confidence": 1
+      }
+    },
+    {
+      "id": "7f439748-34ca-4224-a9f4-dffb73ebe310",
+      "createdAt": "2025-10-10T02:55:40.854Z",
+      "status": "Submitted",
+      "category": "dead-animal",
+      "description": "A dead dog is visible on the ground. Please arrange for its prompt removal to prevent health hazards and maintain public hygiene.",
+      "location": {
+        "latitude": 18.433213,
+        "longitude": 73.863332,
+        "accuracy": 51
+      },
+      "userPhone": "+917058346137",
+      "userId": "user_1760064493045",
+      "image": {
+        "fileName": "7f439748-34ca-4224-a9f4-dffb73ebe310.avif",
+        "originalName": "vadodara-municipal-corporation-dead-animal-removal-vadodara-ho-vadodara-government-organisations-vpt4pi8lht.avif",
+        "mimeType": "image/avif",
+        "url": "/uploads/7f439748-34ca-4224-a9f4-dffb73ebe310.avif"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": "dead-animal",
+        "suggestedDescription": "A dead dog is visible on the ground. Please arrange for its prompt removal to prevent health hazards and maintain public hygiene.",
+        "confidence": 1
+      }
+    },
+    {
+      "id": "43981397-2b7d-45ec-a84b-11d371668d8f",
+      "createdAt": "2025-10-09T21:02:23.760Z",
+      "status": "Submitted",
+      "category": "puddle",
+      "description": "Report severe waterlogging on the road, causing significant disruption to traffic and pedestrian movement. Immediate action is needed to drain the water and investigate the cause.",
+      "location": {
+        "latitude": 18.43327,
+        "longitude": 73.863274,
+        "accuracy": 50
+      },
+      "image": {
+        "fileName": "43981397-2b7d-45ec-a84b-11d371668d8f.jpeg",
+        "originalName": "water logging.jpeg",
+        "mimeType": "image/jpeg",
+        "url": "/uploads/43981397-2b7d-45ec-a84b-11d371668d8f.jpeg"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": "puddle",
+        "suggestedDescription": "Report severe waterlogging on the road, causing significant disruption to traffic and pedestrian movement. Immediate action is needed to drain the water and investigate the cause.",
+        "confidence": 1
+      }
+    },
+    {
+      "id": "f472a1c6-0960-4dfe-9cf7-7630ae9bf5cf",
+      "createdAt": "2025-10-09T20:51:07.369Z",
+      "status": "Submitted",
+      "category": "fallen-tree",
+      "description": "A large tree branch has fallen across the road, obstructing traffic flow. Please arrange for its immediate removal to clear the roadway.",
+      "location": {
+        "latitude": 18.43327,
+        "longitude": 73.863274,
+        "accuracy": 50
+      },
+      "image": {
+        "fileName": "f472a1c6-0960-4dfe-9cf7-7630ae9bf5cf.webp",
+        "originalName": "fallen tree.webp",
+        "mimeType": "image/webp",
+        "url": "/uploads/f472a1c6-0960-4dfe-9cf7-7630ae9bf5cf.webp"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": "fallen-tree",
+        "suggestedDescription": "A large tree branch has fallen across the road, obstructing traffic flow. Please arrange for its immediate removal to clear the roadway.",
+        "confidence": 1
+      }
+    },
+    {
+      "id": "e5315d91-ab73-4f75-9baa-8480a5ce8a4f",
+      "createdAt": "2025-10-09T20:47:02.660Z",
+      "status": "Submitted",
+      "category": "broken-streetlight",
+      "description": "A utility pole is severely leaning across the sidewalk and road, creating a significant safety hazard. Urgent intervention is required to secure or replace the pole and its associated wiring.",
+      "location": {
+        "latitude": 18.43327,
+        "longitude": 73.863274,
+        "accuracy": 50
+      },
+      "image": {
+        "fileName": "e5315d91-ab73-4f75-9baa-8480a5ce8a4f.jpg",
+        "originalName": "1665527727_new-project-45.jpg",
+        "mimeType": "image/jpeg",
+        "url": "/uploads/e5315d91-ab73-4f75-9baa-8480a5ce8a4f.jpg"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": "broken-streetlight",
+        "suggestedDescription": "A utility pole is severely leaning across the sidewalk and road, creating a significant safety hazard. Urgent intervention is required to secure or replace the pole and its associated wiring.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "id": "ed83133b-0c7f-439e-aef0-96b753a6e992",
+      "createdAt": "2025-10-08T07:30:35.082Z",
+      "status": "Submitted",
+      "category": "dead-animal",
+      "description": "A dead animal (cow) is lying on the roadside. Please arrange for its immediate removal to prevent public health hazards and traffic obstruction.",
+      "location": {
+        "latitude": 18.490877079389737,
+        "longitude": 73.84364775122063,
+        "accuracy": 100
+      },
+      "image": {
+        "fileName": "ed83133b-0c7f-439e-aef0-96b753a6e992.avif",
+        "originalName": "dead cow.avif",
+        "mimeType": "image/avif",
+        "url": "/uploads/ed83133b-0c7f-439e-aef0-96b753a6e992.avif"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": "dead-animal",
+        "suggestedDescription": "A dead animal (cow) is lying on the roadside. Please arrange for its immediate removal to prevent public health hazards and traffic obstruction.",
+        "confidence": 1
+      }
+    },
+    {
+      "id": "f109211e-6924-43f0-97a2-867b6da6fe74",
+      "createdAt": "2025-10-08T07:17:05.288Z",
+      "status": "Submitted",
+      "category": "garbage",
+      "description": "A significant amount of litter, including plastic bottles, bags, and other debris, is scattered along the roadside and into the adjacent wooded area. Please arrange for cleanup of this illegal dumping site.",
+      "location": {
+        "latitude": 16.7788,
+        "longitude": 74.2767,
+        "accuracy": 421242
+      },
+      "image": {
+        "fileName": "f109211e-6924-43f0-97a2-867b6da6fe74.webp",
+        "originalName": "trash-8404513.webp",
+        "mimeType": "image/webp",
+        "url": "/uploads/f109211e-6924-43f0-97a2-867b6da6fe74.webp"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": "garbage",
+        "suggestedDescription": "A significant amount of litter, including plastic bottles, bags, and other debris, is scattered along the roadside and into the adjacent wooded area. Please arrange for cleanup of this illegal dumping site.",
+        "confidence": 1
+      }
+    },
+    {
+      "id": "288515d5-9b9e-4589-9e6a-ee599a771d87",
+      "createdAt": "2025-10-08T07:13:00.592Z",
+      "status": "Submitted",
+      "category": "pothole",
+      "description": "The road surface is severely degraded with multiple large potholes filled with water. This condition poses a significant hazard to vehicles and pedestrians.",
+      "location": {
+        "latitude": 18.490888551030896,
+        "longitude": 73.8436461213188,
+        "accuracy": 99
+      },
+      "image": {
+        "fileName": "288515d5-9b9e-4589-9e6a-ee599a771d87.png",
+        "originalName": "civic issue 2.png",
+        "mimeType": "image/png",
+        "url": "/uploads/288515d5-9b9e-4589-9e6a-ee599a771d87.png"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": "pothole",
+        "suggestedDescription": "The road surface is severely degraded with multiple large potholes filled with water. This condition poses a significant hazard to vehicles and pedestrians.",
+        "confidence": 1
+      }
+    },
+    {
+      "id": "05223dd0-66c1-42e6-ab70-2d35f5d58215",
+      "createdAt": "2025-10-08T06:36:32.169Z",
+      "status": "Submitted",
+      "category": "pothole",
+      "description": "The road surface is severely damaged with numerous large potholes. These potholes are currently filled with water, posing a hazard to vehicles and pedestrians.",
+      "location": {
+        "latitude": 18.490877079389737,
+        "longitude": 73.84364775122063,
+        "accuracy": 100
+      },
+      "image": {
+        "fileName": "05223dd0-66c1-42e6-ab70-2d35f5d58215.png",
+        "originalName": "civic issue 2.png",
+        "mimeType": "image/png",
+        "url": "/uploads/05223dd0-66c1-42e6-ab70-2d35f5d58215.png"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": "pothole",
+        "suggestedDescription": "The road surface is severely damaged with numerous large potholes. These potholes are currently filled with water, posing a hazard to vehicles and pedestrians.",
+        "confidence": 0.98
+      }
+    },
+    {
+      "id": "85e0a691-e6c5-48df-a3b3-198fab17cd74",
+      "createdAt": "2025-10-08T06:35:14.588Z",
+      "status": "Submitted",
+      "category": "garbage",
+      "description": "A large accumulation of garbage, including plastic bottles, bags, and other debris, is scattered along the roadside and into the adjacent wooded area. This illegal dumping requires immediate cleanup to prevent further environmental impact.",
+      "location": {
+        "latitude": 18.490878449292786,
+        "longitude": 73.84364797594478,
+        "accuracy": 105
+      },
+      "image": {
+        "fileName": "85e0a691-e6c5-48df-a3b3-198fab17cd74.webp",
+        "originalName": "trash-8404513.webp",
+        "mimeType": "image/webp",
+        "url": "/uploads/85e0a691-e6c5-48df-a3b3-198fab17cd74.webp"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": "garbage",
+        "suggestedDescription": "A large accumulation of garbage, including plastic bottles, bags, and other debris, is scattered along the roadside and into the adjacent wooded area. This illegal dumping requires immediate cleanup to prevent further environmental impact.",
+        "confidence": 1
+      }
+    },
+    {
+      "id": "290f332e-afe5-4123-828b-05c0efcd99e3",
+      "createdAt": "2025-10-07T11:03:47.368Z",
+      "status": "Submitted",
+      "category": "garbage",
+      "description": "garbage on the road",
+      "location": {
+        "latitude": 16.7788,
+        "longitude": 74.2767,
+        "accuracy": 421242
+      },
+      "image": {
+        "fileName": "290f332e-afe5-4123-828b-05c0efcd99e3.webp",
+        "originalName": "trash-8404513.webp",
+        "mimeType": "image/webp",
+        "url": "/uploads/290f332e-afe5-4123-828b-05c0efcd99e3.webp"
+      }
+    },
+    {
+      "id": "45608715-038f-46f2-a95c-a72daf37f4e2",
+      "createdAt": "2025-10-07T10:34:39.862Z",
+      "status": "Submitted",
+      "category": "pothole",
+      "description": "so many potholes on the road",
+      "location": {
+        "latitude": 29.162801,
+        "longitude": 95.1783755,
+        "accuracy": 500
+      },
+      "image": {
+        "fileName": "45608715-038f-46f2-a95c-a72daf37f4e2.png",
+        "originalName": "civic issue 2.png",
+        "mimeType": "image/png",
+        "url": "/uploads/45608715-038f-46f2-a95c-a72daf37f4e2.png"
+      }
+    }
+  ]
+}

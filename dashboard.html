@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>My Dashboard - Civic AI Tech</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="./assets/styles.css" />
+    <link rel="stylesheet" href="./assets/dashboard.css" />
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <header class="dashboard-header">
+        <nav class="dashboard-nav">
+          <a class="brand" href="./index.html">Civic AI Tech</a>
+          <div class="nav-actions">
+            <a href="./profile.html" class="profile-link">👤 My Profile</a>
+            <span id="user-phone" class="user-info"></span>
+            <button id="logout-btn" class="logout-button">Logout</button>
+          </div>
+        </nav>
+      </header>
+
+      <main class="dashboard-main">
+        <div class="dashboard-content">
+          <div class="dashboard-header-section">
+            <h1>My Complaint Dashboard</h1>
+            <a href="./index.html" class="new-complaint-btn">+ File New Complaint</a>
+          </div>
+
+          <section class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-label">Total Complaints</div>
+              <div class="stat-value" id="total-count">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Submitted</div>
+              <div class="stat-value" id="submitted-count">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">In Progress</div>
+              <div class="stat-value" id="inprogress-count">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Resolved</div>
+              <div class="stat-value" id="resolved-count">0</div>
+            </div>
+          </section>
+
+          <section class="complaints-section">
+            <h2>My Complaints</h2>
+            <div id="complaints-container" class="complaints-list">
+              <p class="loading-message">Loading your complaints...</p>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script type="module" src="./assets/dashboard.js"></script>
+  </body>
+</html>

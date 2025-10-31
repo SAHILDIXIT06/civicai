@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Login - Civic AI Tech</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="./assets/styles.css" />
+    <link rel="stylesheet" href="./assets/auth.css" />
+  </head>
+  <body>
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-header">
+          <h1>Login to Civic AI</h1>
+          <p>Select your role and enter your mobile number</p>
+        </div>
+
+        <!-- Role Selection -->
+        <div class="role-selection">
+          <label class="role-option">
+            <input type="radio" name="role" value="citizen" checked />
+            <div class="role-card">
+              <span class="role-icon">👤</span>
+              <h3>Citizen Login</h3>
+              <p>File and track your civic complaints</p>
+            </div>
+          </label>
+          <label class="role-option">
+            <input type="radio" name="role" value="admin" />
+            <div class="role-card">
+              <span class="role-icon">🛡️</span>
+              <h3>Admin Login</h3>
+              <p>Manage and review all complaints</p>
+            </div>
+          </label>
+        </div>
+
+        <form id="phone-form" class="auth-form">
+          <div class="form-group">
+            <label for="phone-number">Mobile Number</label>
+            <div class="phone-input">
+              <select id="country-code" class="country-select">
+                <option value="+91">🇮🇳 +91</option>
+                <option value="+1">🇺🇸 +1</option>
+                <option value="+44">🇬🇧 +44</option>
+              </select>
+              <input 
+                type="tel" 
+                id="phone-number" 
+                placeholder="Enter mobile number"
+                pattern="[0-9]{10}"
+                required
+              />
+            </div>
+          </div>
+          
+          <button type="submit" id="send-code-btn" class="auth-button">
+            Send Verification Code
+          </button>
+        </form>
+
+        <form id="verify-form" class="auth-form" hidden>
+          <div class="form-group">
+            <label for="verification-code">Verification Code</label>
+            <input 
+              type="text" 
+              id="verification-code" 
+              placeholder="Enter 6-digit code"
+              maxlength="6"
+              pattern="[0-9]{6}"
+              required
+            />
+          </div>
+          
+          <button type="submit" id="verify-code-btn" class="auth-button">
+            Verify & Login
+          </button>
+          
+          <button type="button" id="resend-code-btn" class="auth-button secondary">
+            Resend Code
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          <p>New to Civic AI? Registration happens automatically with first login.</p>
+          <a href="./index.html" class="back-link">← Back to Home</a>
+        </div>
+
+        <div id="auth-status" class="auth-status" role="status"></div>
+      </div>
+    </div>
+
+    <script type="module" src="./assets/auth.js"></script>
+  </body>
+</html>

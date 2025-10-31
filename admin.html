@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Civic AI Tech · Admin Dashboard</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="./assets/styles.css" />
+    <link rel="stylesheet" href="./assets/admin.css" />
+  </head>
+  <body>
+    <div class="admin-shell">
+      <header class="admin-header">
+        <a class="admin-back" href="./index.html">← Back to intake form</a>
+        <h1>Admin dashboard</h1>
+        <button type="button" class="refresh-button" data-role="refresh">Refresh</button>
+      </header>
+
+      <main class="admin-main">
+        <section class="summary-grid" aria-label="Complaint summary">
+          <article class="summary-card">
+            <span class="summary-label">Total complaints</span>
+            <strong data-summary="total">0</strong>
+          </article>
+          <article class="summary-card">
+            <span class="summary-label">Submitted</span>
+            <strong data-summary="Submitted">0</strong>
+          </article>
+          <article class="summary-card">
+            <span class="summary-label">In progress</span>
+            <strong data-summary="In Progress">0</strong>
+          </article>
+          <article class="summary-card">
+            <span class="summary-label">Resolved</span>
+            <strong data-summary="Resolved">0</strong>
+          </article>
+        </section>
+
+        <section class="table-card" aria-labelledby="complaints-heading">
+          <div class="table-card__header">
+            <h2 id="complaints-heading">Complaints</h2>
+            <span class="last-refresh">Last refresh: <strong data-role="last-refresh">Never</strong></span>
+          </div>
+          <p class="dashboard-message" data-role="message">Loading complaints…</p>
+          <div class="table-wrapper">
+            <table>
+              <caption class="sr-only">Filed civic complaints</caption>
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Created</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Complainer</th>
+                  <th scope="col">Location</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Image</th>
+                </tr>
+              </thead>
+              <tbody data-role="rows"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="./assets/admin.js"></script>
+  </body>
+</html>

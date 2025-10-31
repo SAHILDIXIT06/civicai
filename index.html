@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Civic AI Tech</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="./assets/styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <nav class="top-nav" aria-label="Primary">
+        <a class="brand" href="./index.html">Civic AI Tech</a>
+        <div class="nav-links">
+          <a class="nav-link" href="./login.html">Login</a>
+          <a class="nav-link" href="./dashboard.html" id="dashboard-link" style="display: none;">My Dashboard</a>
+          <a class="nav-link" href="./admin.html">Admin</a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="upload-card">
+        <h2>FILE A CIVIC COMPLAINT</h2>
+        <p>Report civic issues in your area. Select category and provide details.</p>
+        
+        <form class="upload-form" aria-label="File civic complaint">
+          
+          <!-- Main Category Selection -->
+          <label class="form-field" for="main-category">
+            <span class="label">Main Category *</span>
+            <select id="main-category" required>
+              <option value="">Loading categories...</option>
+            </select>
+            <small class="field-hint">Select the main type of civic issue</small>
+          </label>
+
+          <!-- Sub Category (Dynamic) -->
+          <label class="form-field" for="sub-category" id="sub-category-field" hidden>
+            <span class="label">Sub Category *</span>
+            <select id="sub-category" required>
+              <option value="">Select main category first</option>
+            </select>
+            <small class="field-hint">Select specific issue type</small>
+          </label>
+
+          <!-- Image Upload (Optional for some categories) -->
+          <div class="form-section" id="image-upload-section">
+            <h3 id="image-section-title">📷 Upload Image (Optional for some categories)</h3>
+            <label class="file-area" for="issue-file">
+              <svg width="32" height="32" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M12 16v-8m0 0l-3 3m3-3l3 3M5 20h14a2 2 0 002-2v-4a2 2 0 00-2-2h-1M5 20a2 2 0 01-2-2v-4a2 2 0 012-2h1"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                />
+              </svg>
+              <span>
+                <strong>Select an image</strong>
+                <em>Supports camera or gallery uploads</em>
+              </span>
+              <input type="file" id="issue-file" accept="image/*" capture="environment" />
+            </label>
+            <p id="file-status" class="file-status">No image selected.</p>
+            <figure id="file-preview" class="file-preview" hidden>
+              <img src="" alt="Selected civic issue preview" />
+              <figcaption></figcaption>
+            </figure>
+            
+            <div class="analysis-row">
+              <button type="button" id="analysis-btn" class="analysis-button" disabled>
+                🤖 Analyse image with AI
+              </button>
+              <p id="analysis-status" class="analysis-status" role="status">
+                Upload an image to enable AI analysis
+              </p>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <label class="form-field" for="issue-description">
+            <span class="label">Describe the issue *</span>
+            <textarea
+              id="issue-description"
+              rows="4"
+              placeholder="Share details: what is happening, severity, any risks, etc."
+              required
+            ></textarea>
+            <small class="field-hint">AI can help generate description if image is uploaded</small>
+          </label>
+
+          <!-- Location -->
+          <div class="location-actions">
+            <button type="button" id="location-btn" class="location-button">
+              📍 Grant location access
+            </button>
+            <div class="location-status">
+              <p id="location-message">Location access not granted.</p>
+              <p id="location-coords" aria-live="polite"></p>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="button" id="complaint-btn" class="complaint-button" disabled>
+            File Complaint
+          </button>
+          <p id="complaint-hint" class="button-hint">
+            Complete all required fields and grant location access to file complaint.
+          </p>
+          <p id="complaint-confirmation" class="confirmation" hidden></p>
+        </form>
+      </section>
+
+      <section id="services" class="grid">
+        <article>
+          <h2>Community Analytics</h2>
+          <p>Data-driven insights that support equitable policy decisions.</p>
+        </article>
+        <article>
+          <h2>Engagement Platforms</h2>
+          <p>Tools that connect residents with civic leaders in real time.</p>
+        </article>
+        <article>
+          <h2>Ethical AI Audits</h2>
+          <p>Comprehensive reviews ensuring transparency and governance.</p>
+        </article>
+      </section>
+
+      <section class="about">
+        <h2>Why Civic AI Tech?</h2>
+        <p>
+          We partner with public institutions to design, deploy, and monitor artificial
+          intelligence that serves every resident fairly.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <small>© <span id="year"></span> Civic AI Tech. All rights reserved.</small>
+    </footer>
+
+    <script type="module" src="./assets/main.js"></script>
+    <script>
+      // Handle main category selection
+      mainCategorySelect?.addEventListener('change', async (e) => {
+        const categoryId = e.target.value;
+        selectedMainCategory = categoryId;
+        
+        console.log('🔄 Main category changed to:', categoryId);
+        
+        if (!categoryId) {
+          subCategoryField.hidden = true;
+          subCategorySelect.innerHTML = '<option value="">Select main category first</option>';
+          updateImageRequirement(false);
+          updateComplaintButton();
+          return;
+        }
+        
+        // Load sub-categories
+        try {
+          console.log('🔄 Loading sub-categories for:', categoryId);
+          const response = await fetch(`${API_BASE_URL}/api/categories/${categoryId}/subcategories`);
+          if (!response.ok) throw new Error('Failed to load sub-categories');
+          
+          const data = await response.json();
+          console.log('✅ Loaded sub-categories:', data.subCategories.length, 'items');
+          
+          populateSubCategories(data.subCategories);
+          
+          // Update image requirement based on category
+          const selectedOption = e.target.options[e.target.selectedIndex];
+          const requiresImage = selectedOption.dataset.requiresImage === 'true';
+          updateImageRequirement(requiresImage);
+          
+        } catch (error) {
+          console.error('Error loading sub-categories:', error);
+          subCategorySelect.innerHTML = '<option value="">Error loading sub-categories</option>';
+        }
+        
+        updateComplaintButton();
+      });
+    </script>
+  </body>
+</html>
