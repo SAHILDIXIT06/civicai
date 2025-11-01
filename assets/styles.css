@@ -523,6 +523,13 @@ main {
   margin-top: 1rem;
 }
 
+.upload-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
 .analysis-button {
   padding: 0.85rem 2rem;
   border-radius: 999px;
@@ -1211,6 +1218,22 @@ footer {
     padding: 1.5rem;
   }
 
+  .location-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .analysis-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .location-button,
+  .analysis-button,
+  .complaint-button {
+    width: 100%;
+  }
+
   .section-title {
     font-size: 2rem;
   }
@@ -1221,6 +1244,14 @@ footer {
 }
 
 @media (max-width: 480px) {
+  .top-nav {
+    flex-wrap: wrap;
+  }
+  .nav-links {
+    width: 100%;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
   .hero-features {
     gap: 0.75rem;
   }
@@ -1236,5 +1267,8 @@ footer {
 
   .stats-grid {
     grid-template-columns: 1fr;
+  }
+  .file-area {
+    padding: 1rem;
   }
 }

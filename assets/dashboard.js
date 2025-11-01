@@ -1,4 +1,12 @@
-const API_BASE_URL = "http://localhost:4000";
+// Optional: allow ?api=<url> to override backend from the page URL
+(() => {
+  try {
+    const api = new URLSearchParams(window.location.search).get('api');
+    if (api) localStorage.setItem('apiBaseUrl', api);
+  } catch {}
+})();
+// Backend API base URL with optional override for HTTPS tunnels
+const API_BASE_URL = localStorage.getItem('apiBaseUrl') || `http://${window.location.hostname}:4000`;
 
 // DOM elements
 const userPhoneEl = document.getElementById('user-phone');

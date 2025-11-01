@@ -1,3 +1,13 @@
+// Optional: allow ?api=<url> to override backend from the page URL (useful for tunnels)
+(() => {
+  try {
+    const api = new URLSearchParams(window.location.search).get('api');
+    if (api) {
+      localStorage.setItem('apiBaseUrl', api);
+      // Don't reload automatically; code below will read from localStorage on first load
+    }
+  } catch {}
+})();
 // 🔒 IMMEDIATE AUTH CHECK - Runs before anything else
 // This ensures login page is shown first when app opens
 (function() {
@@ -78,13 +88,19 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-const API_BASE_URL = "http://localhost:4000";
+// Backend API base URL
+// Default: use current host's IP and port 4000
+// Override: set localStorage.apiBaseUrl to use an HTTPS tunnel for mobile (e.g., ngrok/localtunnel)
+const API_BASE_URL = localStorage.getItem('apiBaseUrl') || `http://${window.location.hostname}:4000`;
 
 // DOM Elements
 const mainCategorySelect = document.getElementById('main-category');
 const subCategorySelect = document.getElementById('sub-category');
 const subCategoryField = document.getElementById('sub-category-field');
 const fileInput = document.getElementById('issue-file');
+const cameraInput = document.getElementById('issue-camera');
+const chooseGalleryBtn = document.getElementById('choose-gallery');
+const useCameraBtn = document.getElementById('use-camera');
 const fileStatus = document.getElementById('file-status');
 const filePreview = document.getElementById('file-preview');
 const analysisBtn = document.getElementById('analysis-btn');
@@ -225,9 +241,8 @@ function updateImageRequirement(required) {
   }
 }
 
-// File input handler
-fileInput?.addEventListener('change', (e) => {
-  const file = e.target.files?.[0];
+// Shared handler for gallery or camera file inputs
+function onFileSelected(file) {
   if (!file) {
     selectedFile = null;
     fileStatus.textContent = 'No image selected.';
@@ -255,7 +270,15 @@ fileInput?.addEventListener('change', (e) => {
   analysisStatus.textContent = 'Ready to analyze image';
   
   updateComplaintButton();
-});
+}
+
+// File input handlers
+fileInput?.addEventListener('change', (e) => onFileSelected(e.target.files?.[0]));
+cameraInput?.addEventListener('change', (e) => onFileSelected(e.target.files?.[0]));
+
+// Explicit action buttons so users can pick gallery or camera on mobile
+chooseGalleryBtn?.addEventListener('click', () => fileInput?.click());
+useCameraBtn?.addEventListener('click', () => cameraInput?.click());
 
 // AI Analysis
 analysisBtn?.addEventListener('click', async () => {
@@ -387,6 +410,7 @@ locationBtn?.addEventListener('click', () => {
   locationMessage.textContent = 'Requesting location...';
   locationBtn.disabled = true;
   
+  const geoOpts = { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 };
   navigator.geolocation.getCurrentPosition(
     async (position) => {
       userLocation = {
@@ -417,10 +441,37 @@ locationBtn?.addEventListener('click', () => {
     },
     (error) => {
       console.error('Location error:', error);
-      locationMessage.textContent = '❌ Location access denied. Please enable location.';
+      const insecure = window.location.protocol !== 'https:' && window.location.hostname !== 'localhost';
+      if (insecure) {
+        locationMessage.textContent = '⚠️ Location requires HTTPS on mobile. Use the Map option below or open via an HTTPS tunnel (e.g., ngrok).';
+      } else if (error.code === 1) {
+        locationMessage.textContent = '❌ Permission denied. Please allow location access in your browser settings.';
+      } else if (error.code === 2) {
+        locationMessage.textContent = '❌ Position unavailable. Try moving to an open area or check GPS.';
+      } else if (error.code === 3) {
+        locationMessage.textContent = '⏱️ Timed out. Please try again.';
+      } else {
+        locationMessage.textContent = '❌ Could not get your location.';
+      }
       locationBtn.disabled = false;
     }
-  );
+  , (error) => {
+      console.error('Location error:', error);
+      const insecure = window.location.protocol !== 'https:' && window.location.hostname !== 'localhost';
+      if (insecure) {
+        locationMessage.textContent = '⚠️ Location requires HTTPS on mobile. Use the Map option below or open via an HTTPS tunnel (e.g., ngrok).';
+      } else if (error.code === 1) {
+        locationMessage.textContent = '❌ Permission denied. Please allow location access in your browser settings.';
+      } else if (error.code === 2) {
+        locationMessage.textContent = '❌ Position unavailable. Try moving to an open area or check GPS.';
+      } else if (error.code === 3) {
+        locationMessage.textContent = '⏱️ Timed out. Please try again.';
+      } else {
+        locationMessage.textContent = '❌ Could not get your location.';
+      }
+      locationBtn.disabled = false;
+    }
+  , geoOpts);
 });
 
 // ===== MAP LOCATION PICKER (FREE - Using OpenStreetMap) =====
@@ -591,6 +642,7 @@ myLocationBtn?.addEventListener('click', () => {
   myLocationBtn.disabled = true;
   myLocationBtn.textContent = '📍 Locating...';
   
+  const geoOpts2 = { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 };
   navigator.geolocation.getCurrentPosition(
     async (position) => {
       const lat = position.coords.latitude;
@@ -638,11 +690,22 @@ myLocationBtn?.addEventListener('click', () => {
     },
     (error) => {
       console.error('Location error:', error);
-      alert('Could not get your location. Please enable location services.');
+      const insecure = window.location.protocol !== 'https:' && window.location.hostname !== 'localhost';
+      if (insecure) {
+        alert('Location requires HTTPS on mobile. Use the map by tapping to select, or open the site via an HTTPS tunnel (e.g., ngrok).');
+      } else if (error.code === 1) {
+        alert('Permission denied. Please allow location in your browser settings for this site.');
+      } else if (error.code === 2) {
+        alert('Position unavailable. Try moving to an open area or check GPS.');
+      } else if (error.code === 3) {
+        alert('Timed out while getting location. Please try again.');
+      } else {
+        alert('Could not get your location. Please enable location services.');
+      }
       myLocationBtn.disabled = false;
       myLocationBtn.textContent = '📍 Your Location';
     }
-  );
+  , geoOpts2);
 });
 
 // Confirm location
@@ -805,6 +868,13 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Load categories
   loadCategories();
+
+  // Hint for HTTPS requirement on mobile networks
+  const insecure = window.location.protocol !== 'https:' && window.location.hostname !== 'localhost';
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if (insecure && isMobile && locationMessage) {
+    locationMessage.textContent = '📌 Tip: On mobile, current location needs HTTPS. Use “Select Location on Map” or run via an HTTPS tunnel.';
+  }
   
   // Set current year in footer
   const yearSpan = document.getElementById('year');

@@ -1,6 +1,38 @@
 {
   "complaints": [
     {
+      "id": "bb3d1f20-4d38-404d-914b-88570480d62f",
+      "createdAt": "2025-11-01T21:48:25.585Z",
+      "status": "Submitted",
+      "category": "drainage",
+      "mainCategory": "drainage",
+      "subCategory": "drainage-leakage",
+      "description": "Significant discharge of dark, turbid water, likely untreated drainage or sewage, is visible flowing from large concrete pipes directly into the river/nalla. This discharge is causing visible contamination and foaming in the water body, posing a severe environmental and health hazard.",
+      "location": {
+        "latitude": 19.06245696589666,
+        "longitude": 72.87630765969094,
+        "accuracy": 0,
+        "address": "Ram Manohar Lohia Nagar, Kurla East, L Ward, झोन ५, Mumbai, मुंबई उपनगर जिल्हा, Maharashtra, 400024, India"
+      },
+      "userPhone": "+917058346137",
+      "userId": "user_1762033410417",
+      "userName": null,
+      "image": {
+        "fileName": "bb3d1f20-4d38-404d-914b-88570480d62f.jpg",
+        "originalName": "17620335364035665850660870770689.jpg",
+        "mimeType": "image/jpeg",
+        "url": "/uploads/bb3d1f20-4d38-404d-914b-88570480d62f.jpg"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": null,
+        "suggestedMainCategory": null,
+        "suggestedSubCategory": null,
+        "suggestedDescription": "Significant discharge of dark, turbid water, likely untreated drainage or sewage, is visible flowing from large concrete pipes directly into the river/nalla. This discharge is causing visible contamination and foaming in the water body, posing a severe environmental and health hazard.",
+        "confidence": 0.95
+      }
+    },
+    {
       "id": "cde9a44c-1774-4183-8e5a-366efd28dfd6",
       "createdAt": "2025-11-01T13:52:19.765Z",
       "status": "Submitted",

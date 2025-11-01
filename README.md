@@ -54,22 +54,15 @@ Open http://localhost:3000 in your browser.
 	- GEMINI_MODEL_NAME (default gemini-2.5-flash)
 - Uploads are ignored by git; they’re created at runtime in `backend/uploads/`.
 
-## Phone OTP login (Firebase)
+## Phone OTP login (demo only)
 
-This repo includes optional Firebase Phone Authentication. If not configured, the app falls back to a demo OTP (123456) for local testing.
+This app now uses a built‑in demo OTP flow for login. No external SMS provider is required.
 
-To enable real OTP:
-1) Create a Firebase project (free tier is fine) and add a Web App.
-2) Enable Authentication → Sign-in method → Phone.
-3) In Authentication → Settings → Authorized domains, add:
-	 - localhost
-	 - 127.0.0.1
-	 - Your PC’s LAN IP (e.g., 192.168.x.x) if you’ll access from phone on same Wi‑Fi
-	 - Your ngrok domain if you expose the app publicly
-4) Copy your web app config and update `assets/firebase-config.js` values.
-5) Reload `login.html` and use real phone OTP.
+- When you click “Send Verification Code”, the UI will display: `Demo OTP: 123456`.
+- Enter `123456` to complete the login.
+- Admin access is allowed only for numbers listed in `assets/auth.js` (`adminPhones`).
 
-You’ll see “✅ Firebase Phone Auth enabled” in the browser console on success.
+If, in the future, you want real SMS, you can integrate a provider like AWS SNS, MSG91, or Twilio and replace the demo logic in `assets/auth.js`.
 
 ## Access from your phone
 
@@ -80,7 +73,6 @@ Option A — Same Wi‑Fi, local network
 
 Option B — Public tunnel using ngrok
 - Install ngrok and run: `ngrok http 3000`.
-- Add the ngrok domain to Firebase authorized domains.
 - Open the ngrok HTTPS URL on your phone.
 
 ## Snapshot tags

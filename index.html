@@ -142,8 +142,15 @@
                 <strong>Select an image</strong>
                 <em>Supports camera or gallery uploads</em>
               </span>
-              <input type="file" id="issue-file" accept="image/*" capture="environment" />
+              <!-- Removed capture attribute so users can choose Camera or Gallery on mobile -->
+              <input type="file" id="issue-file" accept="image/*" />
+              <!-- Dedicated camera input for users who want to capture directly -->
+              <input type="file" id="issue-camera" accept="image/*" capture="environment" hidden />
             </label>
+            <div class="upload-actions">
+              <button type="button" id="choose-gallery" class="analysis-button" style="border-style: dashed;">📁 Choose from Gallery</button>
+              <button type="button" id="use-camera" class="analysis-button">📷 Use Camera</button>
+            </div>
             <p id="file-status" class="file-status">No image selected.</p>
             <figure id="file-preview" class="file-preview" hidden>
               <img src="" alt="Selected civic issue preview" />
