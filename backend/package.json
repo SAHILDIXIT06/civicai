@@ -4,11 +4,11 @@
   "type": "module",
   "main": "src/server.js",
   "scripts": {
-    "predev": "kill-port 4000",
+    "predev": "kill-port 4000 || echo Port cleanup skipped",
     "dev": "nodemon src/server.js",
-    "prestart": "kill-port 4000",
+    "prestart": "kill-port 4000 || echo Port cleanup skipped",
     "start": "node src/server.js",
-    "clean": "kill-port 4000"
+    "clean": "kill-port 4000 || echo Port cleanup skipped"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
