@@ -1,6 +1,47 @@
-// Simplified auth system with role-based access
+// Auth system with Firebase Phone OTP (fallback to demo OTP if Firebase not configured)
 let mockUsers = JSON.parse(localStorage.getItem('mockUsers') || '{}');
 let sentCodes = JSON.parse(sessionStorage.getItem('sentCodes') || '{}');
+
+let useFirebase = false;
+let firebaseAuth = null;
+let confirmationResult = null; // from signInWithPhoneNumber
+
+// Try to load Firebase from CDN and initialize using local config
+try {
+  const [{ initializeApp }, { getAuth, RecaptchaVerifier, signInWithPhoneNumber } , firebaseConfig] = await Promise.all([
+    import('https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js'),
+    import('https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js'),
+    import('./firebase-config.js')
+  ]);
+
+  // Basic validation — if placeholders are unchanged, skip Firebase path
+  const hasRealConfig = firebaseConfig &&
+    firebaseConfig.default &&
+    !String(firebaseConfig.default.apiKey || '').startsWith('YOUR_');
+
+  if (hasRealConfig) {
+    const app = initializeApp(firebaseConfig.default);
+    firebaseAuth = getAuth(app);
+    firebaseAuth.useDeviceLanguage();
+
+    // Prepare invisible reCAPTCHA on the page
+    // Container is in login.html with id 'recaptcha-container'
+    // It will auto-render on first use.
+    // We attach constructor to window to avoid tree-shaking by the CDN modules
+    // and so that Firebase can reference it internally.
+    // eslint-disable-next-line no-new
+    new RecaptchaVerifier(firebaseAuth, 'recaptcha-container', { size: 'invisible' });
+
+    // Expose helper for later imports (optional)
+    window.__firebaseAuth = { getAuth, RecaptchaVerifier, signInWithPhoneNumber };
+    useFirebase = true;
+    console.log('✅ Firebase Phone Auth enabled');
+  } else {
+    console.warn('⚠️ Firebase config has placeholders; using demo OTP instead.');
+  }
+} catch (err) {
+  console.warn('⚠️ Firebase not configured or failed to load. Falling back to demo OTP.', err);
+}
 
 const phoneForm = document.getElementById('phone-form');
 const verifyForm = document.getElementById('verify-form');
@@ -41,7 +82,29 @@ const generateCode = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
-const sendVerificationCode = (fullPhoneNumber) => {
+const sendVerificationCode = async (fullPhoneNumber) => {
+  if (useFirebase && firebaseAuth && window.__firebaseAuth) {
+    try {
+      const { signInWithPhoneNumber } = window.__firebaseAuth;
+
+      setStatus('Sending OTP...', 'info');
+      const appVerifier = window.recaptchaVerifier || null;
+      confirmationResult = await signInWithPhoneNumber(firebaseAuth, fullPhoneNumber, appVerifier);
+
+      setStatus('OTP sent. Please check your phone.', 'success');
+      sendCodeBtn.disabled = true;
+      sendCodeBtn.textContent = 'Code Sent!';
+      phoneForm.hidden = true;
+      verifyForm.hidden = false;
+      currentPhoneNumber = fullPhoneNumber;
+      return;
+    } catch (error) {
+      console.error('Firebase send OTP failed:', error);
+      setStatus(error.message || 'Failed to send OTP. Try again.', 'error');
+      return;
+    }
+  }
+
   console.log(`📞 Sending demo OTP for: ${fullPhoneNumber}`);
   console.log(`🎭 Login role: ${selectedRole.toUpperCase()}`);
   
@@ -61,15 +124,29 @@ const sendVerificationCode = (fullPhoneNumber) => {
   console.log(`🔐 Role locked in: ${selectedRole}`);
 };
 
-const verifyCode = (code) => {
+const verifyCode = async (code) => {
+  if (useFirebase && confirmationResult) {
+    try {
+      const result = await confirmationResult.confirm(code);
+      const user = result.user;
+      currentPhoneNumber = user.phoneNumber || currentPhoneNumber;
+    } catch (error) {
+      console.error('Firebase verify OTP failed:', error);
+      setStatus(error.message || 'Invalid code. Please try again.', 'error');
+      return;
+    }
+  }
+
   const sentCode = sentCodes[currentPhoneNumber];
   
   if (!sentCode) {
-    setStatus('No code sent. Please request a code first.', 'error');
-    return;
+    if (!useFirebase) {
+      setStatus('No code sent. Please request a code first.', 'error');
+      return;
+    }
   }
   
-  if (code !== sentCode) {
+  if (!useFirebase && code !== sentCode) {
     setStatus('Invalid code. Please try again.', 'error');
     return;
   }
@@ -116,8 +193,10 @@ const verifyCode = (code) => {
   console.log('   Phone:', currentPhoneNumber);
   console.log('   Role:', selectedRole);
   
-  delete sentCodes[currentPhoneNumber];
-  sessionStorage.setItem('sentCodes', JSON.stringify(sentCodes));
+  if (!useFirebase) {
+    delete sentCodes[currentPhoneNumber];
+    sessionStorage.setItem('sentCodes', JSON.stringify(sentCodes));
+  }
   
   setStatus('✅ Login successful! Redirecting...', 'success');
   
