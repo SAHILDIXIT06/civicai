@@ -13,11 +13,11 @@ let currentUser = null;
 
 // Auth check
 const checkAuth = () => {
-  const authToken = localStorage.getItem('authToken');
   const userPhone = localStorage.getItem('userPhone');
   const userId = localStorage.getItem('userId');
+  const userRole = localStorage.getItem('userRole');
   
-  if (!authToken || !userPhone || !userId) {
+  if (!userPhone || !userId) {
     window.location.href = './login.html';
     return false;
   }
@@ -25,7 +25,7 @@ const checkAuth = () => {
   currentUser = {
     id: userId,
     phone: userPhone,
-    token: authToken
+    role: userRole
   };
   
   return true;
@@ -40,9 +40,9 @@ const displayUserInfo = () => {
 
 // Logout functionality
 const logout = () => {
-  localStorage.removeItem('authToken');
   localStorage.removeItem('userPhone');
   localStorage.removeItem('userId');
+  localStorage.removeItem('userRole');
   window.location.href = './login.html';
 };
 
@@ -128,6 +128,15 @@ const renderComplaints = (complaints) => {
   const complaintsHTML = complaints.map(complaint => {
     const imageUrl = complaint.image?.url ? `${API_BASE_URL}${complaint.image.url}` : null;
     
+    // Format category names
+    const formatCategoryName = (category) => {
+      if (!category) return 'Unknown';
+      return category.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    };
+    
+    const mainCategory = formatCategoryName(complaint.mainCategory || complaint.category);
+    const subCategory = formatCategoryName(complaint.subCategory);
+    
     return `
       <div class="complaint-card">
         <div class="complaint-header">
@@ -139,8 +148,13 @@ const renderComplaints = (complaints) => {
         
         <div class="complaint-details">
           <div class="complaint-category">
-            <strong>Category:</strong> ${complaint.category || 'Unknown'}
+            <strong>Main Category:</strong> ${mainCategory}
           </div>
+          ${complaint.subCategory ? `
+          <div class="complaint-subcategory">
+            <strong>Sub-Category:</strong> ${subCategory}
+          </div>
+          ` : ''}
           <div class="complaint-date">
             <strong>Filed:</strong> ${formatDate(complaint.createdAt)}
           </div>

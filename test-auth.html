@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth Test - Civic AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .status {
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .status.logged-out {
+            background: #fee;
+            color: #c33;
+            border: 2px solid #fcc;
+        }
+        
+        .status.logged-in {
+            background: #efe;
+            color: #3c3;
+            border: 2px solid #cfc;
+        }
+        
+        .info {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-family: 'Courier New', monospace;
+            background: white;
+            padding: 8px;
+            border-radius: 4px;
+            word-break: break-all;
+        }
+        
+        button {
+            padding: 12px 30px;
+            margin: 10px 5px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-danger {
+            background: #f56565;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #e53e3e;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 101, 101, 0.4);
+        }
+        
+        .btn-success {
+            background: #48bb78;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(72, 187, 120, 0.4);
+        }
+        
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .note {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            color: #856404;
+        }
+        
+        .note strong {
+            display: block;
+            margin-bottom: 8px;
+            color: #533f03;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔒 Authentication Test Page</h1>
+        
+        <div id="authStatus" class="status">Checking...</div>
+        
+        <div id="authDetails" style="display: none;">
+            <div class="info">
+                <div class="info-label">Auth Token:</div>
+                <div class="info-value" id="tokenValue">-</div>
+            </div>
+            
+            <div class="info">
+                <div class="info-label">User Phone:</div>
+                <div class="info-value" id="phoneValue">-</div>
+            </div>
+            
+            <div class="info">
+                <div class="info-label">User ID:</div>
+                <div class="info-value" id="userIdValue">-</div>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <button class="btn-primary" onclick="testComplaintPage()">
+                📝 Go to Complaint Page
+            </button>
+            <button class="btn-success" onclick="testLoginPage()">
+                🔑 Go to Login Page
+            </button>
+            <button class="btn-danger" onclick="clearAuth()">
+                🗑️ Clear Auth & Test
+            </button>
+        </div>
+        
+        <div class="note">
+            <strong>🧪 How to Test:</strong>
+            1. Click "Clear Auth & Test" to simulate logged-out user<br>
+            2. Then click "Go to Complaint Page"<br>
+            3. You should be redirected to Login page automatically<br>
+            4. If you see complaint form, the auth check failed ❌
+        </div>
+    </div>
+
+    <script>
+        function checkAuth() {
+            const authToken = localStorage.getItem('authToken');
+            const userPhone = localStorage.getItem('userPhone');
+            const userId = localStorage.getItem('userId');
+            
+            const statusEl = document.getElementById('authStatus');
+            const detailsEl = document.getElementById('authDetails');
+            
+            if (authToken && userPhone) {
+                statusEl.className = 'status logged-in';
+                statusEl.innerHTML = '✅ User is LOGGED IN';
+                detailsEl.style.display = 'block';
+                
+                document.getElementById('tokenValue').textContent = authToken.substring(0, 50) + '...';
+                document.getElementById('phoneValue').textContent = userPhone;
+                document.getElementById('userIdValue').textContent = userId || 'Not set';
+            } else {
+                statusEl.className = 'status logged-out';
+                statusEl.innerHTML = '❌ User is NOT LOGGED IN';
+                detailsEl.style.display = 'none';
+            }
+        }
+        
+        function testComplaintPage() {
+            window.location.href = './index.html';
+        }
+        
+        function testLoginPage() {
+            window.location.href = './login.html';
+        }
+        
+        function clearAuth() {
+            if (confirm('This will clear all authentication data. Continue?')) {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('userPhone');
+                localStorage.removeItem('userId');
+                alert('✅ Authentication cleared! Now click "Go to Complaint Page" to test.');
+                checkAuth();
+            }
+        }
+        
+        // Run on load
+        checkAuth();
+        
+        // Auto-refresh status
+        setInterval(checkAuth, 2000);
+    </script>
+</body>
+</html>

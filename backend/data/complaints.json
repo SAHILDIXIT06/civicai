@@ -1,6 +1,382 @@
 {
   "complaints": [
     {
+      "id": "cde9a44c-1774-4183-8e5a-366efd28dfd6",
+      "createdAt": "2025-11-01T13:52:19.765Z",
+      "status": "Submitted",
+      "category": "drainage",
+      "mainCategory": "drainage",
+      "subCategory": "drainage-leakage",
+      "description": "Large concrete pipes are discharging turbid and foamy wastewater directly into the river/nalla. This indicates a significant leakage or unauthorized release of drainage water, leading to severe water pollution and posing environmental and health risks.",
+      "location": {
+        "latitude": 18.524088546877447,
+        "longitude": 73.8578588763375,
+        "accuracy": 0,
+        "address": "Dengle Bridge, Mangalwar Peth, Pune, Pune District, Maharashtra, 411011, India"
+      },
+      "userPhone": "+917058346137",
+      "userId": "user_1762004851109",
+      "userName": null,
+      "image": {
+        "fileName": "cde9a44c-1774-4183-8e5a-366efd28dfd6.jpg",
+        "originalName": "river-pollution-759.jpg",
+        "mimeType": "image/jpeg",
+        "url": "/uploads/cde9a44c-1774-4183-8e5a-366efd28dfd6.jpg"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": null,
+        "suggestedMainCategory": null,
+        "suggestedSubCategory": null,
+        "suggestedDescription": "Large concrete pipes are discharging turbid and foamy wastewater directly into the river/nalla. This indicates a significant leakage or unauthorized release of drainage water, leading to severe water pollution and posing environmental and health risks.",
+        "confidence": 0.98
+      }
+    },
+    {
+      "id": "c7dabeff-106f-4528-be8d-fd7143bd3b11",
+      "createdAt": "2025-11-01T13:14:51.797Z",
+      "status": "Submitted",
+      "category": "garbage-sweeping",
+      "mainCategory": "garbage-sweeping",
+      "subCategory": "dead-animal-removal",
+      "description": "A deceased leopard is found lying on the road surface. Immediate removal of the animal is required to prevent health hazards, maintain public hygiene, and ensure road safety.",
+      "location": {
+        "latitude": 18.5246091,
+        "longitude": 73.8786239,
+        "accuracy": 279071.26072724134,
+        "address": "Bund Garden Road, Somwar Peth, Pune, Pune District, Maharashtra, 411001, India"
+      },
+      "userPhone": "+917058346137",
+      "userId": "user_1762002829018",
+      "userName": null,
+      "image": {
+        "fileName": "c7dabeff-106f-4528-be8d-fd7143bd3b11.jpeg",
+        "originalName": "images.jpeg",
+        "mimeType": "image/jpeg",
+        "url": "/uploads/c7dabeff-106f-4528-be8d-fd7143bd3b11.jpeg"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": null,
+        "suggestedMainCategory": null,
+        "suggestedSubCategory": null,
+        "suggestedDescription": "A deceased leopard is found lying on the road surface. Immediate removal of the animal is required to prevent health hazards, maintain public hygiene, and ensure road safety.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "id": "7a83de68-43bb-4ea1-9e88-a28f8247d572",
+      "createdAt": "2025-10-31T21:18:59.943Z",
+      "status": "Submitted",
+      "category": "road",
+      "mainCategory": "road",
+      "subCategory": "zebra-crossing",
+      "description": "The zebra crossing markings on the road are severely faded and partially worn off, reducing visibility. This poses a safety hazard for pedestrians crossing the road and requires immediate repainting to ensure clear demarcation.",
+      "location": {
+        "latitude": 18.5246091,
+        "longitude": 73.8786239,
+        "accuracy": 279071.26072724134,
+        "address": "Bund Garden Road, Somwar Peth, Pune, Pune District, Maharashtra, 411001, India"
+      },
+      "userPhone": "+917058346137",
+      "userId": "user_1761945091909",
+      "userName": null,
+      "image": {
+        "fileName": "7a83de68-43bb-4ea1-9e88-a28f8247d572.webp",
+        "originalName": "71132183.webp",
+        "mimeType": "image/webp",
+        "url": "/uploads/7a83de68-43bb-4ea1-9e88-a28f8247d572.webp"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": null,
+        "suggestedMainCategory": null,
+        "suggestedSubCategory": null,
+        "suggestedDescription": "The zebra crossing markings on the road are severely faded and partially worn off, reducing visibility. This poses a safety hazard for pedestrians crossing the road and requires immediate repainting to ensure clear demarcation.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "id": "a99001b8-d7c2-4c4f-99a5-1ffc3689b405",
+      "createdAt": "2025-10-31T20:58:06.547Z",
+      "status": "Submitted",
+      "category": "garbage-sweeping",
+      "mainCategory": "garbage-sweeping",
+      "subCategory": "garbage-dump",
+      "description": "A substantial pile of mixed garbage, including plastic waste and organic debris, has accumulated on the footpath alongside the road. This unauthorized dump creates an unhygienic environment, obstructs pedestrian passage, and requires immediate removal by municipal sanitation services.",
+      "location": {
+        "latitude": 18.484827375154946,
+        "longitude": 73.87189099812198,
+        "accuracy": 0,
+        "address": "Haji Kadirbhai Satarkar Marg, Mukund Nagar, Pune, Pune District, Maharashtra, 410048, India"
+      },
+      "userPhone": "+919011341175",
+      "userId": "user_1761943944635",
+      "userName": "YO",
+      "image": {
+        "fileName": "a99001b8-d7c2-4c4f-99a5-1ffc3689b405.jpg",
+        "originalName": "65547332.jpg",
+        "mimeType": "image/jpeg",
+        "url": "/uploads/a99001b8-d7c2-4c4f-99a5-1ffc3689b405.jpg"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": null,
+        "suggestedMainCategory": null,
+        "suggestedSubCategory": null,
+        "suggestedDescription": "A substantial pile of mixed garbage, including plastic waste and organic debris, has accumulated on the footpath alongside the road. This unauthorized dump creates an unhygienic environment, obstructs pedestrian passage, and requires immediate removal by municipal sanitation services.",
+        "confidence": 0.98
+      }
+    },
+    {
+      "id": "28933497-fb1b-4c91-8b4b-2f15de001542",
+      "createdAt": "2025-10-31T19:08:57.548Z",
+      "status": "Submitted",
+      "category": "garbage-sweeping",
+      "mainCategory": "garbage-sweeping",
+      "subCategory": "dead-animal-removal",
+      "description": "A deceased bovine animal is visible lying on the roadside. Immediate removal is required to prevent public health hazards and maintain sanitation.",
+      "location": {
+        "latitude": 18.4926358982073,
+        "longitude": 73.84990405290945,
+        "accuracy": 0
+      },
+      "userPhone": "+917058346137",
+      "userId": "user_1761937445387",
+      "userName": null,
+      "image": {
+        "fileName": "28933497-fb1b-4c91-8b4b-2f15de001542.jpg",
+        "originalName": "ed83133b-0c7f-439e-aef0-96b753a6e992 (4).jpg",
+        "mimeType": "image/jpeg",
+        "url": "/uploads/28933497-fb1b-4c91-8b4b-2f15de001542.jpg"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": null,
+        "suggestedMainCategory": null,
+        "suggestedSubCategory": null,
+        "suggestedDescription": "A deceased bovine animal is visible lying on the roadside. Immediate removal is required to prevent public health hazards and maintain sanitation.",
+        "confidence": 0.98
+      }
+    },
+    {
+      "id": "d5c87a08-9f53-4053-9391-d4f3dafc9998",
+      "createdAt": "2025-10-31T18:53:36.990Z",
+      "status": "Submitted",
+      "category": "drainage",
+      "mainCategory": "drainage",
+      "subCategory": "drainage-leakage",
+      "description": "Untreated drainage water is visibly discharging from a large concrete pipe directly into the river/nalla, causing significant water pollution with visible foam and discoloration. This leakage poses an environmental and public health hazard requiring immediate attention.",
+      "location": {
+        "latitude": 18.52246849263634,
+        "longitude": 73.85438189506884,
+        "accuracy": 0
+      },
+      "userPhone": "+919011341175",
+      "userId": "user_1761936429333",
+      "userName": null,
+      "image": {
+        "fileName": "d5c87a08-9f53-4053-9391-d4f3dafc9998.jpg",
+        "originalName": "river-pollution-759.jpg",
+        "mimeType": "image/jpeg",
+        "url": "/uploads/d5c87a08-9f53-4053-9391-d4f3dafc9998.jpg"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": null,
+        "suggestedMainCategory": null,
+        "suggestedSubCategory": null,
+        "suggestedDescription": "Untreated drainage water is visibly discharging from a large concrete pipe directly into the river/nalla, causing significant water pollution with visible foam and discoloration. This leakage poses an environmental and public health hazard requiring immediate attention.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "id": "445ba522-a3a1-4f1b-bc8a-f840ca2123a5",
+      "createdAt": "2025-10-31T18:09:24.626Z",
+      "status": "Submitted",
+      "category": "unauthorized-ads",
+      "mainCategory": "unauthorized-ads",
+      "subCategory": "unauthorized-hoardings",
+      "description": "Multiple large, unauthorized banners and various smaller advertisements are prominently displayed along the roadside and on utility poles in the Bhekrainagar, Fursungi area. These illegal hoardings contribute to visual clutter and constitute unauthorized advertising on public property, requiring immediate removal.",
+      "location": {
+        "latitude": 18.5246091,
+        "longitude": 73.8786239,
+        "accuracy": 279071.26072724134
+      },
+      "userPhone": "+919011341175",
+      "userId": "user_1761933922269",
+      "userName": "pune citizen",
+      "image": {
+        "fileName": "445ba522-a3a1-4f1b-bc8a-f840ca2123a5.jpg",
+        "originalName": "DIWALI-HOLIDAY-2025-03-20T092913.755.jpg",
+        "mimeType": "image/jpeg",
+        "url": "/uploads/445ba522-a3a1-4f1b-bc8a-f840ca2123a5.jpg"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": null,
+        "suggestedMainCategory": null,
+        "suggestedSubCategory": null,
+        "suggestedDescription": "Multiple large, unauthorized banners and various smaller advertisements are prominently displayed along the roadside and on utility poles in the Bhekrainagar, Fursungi area. These illegal hoardings contribute to visual clutter and constitute unauthorized advertising on public property, requiring immediate removal.",
+        "confidence": 0.98
+      }
+    },
+    {
+      "id": "719911cd-b163-418a-ba57-3f9822dbce02",
+      "createdAt": "2025-10-31T17:19:59.080Z",
+      "status": "Submitted",
+      "category": "tree-authority",
+      "mainCategory": "tree-authority",
+      "subCategory": "fallen-tree",
+      "description": "A significant tree branch or a small tree has fallen across the road, completely obstructing traffic flow. The road appears wet from recent rain. Immediate removal is required to clear the passage and ensure public safety.",
+      "location": {
+        "latitude": 18.5246091,
+        "longitude": 73.8786239,
+        "accuracy": 279071.26072724134
+      },
+      "userPhone": "+919011341175",
+      "userId": "user_1761930520764",
+      "userName": null,
+      "image": {
+        "fileName": "719911cd-b163-418a-ba57-3f9822dbce02.webp",
+        "originalName": "fallen tree.webp",
+        "mimeType": "image/webp",
+        "url": "/uploads/719911cd-b163-418a-ba57-3f9822dbce02.webp"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": null,
+        "suggestedMainCategory": null,
+        "suggestedSubCategory": null,
+        "suggestedDescription": "A significant tree branch or a small tree has fallen across the road, completely obstructing traffic flow. The road appears wet from recent rain. Immediate removal is required to clear the passage and ensure public safety.",
+        "confidence": 0.98
+      }
+    },
+    {
+      "id": "ab08be08-f4da-4686-9667-cfb17fd3aa1e",
+      "createdAt": "2025-10-31T17:12:07.844Z",
+      "status": "Submitted",
+      "category": "garbage-sweeping",
+      "mainCategory": "garbage-sweeping",
+      "subCategory": "dead-animal-removal",
+      "description": "A deceased leopard is visible lying on a paved surface, likely a road. Immediate removal of the animal is required to ensure public safety, prevent traffic hazards, and maintain hygiene. The cause of death may also need investigation.",
+      "location": {
+        "latitude": 18.5246091,
+        "longitude": 73.8786239,
+        "accuracy": 279071.26072724134
+      },
+      "userPhone": "+919011341175",
+      "userId": "user_1761930520764",
+      "userName": null,
+      "image": {
+        "fileName": "ab08be08-f4da-4686-9667-cfb17fd3aa1e.jpeg",
+        "originalName": "images.jpeg",
+        "mimeType": "image/jpeg",
+        "url": "/uploads/ab08be08-f4da-4686-9667-cfb17fd3aa1e.jpeg"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": null,
+        "suggestedMainCategory": null,
+        "suggestedSubCategory": null,
+        "suggestedDescription": "A deceased leopard is visible lying on a paved surface, likely a road. Immediate removal of the animal is required to ensure public safety, prevent traffic hazards, and maintain hygiene. The cause of death may also need investigation.",
+        "confidence": 0.98
+      }
+    },
+    {
+      "id": "70bc0483-5c25-406f-a728-0ef188a1e5c3",
+      "createdAt": "2025-10-31T17:11:15.951Z",
+      "status": "Submitted",
+      "category": "road",
+      "mainCategory": "road",
+      "subCategory": "water-logging",
+      "description": "The image depicts severe waterlogging on a road, with water levels high enough to cause a two-wheeler to stall and require manual pushing. This widespread water accumulation obstructs traffic flow and poses a significant inconvenience to citizens, indicating a need for urgent clearing and inspection of the drainage system.",
+      "location": {
+        "latitude": 18.5246091,
+        "longitude": 73.8786239,
+        "accuracy": 279071.26072724134
+      },
+      "userPhone": "+919011341175",
+      "userId": "user_1761930520764",
+      "userName": null,
+      "image": {
+        "fileName": "70bc0483-5c25-406f-a728-0ef188a1e5c3.jpeg",
+        "originalName": "water logging.jpeg",
+        "mimeType": "image/jpeg",
+        "url": "/uploads/70bc0483-5c25-406f-a728-0ef188a1e5c3.jpeg"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": null,
+        "suggestedMainCategory": null,
+        "suggestedSubCategory": null,
+        "suggestedDescription": "The image depicts severe waterlogging on a road, with water levels high enough to cause a two-wheeler to stall and require manual pushing. This widespread water accumulation obstructs traffic flow and poses a significant inconvenience to citizens, indicating a need for urgent clearing and inspection of the drainage system.",
+        "confidence": 0.98
+      }
+    },
+    {
+      "id": "05344b20-d511-4fcf-827d-e377571ce6b7",
+      "createdAt": "2025-10-31T17:10:24.604Z",
+      "status": "Submitted",
+      "category": "garbage-sweeping",
+      "mainCategory": "garbage-sweeping",
+      "subCategory": "garbage-dump",
+      "description": "A substantial quantity of mixed garbage, including plastic waste and general refuse, has been illegally dumped along the roadside and in the adjacent open, bushy area. This unsanitary accumulation poses environmental and health hazards and requires immediate removal and proper disposal.",
+      "location": {
+        "latitude": 18.5246091,
+        "longitude": 73.8786239,
+        "accuracy": 279071.26072724134
+      },
+      "userPhone": "+919011341175",
+      "userId": "user_1761930520764",
+      "userName": null,
+      "image": {
+        "fileName": "05344b20-d511-4fcf-827d-e377571ce6b7.webp",
+        "originalName": "trash-8404513.webp",
+        "mimeType": "image/webp",
+        "url": "/uploads/05344b20-d511-4fcf-827d-e377571ce6b7.webp"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": null,
+        "suggestedMainCategory": null,
+        "suggestedSubCategory": null,
+        "suggestedDescription": "A substantial quantity of mixed garbage, including plastic waste and general refuse, has been illegally dumped along the roadside and in the adjacent open, bushy area. This unsanitary accumulation poses environmental and health hazards and requires immediate removal and proper disposal.",
+        "confidence": 0.98
+      }
+    },
+    {
+      "id": "76d6d1ee-ca67-4fc1-987a-e2fa3897bffc",
+      "createdAt": "2025-10-31T17:09:29.025Z",
+      "status": "Submitted",
+      "category": "road",
+      "mainCategory": "road",
+      "subCategory": "pothole",
+      "description": "Multiple large potholes are visible across the road surface, many of which are filled with water. This extensive damage significantly impacts road safety and vehicle mobility, requiring immediate repair work.",
+      "location": {
+        "latitude": 18.5246091,
+        "longitude": 73.8786239,
+        "accuracy": 279071.26072724134
+      },
+      "userPhone": "+919011341175",
+      "userId": "user_1761930520764",
+      "userName": null,
+      "image": {
+        "fileName": "76d6d1ee-ca67-4fc1-987a-e2fa3897bffc.png",
+        "originalName": "civic issue 2.png",
+        "mimeType": "image/png",
+        "url": "/uploads/76d6d1ee-ca67-4fc1-987a-e2fa3897bffc.png"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": null,
+        "suggestedMainCategory": null,
+        "suggestedSubCategory": null,
+        "suggestedDescription": "Multiple large potholes are visible across the road surface, many of which are filled with water. This extensive damage significantly impacts road safety and vehicle mobility, requiring immediate repair work.",
+        "confidence": 0.98
+      }
+    },
+    {
       "id": "391ec79e-6dc7-4694-b7b8-e99b188da967",
       "createdAt": "2025-10-31T04:51:08.636Z",
       "status": "Submitted",

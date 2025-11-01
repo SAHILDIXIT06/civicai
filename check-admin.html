@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Check - Civic AI</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #1a1a2e;
+            color: white;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .section {
+            background: #16213e;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .label {
+            font-weight: 600;
+            color: #a0d8ff;
+        }
+        .value {
+            font-family: 'Courier New', monospace;
+            background: rgba(0,0,0,0.3);
+            padding: 5px 10px;
+            border-radius: 4px;
+            word-break: break-all;
+        }
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
+        .warning { color: #f59e0b; }
+        button {
+            padding: 12px 30px;
+            margin: 5px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-check {
+            background: #667eea;
+            color: white;
+        }
+        .btn-check:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        .btn-fix {
+            background: #10b981;
+            color: white;
+        }
+        .btn-fix:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+        pre {
+            background: rgba(0,0,0,0.5);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 13px;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .badge-success {
+            background: #10b981;
+            color: white;
+        }
+        .badge-error {
+            background: #ef4444;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Admin Access Diagnostic Tool</h1>
+        
+        <div class="section">
+            <h2>📱 Current Session Info</h2>
+            <div class="info-grid">
+                <span class="label">User Phone:</span>
+                <span class="value" id="userPhone">Loading...</span>
+                
+                <span class="label">User Role:</span>
+                <span class="value" id="userRole">Loading...</span>
+                
+                <span class="label">User ID:</span>
+                <span class="value" id="userId">Loading...</span>
+                
+                <span class="label">Auth Token:</span>
+                <span class="value" id="authToken">Loading...</span>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🛡️ Backend Admin Check</h2>
+            <div class="info-grid">
+                <span class="label">API Status:</span>
+                <span class="value" id="apiStatus">Not checked yet</span>
+                
+                <span class="label">Is Admin (Backend):</span>
+                <span class="value" id="backendIsAdmin">-</span>
+                
+                <span class="label">Phone Checked:</span>
+                <span class="value" id="phoneChecked">-</span>
+                
+                <span class="label">Expected Admins:</span>
+                <span class="value" id="expectedAdmins">-</span>
+            </div>
+            <button class="btn-check" onclick="checkBackend()">🔄 Check Backend Now</button>
+        </div>
+        
+        <div class="section">
+            <h2>❗ Diagnosis</h2>
+            <div id="diagnosis" style="padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px;">
+                Click "Check Backend Now" to diagnose...
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🔧 Actions</h2>
+            <button class="btn-fix" onclick="clearAndRelogin()">✅ Clear All & Re-Login as Admin</button>
+            <button class="btn-check" onclick="viewRawData()">📊 View Raw localStorage Data</button>
+        </div>
+        
+        <div class="section" id="rawDataSection" style="display: none;">
+            <h2>📊 Raw Data</h2>
+            <pre id="rawData"></pre>
+        </div>
+        
+        <div class="section">
+            <h2>📝 Console Logs</h2>
+            <pre id="logs"></pre>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = "http://localhost:4000";
+        let logs = [];
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : 'ℹ️';
+            const logMessage = `[${timestamp}] ${prefix} ${message}`;
+            logs.push(logMessage);
+            document.getElementById('logs').textContent = logs.join('\n');
+            console.log(logMessage);
+        }
+        
+        function loadSessionData() {
+            const phone = localStorage.getItem('userPhone');
+            const role = localStorage.getItem('userRole');
+            const userId = localStorage.getItem('userId');
+            const token = localStorage.getItem('authToken');
+            
+            document.getElementById('userPhone').textContent = phone || 'Not set';
+            document.getElementById('userRole').textContent = role || 'Not set';
+            document.getElementById('userId').textContent = userId || 'Not set';
+            document.getElementById('authToken').textContent = token ? token.substring(0, 40) + '...' : 'Not set';
+            
+            log(`Session data loaded: Phone=${phone}, Role=${role}`);
+        }
+        
+        async function checkBackend() {
+            const phone = localStorage.getItem('userPhone');
+            const token = localStorage.getItem('authToken');
+            
+            if (!phone || !token) {
+                document.getElementById('apiStatus').innerHTML = '<span class="error">❌ Not logged in</span>';
+                log('Not logged in - cannot check backend', 'error');
+                return;
+            }
+            
+            try {
+                log(`Checking admin status for phone: ${phone}`);
+                
+                const url = `${API_BASE_URL}/api/admin/check?phone=${encodeURIComponent(phone)}`;
+                log(`API URL: ${url}`);
+                
+                const response = await fetch(url, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                log(`Response status: ${response.status}`);
+                
+                const data = await response.json();
+                log(`Response data: ${JSON.stringify(data)}`);
+                
+                document.getElementById('apiStatus').innerHTML = `<span class="success">✅ ${response.status} OK</span>`;
+                document.getElementById('backendIsAdmin').innerHTML = data.isAdmin 
+                    ? '<span class="success">✅ TRUE</span>' 
+                    : '<span class="error">❌ FALSE</span>';
+                document.getElementById('phoneChecked').textContent = data.phone || 'N/A';
+                
+                // Fetch expected admin list
+                const adminResponse = await fetch(`${API_BASE_URL}/api/admin-phones`);
+                const adminData = await adminResponse.json();
+                document.getElementById('expectedAdmins').textContent = adminData.adminPhones.join(', ');
+                
+                log(`Expected admins: ${adminData.adminPhones.join(', ')}`);
+                
+                // Diagnosis
+                const diagnosisEl = document.getElementById('diagnosis');
+                if (data.isAdmin) {
+                    diagnosisEl.innerHTML = `
+                        <div class="success">
+                            <h3>✅ ALL GOOD!</h3>
+                            <p>Phone <strong>${phone}</strong> IS in the admin list.</p>
+                            <p>You should have admin access.</p>
+                            <p><strong>If you're still seeing "Access Denied", try:</strong></p>
+                            <ol>
+                                <li>Hard refresh the page (Ctrl+Shift+R)</li>
+                                <li>Clear browser cache completely</li>
+                                <li>Use incognito/private mode</li>
+                            </ol>
+                        </div>
+                    `;
+                    log('Diagnosis: User IS admin - should have access', 'success');
+                } else {
+                    diagnosisEl.innerHTML = `
+                        <div class="error">
+                            <h3>❌ PROBLEM FOUND!</h3>
+                            <p>Phone stored: <strong>${phone}</strong></p>
+                            <p>Expected admin phones: <strong>${adminData.adminPhones.join(', ')}</strong></p>
+                            <p><strong>Possible issues:</strong></p>
+                            <ol>
+                                <li>Phone format mismatch (check for spaces, dashes, or missing +91)</li>
+                                <li>Phone number ${phone} is NOT in admin_phones.json</li>
+                                <li>Need to add your number to backend/data/admin_phones.json</li>
+                            </ol>
+                            <p><strong>Solution:</strong> Click "Clear All & Re-Login as Admin" below</p>
+                        </div>
+                    `;
+                    log(`Diagnosis: User NOT admin - ${phone} not in list [${adminData.adminPhones.join(', ')}]`, 'error');
+                }
+                
+            } catch (error) {
+                document.getElementById('apiStatus').innerHTML = `<span class="error">❌ Error: ${error.message}</span>`;
+                log(`Error checking backend: ${error.message}`, 'error');
+            }
+        }
+        
+        function clearAndRelogin() {
+            if (confirm('This will clear all login data and redirect you to login page.\n\nMake sure to:\n1. Select "🛡️ Admin Login"\n2. Enter: 7058346137\n\nContinue?')) {
+                log('Clearing all data and redirecting to login...', 'success');
+                localStorage.clear();
+                sessionStorage.clear();
+                window.location.href = './login.html';
+            }
+        }
+        
+        function viewRawData() {
+            const rawDataSection = document.getElementById('rawDataSection');
+            const rawDataEl = document.getElementById('rawData');
+            
+            const allData = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                allData[key] = localStorage.getItem(key);
+            }
+            
+            rawDataEl.textContent = JSON.stringify(allData, null, 2);
+            rawDataSection.style.display = 'block';
+            log('Displayed raw localStorage data');
+        }
+        
+        // Load data on page load
+        loadSessionData();
+        log('Page loaded - ready for diagnostic');
+    </script>
+</body>
+</html>

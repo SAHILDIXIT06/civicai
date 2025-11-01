@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quick Fix - Admin Login</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            color: white;
+        }
+        .card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 500px;
+        }
+        h1 { font-size: 2rem; margin-bottom: 20px; }
+        p { margin: 15px 0; line-height: 1.6; }
+        button {
+            padding: 15px 40px;
+            margin: 10px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .primary {
+            background: #10b981;
+            color: white;
+        }
+        .primary:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+        }
+        .info {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        .highlight {
+            color: #ffd700;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🔧 Quick Admin Login Fix</h1>
+        
+        <div class="info">
+            <p><strong>Current Status:</strong></p>
+            <p>Phone: <span class="highlight" id="currentPhone">-</span></p>
+            <p>Role: <span class="highlight" id="currentRole">-</span></p>
+        </div>
+        
+        <p><strong>Problem:</strong> You're logged in as <span class="highlight" id="problemRole">-</span></p>
+        <p>To access admin panel, you need to be logged in as <span class="highlight">admin</span></p>
+        
+        <button class="primary" onclick="fixNow()">
+            ✅ Clear & Login as Admin
+        </button>
+        
+        <p style="font-size: 0.9rem; margin-top: 30px; opacity: 0.8;">
+            This will clear your current login and redirect you to the login page.<br>
+            Make sure to select "🛡️ Admin Login" before entering your phone number!
+        </p>
+    </div>
+
+    <script>
+        // Display current status
+        document.getElementById('currentPhone').textContent = localStorage.getItem('userPhone') || 'Not logged in';
+        document.getElementById('currentRole').textContent = localStorage.getItem('userRole') || 'Not set';
+        document.getElementById('problemRole').textContent = localStorage.getItem('userRole') || 'unknown';
+
+        function fixNow() {
+            console.log('🧹 Clearing all authentication data...');
+            localStorage.clear();
+            sessionStorage.clear();
+            console.log('✅ Cleared! Redirecting to login...');
+            
+            alert('✅ All cleared! Now:\n\n1. Select "🛡️ Admin Login"\n2. Enter: 7058346137\n3. Complete verification\n4. You\'ll be redirected to admin panel');
+            
+            window.location.href = './login.html';
+        }
+    </script>
+</body>
+</html>

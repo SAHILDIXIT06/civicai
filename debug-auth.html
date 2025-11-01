@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Auth - Civic AI</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+        .section {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        .section h2 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .label {
+            font-weight: 600;
+            color: #a0d8ff;
+        }
+        .value {
+            font-family: 'Courier New', monospace;
+            background: rgba(0,0,0,0.3);
+            padding: 4px 12px;
+            border-radius: 4px;
+            word-break: break-all;
+            max-width: 60%;
+            text-align: right;
+        }
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-align: center;
+        }
+        .success { background: #10b981; }
+        .error { background: #ef4444; }
+        .warning { background: #f59e0b; }
+        button {
+            width: 100%;
+            padding: 15px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+        pre {
+            background: rgba(0,0,0,0.5);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Authentication Debug Tool</h1>
+        
+        <div id="status" class="status"></div>
+        
+        <div class="section">
+            <h2>📱 Current Login Info</h2>
+            <div class="info-row">
+                <span class="label">Phone Number:</span>
+                <span class="value" id="phone">-</span>
+            </div>
+            <div class="info-row">
+                <span class="label">User Role:</span>
+                <span class="value" id="role">-</span>
+            </div>
+            <div class="info-row">
+                <span class="label">User ID:</span>
+                <span class="value" id="userId">-</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Auth Token:</span>
+                <span class="value" id="token">-</span>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🛡️ Admin Status Check</h2>
+            <div class="info-row">
+                <span class="label">Is Admin?</span>
+                <span class="value" id="isAdmin">Checking...</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Backend Response:</span>
+                <span class="value" id="backendStatus">-</span>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📋 Expected Admin Phones</h2>
+            <pre id="adminPhones">Loading...</pre>
+        </div>
+        
+        <div class="section">
+            <h2>🔧 Actions</h2>
+            <button class="btn-primary" onclick="checkAdmin()">🔄 Refresh Admin Check</button>
+            <button class="btn-success" onclick="fixAndLogin()">✅ Logout & Login as Admin</button>
+            <button class="btn-danger" onclick="clearAll()">🗑️ Clear All & Start Fresh</button>
+        </div>
+        
+        <div class="section">
+            <h2>📝 Full localStorage Data</h2>
+            <pre id="fullData"></pre>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = "http://localhost:4000";
+        
+        function updateDisplay() {
+            const phone = localStorage.getItem('userPhone') || 'Not logged in';
+            const role = localStorage.getItem('userRole') || 'Not set';
+            const userId = localStorage.getItem('userId') || 'Not set';
+            const token = localStorage.getItem('authToken') || 'Not set';
+            
+            document.getElementById('phone').textContent = phone;
+            document.getElementById('role').textContent = role;
+            document.getElementById('userId').textContent = userId;
+            document.getElementById('token').textContent = token === 'Not set' ? token : token.substring(0, 30) + '...';
+            
+            // Show full data
+            const allData = {
+                authToken: token,
+                userPhone: phone,
+                userId: userId,
+                userRole: role,
+                mockUsers: JSON.parse(localStorage.getItem('mockUsers') || '{}')
+            };
+            document.getElementById('fullData').textContent = JSON.stringify(allData, null, 2);
+            
+            // Update status
+            const statusEl = document.getElementById('status');
+            if (phone === 'Not logged in') {
+                statusEl.className = 'status error';
+                statusEl.textContent = '❌ NOT LOGGED IN';
+            } else if (role === 'admin') {
+                statusEl.className = 'status success';
+                statusEl.textContent = `✅ LOGGED IN AS ADMIN (${phone})`;
+            } else {
+                statusEl.className = 'status warning';
+                statusEl.textContent = `⚠️ LOGGED IN AS CITIZEN (${phone})`;
+            }
+        }
+        
+        async function checkAdmin() {
+            const phone = localStorage.getItem('userPhone');
+            const token = localStorage.getItem('authToken');
+            
+            if (!phone || !token) {
+                document.getElementById('isAdmin').textContent = 'Not logged in';
+                document.getElementById('backendStatus').textContent = 'N/A';
+                return;
+            }
+            
+            try {
+                console.log('🔍 Checking admin status for:', phone);
+                
+                const response = await fetch(`${API_BASE_URL}/api/admin/check?phone=${encodeURIComponent(phone)}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                const data = await response.json();
+                
+                console.log('📡 Backend response:', data);
+                
+                document.getElementById('isAdmin').textContent = data.isAdmin ? '✅ YES' : '❌ NO';
+                document.getElementById('backendStatus').textContent = JSON.stringify(data);
+                
+                // Fetch expected admin phones
+                const adminResponse = await fetch(`${API_BASE_URL}/api/admin-phones`);
+                const adminData = await adminResponse.json();
+                document.getElementById('adminPhones').textContent = JSON.stringify(adminData, null, 2);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('isAdmin').textContent = '❌ ERROR';
+                document.getElementById('backendStatus').textContent = error.message;
+            }
+        }
+        
+        function fixAndLogin() {
+            if (confirm('This will logout and take you to login page where you can login as Admin. Continue?')) {
+                localStorage.clear();
+                sessionStorage.clear();
+                window.location.href = './login.html';
+            }
+        }
+        
+        function clearAll() {
+            if (confirm('This will clear ALL data and reload the page. Continue?')) {
+                localStorage.clear();
+                sessionStorage.clear();
+                location.reload();
+            }
+        }
+        
+        // Run on load
+        updateDisplay();
+        checkAdmin();
+        
+        // Auto-refresh every 3 seconds
+        setInterval(() => {
+            updateDisplay();
+        }, 3000);
+    </script>
+</body>
+</html>

@@ -1,12 +1,14 @@
 .dashboard-container {
   min-height: 100vh;
-  background: radial-gradient(circle at top, #151515, var(--bg));
+  background: radial-gradient(circle at top, var(--bg-secondary), var(--bg));
+  transition: background 0.3s ease;
 }
 
 .dashboard-header {
-  background: rgba(18, 18, 18, 0.8);
+  background: var(--card-bg);
   border-bottom: 1px solid var(--line);
   padding: 1rem 0;
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .dashboard-nav {
@@ -79,16 +81,37 @@
 
 .new-complaint-btn {
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
-  color: #050505;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white;
   text-decoration: none;
-  border-radius: 0.5rem;
+  border-radius: 999px;
   font-weight: 600;
-  transition: transform 0.2s ease;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.new-complaint-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.new-complaint-btn:hover::before {
+  width: 300px;
+  height: 300px;
 }
 
 .new-complaint-btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5), 0 0 60px rgba(102, 126, 234, 0.3);
 }
 
 .stats-grid {
@@ -99,11 +122,18 @@
 }
 
 .stat-card {
-  background: rgba(18, 18, 18, 0.8);
+  background: var(--card-bg);
   border: 1px solid var(--line);
   border-radius: 1rem;
   padding: 1.5rem;
   text-align: center;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+  border-color: var(--primary);
 }
 
 .stat-label {
@@ -136,16 +166,17 @@
 }
 
 .complaint-card {
-  background: rgba(18, 18, 18, 0.8);
+  background: var(--card-bg);
   border: 1px solid var(--line);
   border-radius: 1rem;
   padding: 1.5rem;
-  transition: transform 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .complaint-card:hover {
   transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: var(--primary);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
 }
 
 .complaint-header {
@@ -162,25 +193,47 @@
 
 .complaint-status {
   padding: 0.35rem 0.85rem;
-  border-radius: 0.5rem;
+  border-radius: 999px;
   font-size: 0.85rem;
   font-weight: 600;
   text-transform: uppercase;
+  transition: all 0.3s ease;
 }
 
 .status-submitted {
   background: rgba(66, 211, 255, 0.2);
-  color: #c4f3ff;
+  color: #42d3ff;
+  border: 1px solid rgba(66, 211, 255, 0.3);
+}
+
+[data-theme="light"] .status-submitted {
+  background: rgba(66, 211, 255, 0.15);
+  color: #0891b2;
+  border: 1px solid rgba(66, 211, 255, 0.4);
 }
 
 .status-in-progress {
   background: rgba(255, 196, 87, 0.2);
-  color: #ffe4b2;
+  color: #ffc457;
+  border: 1px solid rgba(255, 196, 87, 0.3);
+}
+
+[data-theme="light"] .status-in-progress {
+  background: rgba(255, 196, 87, 0.15);
+  color: #d97706;
+  border: 1px solid rgba(255, 196, 87, 0.4);
 }
 
 .status-resolved {
   background: rgba(72, 187, 120, 0.2);
-  color: #b7f5d6;
+  color: #48bb78;
+  border: 1px solid rgba(72, 187, 120, 0.3);
+}
+
+[data-theme="light"] .status-resolved {
+  background: rgba(72, 187, 120, 0.15);
+  color: #059669;
+  border: 1px solid rgba(72, 187, 120, 0.4);
 }
 
 .complaint-details {
@@ -193,6 +246,12 @@
 .complaint-category {
   color: var(--fg);
   font-weight: 600;
+}
+
+.complaint-subcategory {
+  color: var(--fg);
+  font-weight: 500;
+  margin-top: 0.25rem;
 }
 
 .complaint-date {

@@ -16,30 +16,19 @@ const roleOptions = document.querySelectorAll('input[name="role"]');
 let currentPhoneNumber = '';
 let selectedRole = 'citizen'; // default role
 
-const API_BASE_URL = "http://localhost:4000";
-
-// Admin phone numbers (will be fetched from backend)
-let adminPhones = [];
-
-// Fetch admin phones from backend
-const fetchAdminPhones = async () => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/api/admin-phones`);
-    if (response.ok) {
-      const data = await response.json();
-      adminPhones = data.adminPhones || [];
-    }
-  } catch (error) {
-    console.error('Failed to fetch admin phones:', error);
-    // Fallback to hardcoded list
-    adminPhones = ['+917058346137', '+919876543210'];
-  }
-};
+// Admin phone numbers
+let adminPhones = ['+917058346137', '+919876543210'];
 
 // Track selected role
 roleOptions.forEach(radio => {
   radio.addEventListener('change', (e) => {
     selectedRole = e.target.value;
+    console.log(`🔐 Role selected: ${selectedRole.toUpperCase()}`);
+    
+    // Visual feedback
+    if (selectedRole === 'admin') {
+      console.log('⚠️ ADMIN LOGIN: Make sure your phone number is in the admin list!');
+    }
   });
 });
 
@@ -52,130 +41,93 @@ const generateCode = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
-const sendVerificationCode = async (fullPhoneNumber) => {
-  try {
-    setStatus('Sending verification code...', 'info');
-    sendCodeBtn.disabled = true;
-    
-    // Generate a 6-digit code
-    const code = generateCode();
-    
-    // Store the code temporarily
-    sentCodes[fullPhoneNumber] = {
-      code: code,
-      timestamp: Date.now(),
-      attempts: 0,
-      role: selectedRole
-    };
-    sessionStorage.setItem('sentCodes', JSON.stringify(sentCodes));
-    
-    // Simulate sending delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    phoneForm.hidden = true;
-    verifyForm.hidden = false;
-    
-    // Show the code in status for demo purposes
-    setStatus(`Code sent! Demo code: ${code}`, 'success');
-    
-    currentPhoneNumber = fullPhoneNumber;
-    
-  } catch (error) {
-    console.error('Error sending code:', error);
-    setStatus(`Error: ${error.message}`, 'error');
-    sendCodeBtn.disabled = false;
-  }
+const sendVerificationCode = (fullPhoneNumber) => {
+  console.log(`📞 Sending demo OTP for: ${fullPhoneNumber}`);
+  console.log(`🎭 Login role: ${selectedRole.toUpperCase()}`);
+  
+  const code = '123456'; // Demo OTP
+  sentCodes[fullPhoneNumber] = code;
+  sessionStorage.setItem('sentCodes', JSON.stringify(sentCodes));
+  
+  setStatus('Demo OTP: 123456 (use this to login)', 'success');
+  sendCodeBtn.disabled = true;
+  sendCodeBtn.textContent = 'Code Sent!';
+  
+  phoneForm.hidden = true;
+  verifyForm.hidden = false;
+  currentPhoneNumber = fullPhoneNumber;
+  
+  console.log(`✅ Demo OTP ready: 123456`);
+  console.log(`🔐 Role locked in: ${selectedRole}`);
 };
 
-const verifyCode = async (code) => {
-  try {
-    setStatus('Verifying code...', 'info');
-    verifyCodeBtn.disabled = true;
-    
-    const sentCode = sentCodes[currentPhoneNumber];
-    
-    if (!sentCode) {
-      throw new Error('No code found. Please request a new code.');
-    }
-    
-    // Check if code is expired (5 minutes)
-    if (Date.now() - sentCode.timestamp > 5 * 60 * 1000) {
-      throw new Error('Code expired. Please request a new code.');
-    }
-    
-    // Check attempts
-    if (sentCode.attempts >= 3) {
-      throw new Error('Too many attempts. Please request a new code.');
-    }
-    
-    if (code !== sentCode.code) {
-      sentCode.attempts++;
-      sessionStorage.setItem('sentCodes', JSON.stringify(sentCodes));
-      throw new Error('Invalid code. Please try again.');
-    }
-    
-    // Check if admin role is selected
-    const requestedRole = sentCode.role;
-    
-    if (requestedRole === 'admin') {
-      // Verify if phone number is in admin list
-      if (!adminPhones.includes(currentPhoneNumber)) {
-        throw new Error('Access denied. You are not authorized for admin access.');
-      }
-    }
-    
-    // Successful verification
-    const userId = `user_${Date.now()}`;
-    const authToken = btoa(`${userId}:${currentPhoneNumber}:${Date.now()}`);
-    
-    // Store or update user
-    if (!mockUsers[currentPhoneNumber]) {
-      mockUsers[currentPhoneNumber] = {
-        id: userId,
-        phone: currentPhoneNumber,
-        role: requestedRole,
-        createdAt: new Date().toISOString(),
-        lastLogin: new Date().toISOString(),
-        profile: {
-          name: '',
-          address: '',
-          profilePhoto: null
-        }
-      };
-    } else {
-      // Update existing user
-      mockUsers[currentPhoneNumber].lastLogin = new Date().toISOString();
-      mockUsers[currentPhoneNumber].role = requestedRole;
-    }
-    
-    localStorage.setItem('mockUsers', JSON.stringify(mockUsers));
-    
-    // Store session
-    localStorage.setItem('authToken', authToken);
-    localStorage.setItem('userPhone', currentPhoneNumber);
-    localStorage.setItem('userId', userId);
-    localStorage.setItem('userRole', requestedRole);
-    
-    // Clean up
-    delete sentCodes[currentPhoneNumber];
-    sessionStorage.setItem('sentCodes', JSON.stringify(sentCodes));
-    
-    setStatus('Login successful! Redirecting...', 'success');
-    
-    // Redirect based on role
-    setTimeout(() => {
-      if (requestedRole === 'admin') {
-        window.location.href = './admin.html';
-      } else {
-        window.location.href = './dashboard.html';
-      }
-    }, 1500);
-    
-  } catch (error) {
-    console.error('Error verifying code:', error);
-    setStatus(error.message, 'error');
-    verifyCodeBtn.disabled = false;
+const verifyCode = (code) => {
+  const sentCode = sentCodes[currentPhoneNumber];
+  
+  if (!sentCode) {
+    setStatus('No code sent. Please request a code first.', 'error');
+    return;
   }
+  
+  if (code !== sentCode) {
+    setStatus('Invalid code. Please try again.', 'error');
+    return;
+  }
+  
+  // Check admin authorization
+  if (selectedRole === 'admin' && !adminPhones.includes(currentPhoneNumber)) {
+    console.log('❌ Admin check failed:');
+    console.log('   Current phone:', currentPhoneNumber);
+    console.log('   Admin phones:', adminPhones);
+    console.log('   Includes?', adminPhones.includes(currentPhoneNumber));
+    setStatus('Access denied. Not authorized for admin access.', 'error');
+    return;
+  }
+  
+  console.log('✅ Admin check passed! Phone:', currentPhoneNumber);
+  
+  // Successful verification
+  const userId = `user_${Date.now()}`;
+  
+  if (!mockUsers[currentPhoneNumber]) {
+    mockUsers[currentPhoneNumber] = {
+      id: userId,
+      phone: currentPhoneNumber,
+      role: selectedRole,
+      createdAt: new Date().toISOString(),
+      lastLogin: new Date().toISOString(),
+      profile: {
+        name: '',
+        address: '',
+        profilePhoto: null
+      }
+    };
+  } else {
+    mockUsers[currentPhoneNumber].lastLogin = new Date().toISOString();
+    mockUsers[currentPhoneNumber].role = selectedRole;
+  }
+  
+  localStorage.setItem('mockUsers', JSON.stringify(mockUsers));
+  localStorage.setItem('userPhone', currentPhoneNumber);
+  localStorage.setItem('userId', userId);
+  localStorage.setItem('userRole', selectedRole);
+  
+  console.log('✅ Login successful!');
+  console.log('   Phone:', currentPhoneNumber);
+  console.log('   Role:', selectedRole);
+  
+  delete sentCodes[currentPhoneNumber];
+  sessionStorage.setItem('sentCodes', JSON.stringify(sentCodes));
+  
+  setStatus('✅ Login successful! Redirecting...', 'success');
+  
+  setTimeout(() => {
+    if (selectedRole === 'admin') {
+      window.location.href = './admin.html';
+    } else {
+      window.location.href = './dashboard.html';
+    }
+  }, 1000);
 };
 
 phoneForm.addEventListener('submit', (e) => {
@@ -209,19 +161,21 @@ verifyForm.addEventListener('submit', (e) => {
 resendCodeBtn.addEventListener('click', () => {
   phoneForm.hidden = false;
   verifyForm.hidden = true;
-  setStatus('Enter your number to resend code', 'info');
+  setStatus('Enter your number to resend OTP', 'info');
   sendCodeBtn.disabled = false;
+  sendCodeBtn.textContent = 'Send Verification Code';
   verifyCodeBtn.disabled = false;
+  verifyCodeBtn.textContent = 'Verify & Login';
+  resendCodeBtn.textContent = 'Resend Code';
+  verificationCode.value = '';
 });
 
 // Check if already logged in
-document.addEventListener('DOMContentLoaded', async () => {
-  await fetchAdminPhones();
-  
-  const authToken = localStorage.getItem('authToken');
+document.addEventListener('DOMContentLoaded', () => {
+  const userPhone = localStorage.getItem('userPhone');
   const userRole = localStorage.getItem('userRole');
   
-  if (authToken) {
+  if (userPhone && userRole) {
     if (userRole === 'admin') {
       window.location.href = './admin.html';
     } else {

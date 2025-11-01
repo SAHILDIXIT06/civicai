@@ -12,6 +12,60 @@ const summaryEls = {
   resolved: document.querySelector('[data-summary="Resolved"]')
 };
 
+// 🔥 NEW: Check if user is admin
+const checkAdminAccess = async () => {
+  const userPhone = localStorage.getItem('userPhone');
+  const userRole = localStorage.getItem('userRole');
+  
+  console.log('🔐 Admin Access Check:');
+  console.log('   User Phone:', userPhone);
+  console.log('   User Role:', userRole);
+  
+  if (!userPhone || !userRole) {
+    alert('Please login first to access the admin dashboard.');
+    window.location.href = './login.html';
+    return false;
+  }
+  
+  // Check if user has admin role
+  if (userRole !== 'admin') {
+    alert('Access denied. Admin privileges required.');
+    window.location.href = './dashboard.html';
+    return false;
+  }
+  
+  try {
+    const url = `${API_BASE_URL}/api/admin/check?phone=${encodeURIComponent(userPhone)}`;
+    console.log('   API Call:', url);
+    
+    // Fetch admin phones from backend
+    const response = await fetch(url);
+    
+    console.log('   Response Status:', response.status);
+    
+    if (!response.ok) {
+      throw new Error('Not authorized');
+    }
+    
+    const data = await response.json();
+    console.log('   API Response:', data);
+    
+    if (!data.isAdmin) {
+      alert('Access Denied: You do not have admin privileges.');
+      window.location.href = './index.html';
+      return false;
+    }
+    
+    console.log('✅ Admin access granted!');
+    return true;
+  } catch (error) {
+    console.error('❌ Admin check error:', error);
+    alert('Access Denied: You do not have admin privileges.');
+    window.location.href = './index.html';
+    return false;
+  }
+};
+
 const setMessage = (text, tone = "info") => {
   if (!messageEl) return;
   messageEl.textContent = text;
@@ -29,15 +83,36 @@ const formatDate = (isoString) => {
 
 const formatLocation = (location) => {
   if (!location) return "—";
-  const { latitude, longitude, accuracy } = location;
+  const { latitude, longitude, accuracy, address } = location;
   if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
     return "—";
   }
-  const base = `${latitude.toFixed(5)}°, ${longitude.toFixed(5)}°`;
-  if (Number.isFinite(accuracy)) {
-    return `${base} (±${Math.round(accuracy)} m)`;
+  
+  // Create a container for location info
+  const container = document.createElement("div");
+  container.className = "location-info";
+  
+  // Add address if available
+  if (address) {
+    const addressText = document.createElement("div");
+    addressText.className = "location-address";
+    addressText.textContent = address;
+    container.appendChild(addressText);
   }
-  return base;
+  
+  // Create clickable map link
+  const mapLink = document.createElement("a");
+  mapLink.href = `https://www.google.com/maps?q=${latitude},${longitude}`;
+  mapLink.target = "_blank";
+  mapLink.rel = "noopener noreferrer";
+  mapLink.className = "location-link";
+  mapLink.innerHTML = `📍 ${latitude.toFixed(5)}°, ${longitude.toFixed(5)}°`;
+  if (Number.isFinite(accuracy)) {
+    mapLink.innerHTML += ` <span class="location-accuracy">(±${Math.round(accuracy)}m)</span>`;
+  }
+  container.appendChild(mapLink);
+  
+  return container;
 };
 
 const statusClass = (status = "") => {
@@ -66,7 +141,18 @@ const buildRow = (complaint) => {
 
   addCell(complaint.id ?? "—");
   addCell(formatDate(complaint.createdAt));
-  addCell(complaint.category ?? "—");
+  
+  // 🔥 NEW: Display Main Category
+  const mainCategory = complaint.mainCategory 
+    ? complaint.mainCategory.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+    : (complaint.category ?? "—");
+  addCell(mainCategory);
+  
+  // 🔥 NEW: Display Sub-Category
+  const subCategory = complaint.subCategory 
+    ? complaint.subCategory.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+    : "—";
+  addCell(subCategory);
 
   const statusBadge = document.createElement("span");
   statusBadge.className = `status-badge ${statusClass(complaint.status)}`;
@@ -124,7 +210,7 @@ const renderComplaints = (complaints) => {
   if (complaints.length === 0) {
     const emptyRow = document.createElement("tr");
     const cell = document.createElement("td");
-    cell.colSpan = 7;
+    cell.colSpan = 9; // Updated from 7 to 9 (added 2 columns)
     cell.textContent = "No complaints found.";
     emptyRow.appendChild(cell);
     tableBody.appendChild(emptyRow);
@@ -172,6 +258,10 @@ if (refreshBtn) {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  loadComplaints();
+document.addEventListener("DOMContentLoaded", async () => {
+  // Check admin access first
+  const isAdmin = await checkAdminAccess();
+  if (isAdmin) {
+    loadComplaints();
+  }
 });

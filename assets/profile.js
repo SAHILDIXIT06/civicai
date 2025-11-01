@@ -1,15 +1,15 @@
 // Check authentication
 const checkAuth = () => {
-  const authToken = localStorage.getItem('authToken');
   const userPhone = localStorage.getItem('userPhone');
   const userId = localStorage.getItem('userId');
+  const userRole = localStorage.getItem('userRole');
   
-  if (!authToken || !userPhone || !userId) {
+  if (!userPhone || !userId) {
     window.location.href = './login.html';
     return false;
   }
   
-  return { authToken, userPhone, userId };
+  return { userPhone, userId, userRole };
 };
 
 const auth = checkAuth();
@@ -222,7 +222,6 @@ if (logoutBtn) {
       if (!confirmLogout) return;
     }
     
-    localStorage.removeItem('authToken');
     localStorage.removeItem('userPhone');
     localStorage.removeItem('userId');
     localStorage.removeItem('userRole');

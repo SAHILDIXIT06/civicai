@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Complaint Filed Successfully - Civic AI Tech</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="./assets/styles.css" />
+    <style>
+      .success-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        background: radial-gradient(circle at top, var(--bg-secondary), var(--bg));
+        transition: background 0.3s ease;
+      }
+
+      .success-card {
+        max-width: 600px;
+        width: 100%;
+        background: var(--card-bg);
+        border: 2px solid var(--line);
+        border-radius: 1.5rem;
+        padding: 3rem;
+        text-align: center;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      [data-theme="light"] .success-card {
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        border-color: rgba(102, 126, 234, 0.2);
+      }
+
+      .success-icon {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 2rem;
+        position: relative;
+        animation: scaleIn 0.5s ease-out;
+      }
+
+      @keyframes scaleIn {
+        0% {
+          transform: scale(0);
+          opacity: 0;
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .checkmark {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        display: block;
+        stroke-width: 4;
+        stroke: #4CAF50;
+        stroke-miterlimit: 10;
+        box-shadow: inset 0px 0px 0px #4CAF50;
+        animation: fillCircle 0.4s ease-in-out 0.4s forwards, scaleCircle 0.3s ease-in-out 0.9s both;
+        filter: drop-shadow(0 0 10px rgba(76, 175, 80, 0.4));
+      }
+
+      .checkmark__circle {
+        stroke-dasharray: 166;
+        stroke-dashoffset: 166;
+        stroke-width: 4;
+        stroke-miterlimit: 10;
+        stroke: #4CAF50;
+        fill: none;
+        animation: strokeCircle 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+      }
+
+      .checkmark__check {
+        transform-origin: 50% 50%;
+        stroke-dasharray: 48;
+        stroke-dashoffset: 48;
+        stroke-width: 5;
+        stroke: #fff;
+        animation: strokeCheck 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+      }
+
+      @keyframes strokeCircle {
+        100% {
+          stroke-dashoffset: 0;
+        }
+      }
+
+      @keyframes strokeCheck {
+        100% {
+          stroke-dashoffset: 0;
+        }
+      }
+
+      @keyframes fillCircle {
+        100% {
+          box-shadow: inset 0px 0px 0px 30px #4CAF50;
+        }
+      }
+
+      @keyframes scaleCircle {
+        0%, 100% {
+          transform: none;
+        }
+        50% {
+          transform: scale3d(1.1, 1.1, 1);
+        }
+      }
+
+      .success-title {
+        font-size: 2rem;
+        color: #4CAF50;
+        margin-bottom: 1rem;
+        animation: fadeInUp 0.5s ease-out 0.3s both;
+      }
+
+      .success-message {
+        font-size: 1.1rem;
+        color: var(--fg-soft);
+        margin-bottom: 2rem;
+        line-height: 1.6;
+        animation: fadeInUp 0.5s ease-out 0.5s both;
+      }
+
+      @keyframes fadeInUp {
+        0% {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .complaint-details {
+        background: var(--bg-secondary);
+        border: 2px solid var(--line);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        text-align: left;
+        animation: fadeInUp 0.5s ease-out 0.7s both;
+        transition: all 0.3s ease;
+      }
+
+      [data-theme="light"] .complaint-details {
+        background: rgba(102, 126, 234, 0.03);
+        border-color: rgba(102, 126, 234, 0.2);
+      }
+
+      .complaint-details h3 {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        color: var(--fg);
+      }
+
+      .detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .detail-row:last-child {
+        border-bottom: none;
+      }
+
+      .detail-label {
+        font-weight: 600;
+        color: var(--fg-soft);
+      }
+
+      .detail-value {
+        color: var(--fg);
+        font-weight: 500;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        animation: fadeInUp 0.5s ease-out 0.9s both;
+      }
+
+      .btn {
+        padding: 0.85rem 2rem;
+        border-radius: 999px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        color: white;
+        border: 2px solid var(--primary);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+      }
+
+      .btn-primary:hover::before {
+        width: 300px;
+        height: 300px;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5), 0 0 60px rgba(102, 126, 234, 0.3);
+      }
+
+      .btn-secondary {
+        background: var(--bg-secondary);
+        color: var(--fg);
+        border: 2px solid var(--line);
+      }
+
+      [data-theme="light"] .btn-secondary {
+        background: white;
+        border-color: rgba(0, 0, 0, 0.15);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(102, 126, 234, 0.1);
+        border-color: var(--primary);
+        transform: translateY(-2px);
+      }
+
+      /* Theme toggle button */
+      .theme-toggle {
+        position: fixed;
+        top: 2rem;
+        right: 2rem;
+        background: var(--card-bg);
+        border: 2px solid var(--line);
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1.5rem;
+        z-index: 1000;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .theme-toggle:hover {
+        transform: scale(1.1) rotate(15deg);
+        border-color: var(--primary);
+        box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+      <span class="theme-icon">🌙</span>
+    </button>
+    
+    <div class="success-container">
+      <div class="success-card">
+        <div class="success-icon">
+          <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+            <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+            <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+          </svg>
+        </div>
+
+        <h1 class="success-title">Complaint Filed Successfully!</h1>
+        <p class="success-message">
+          Your civic complaint has been submitted successfully. 
+          Our team will review it and take appropriate action.
+        </p>
+
+        <div class="complaint-details" id="complaint-details">
+          <h3>Complaint Details</h3>
+          <div class="detail-row">
+            <span class="detail-label">Complaint ID:</span>
+            <span class="detail-value" id="complaint-id">Loading...</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Main Category:</span>
+            <span class="detail-value" id="main-category">Loading...</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Sub-Category:</span>
+            <span class="detail-value" id="sub-category">Loading...</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Status:</span>
+            <span class="detail-value">Submitted</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Filed On:</span>
+            <span class="detail-value" id="filed-date">Loading...</span>
+          </div>
+          <div class="detail-row" id="location-row" style="display: none;">
+            <span class="detail-label">Location:</span>
+            <span class="detail-value" id="location-address">Loading...</span>
+          </div>
+          <div class="detail-row" id="map-link-row" style="display: none;">
+            <span class="detail-label">View on Map:</span>
+            <span class="detail-value">
+              <a href="#" id="map-link" target="_blank" style="color: #667eea; text-decoration: none;">
+                📍 Open in Google Maps
+              </a>
+            </span>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <a href="./dashboard.html" class="btn btn-primary">View My Complaints</a>
+          <a href="./index.html" class="btn btn-secondary">File Another Complaint</a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Get complaint data from localStorage
+      const complaintData = JSON.parse(localStorage.getItem('lastComplaint') || '{}');
+
+      if (complaintData.id) {
+        document.getElementById('complaint-id').textContent = complaintData.id || 'N/A';
+        
+        // Format category names
+        const formatCategory = (cat) => {
+          if (!cat) return 'N/A';
+          return cat.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        };
+        
+        document.getElementById('main-category').textContent = formatCategory(complaintData.mainCategory);
+        document.getElementById('sub-category').textContent = formatCategory(complaintData.subCategory);
+        
+        const date = new Date(complaintData.createdAt);
+        document.getElementById('filed-date').textContent = date.toLocaleString();
+        
+        // Display location if available
+        if (complaintData.location) {
+          const loc = complaintData.location;
+          
+          // Show location address if available
+          if (loc.address) {
+            document.getElementById('location-address').textContent = loc.address;
+            document.getElementById('location-row').style.display = 'flex';
+          } else if (loc.latitude && loc.longitude) {
+            document.getElementById('location-address').textContent = 
+              `${loc.latitude.toFixed(6)}, ${loc.longitude.toFixed(6)}`;
+            document.getElementById('location-row').style.display = 'flex';
+          }
+          
+          // Create Google Maps link
+          if (loc.latitude && loc.longitude) {
+            const mapsUrl = `https://www.google.com/maps?q=${loc.latitude},${loc.longitude}`;
+            document.getElementById('map-link').href = mapsUrl;
+            document.getElementById('map-link-row').style.display = 'flex';
+          }
+        }
+        
+        // Clear the data after displaying
+        setTimeout(() => {
+          localStorage.removeItem('lastComplaint');
+        }, 1000);
+      } else {
+        // If no data, redirect to home after 3 seconds
+        setTimeout(() => {
+          window.location.href = './index.html';
+        }, 3000);
+      }
+    </script>
+    <script src="./assets/theme.js"></script>
+  </body>
+</html>

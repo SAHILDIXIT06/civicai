@@ -75,7 +75,8 @@ const parseLocation = (payload) => {
   return {
     latitude: latitudeValue,
     longitude: longitudeValue,
-    accuracy: Number.isFinite(accuracyValue) ? accuracyValue : undefined
+    accuracy: Number.isFinite(accuracyValue) ? accuracyValue : undefined,
+    address: payload.address || null // Store address from map selection
   };
 };
 
@@ -164,7 +165,8 @@ app.post('/api/complaints', upload.single('image'), async (req, res, next) => {
       description, 
       latitude, 
       longitude, 
-      accuracy, 
+      accuracy,
+      address,           // 🔥 NEW: Address from map selection
       suggestedCategory, 
       suggestedDescription, 
       suggestedConfidence, 
@@ -198,7 +200,12 @@ app.post('/api/complaints', upload.single('image'), async (req, res, next) => {
 
     const locationFromForm =
       lat !== null && lon !== null
-        ? { latitude: lat, longitude: lon, accuracy: acc ?? null }
+        ? { 
+            latitude: lat, 
+            longitude: lon, 
+            accuracy: acc ?? null,
+            address: address || null // 🔥 Include address from map selection
+          }
         : null;
 
     const complaintId = randomUUID();
@@ -313,6 +320,33 @@ app.get('/api/admin-phones', async (_req, res, next) => {
     const raw = await fs.readFile(adminPhonesFile, 'utf8');
     const data = JSON.parse(raw);
     res.json(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// 🔥 NEW: Admin check endpoint
+app.get('/api/admin/check', async (req, res, next) => {
+  try {
+    // Get phone from query or body
+    const phone = req.query.phone || req.body.phone;
+    
+    if (!phone) {
+      return res.status(400).json({ isAdmin: false, message: 'Phone number required' });
+    }
+    
+    const adminPhonesFile = path.join(dataDir, 'admin_phones.json');
+    const raw = await fs.readFile(adminPhonesFile, 'utf8');
+    const data = JSON.parse(raw);
+    
+    console.log('🔍 Admin Check Request:');
+    console.log('   Phone from request:', phone);
+    console.log('   Admin phones in list:', data.adminPhones);
+    console.log('   Match found:', data.adminPhones.includes(phone));
+    
+    const isAdmin = data.adminPhones.includes(phone);
+    
+    res.json({ isAdmin, phone });
   } catch (error) {
     next(error);
   }

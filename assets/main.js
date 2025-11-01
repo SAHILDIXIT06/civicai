@@ -1,20 +1,82 @@
+// 🔒 IMMEDIATE AUTH CHECK - Runs before anything else
+// This ensures login page is shown first when app opens
+(function() {
+  const userPhone = localStorage.getItem('userPhone');
+  const userId = localStorage.getItem('userId');
+  
+  if (!userPhone || !userId) {
+    // Not logged in - redirect to login page immediately
+    window.location.href = './login.html';
+  }
+})();
+
 const yearEl = document.getElementById("year");
 if (yearEl) {
   yearEl.textContent = new Date().getFullYear().toString();
 }
 
 // Check auth status and show appropriate nav links
-const checkAuthNav = () => {
-  const authToken = localStorage.getItem('authToken');
+const checkAuthNav = async () => {
+  const userPhone = localStorage.getItem('userPhone');
+  const userRole = localStorage.getItem('userRole');
+  const loginLink = document.getElementById('login-link');
   const dashboardLink = document.getElementById('dashboard-link');
+  const adminLink = document.getElementById('admin-link');
+  const logoutLink = document.getElementById('logout-link');
   
-  if (authToken && dashboardLink) {
-    dashboardLink.style.display = 'inline-block';
+  if (userPhone && userRole) {
+    // User is logged in
+    if (loginLink) loginLink.style.display = 'none';
+    if (dashboardLink) dashboardLink.style.display = 'inline-block';
+    if (logoutLink) logoutLink.style.display = 'inline-block';
+    
+    // Check if user is admin
+    if (userRole === 'admin' && adminLink) {
+      adminLink.style.display = 'inline-block';
+    }
+  } else {
+    // User is not logged in
+    if (loginLink) loginLink.style.display = 'inline-block';
+    if (dashboardLink) dashboardLink.style.display = 'none';
+    if (adminLink) adminLink.style.display = 'none';
+    if (logoutLink) logoutLink.style.display = 'none';
   }
 };
 
-// Call on page load
-document.addEventListener('DOMContentLoaded', checkAuthNav);
+// Logout function
+const logout = () => {
+  localStorage.removeItem('userPhone');
+  localStorage.removeItem('userId');
+  localStorage.removeItem('userRole');
+  window.location.href = './login.html';
+};
+
+// Check if user is authenticated before allowing access to complaint page
+const checkAuthAndRedirect = () => {
+  const userPhone = localStorage.getItem('userPhone');
+  const userId = localStorage.getItem('userId');
+  
+  // If not logged in, redirect to login page
+  if (!userPhone || !userId) {
+    window.location.href = './login.html';
+    return false;
+  }
+  return true;
+};
+
+// Add logout event listener
+document.addEventListener('DOMContentLoaded', () => {
+  // First check if user is authenticated
+  if (!checkAuthAndRedirect()) {
+    return; // Stop execution if redirecting to login
+  }
+  
+  checkAuthNav();
+  const logoutLink = document.getElementById('logout-link');
+  if (logoutLink) {
+    logoutLink.addEventListener('click', logout);
+  }
+});
 
 const API_BASE_URL = "http://localhost:4000";
 
@@ -183,9 +245,7 @@ fileInput?.addEventListener('change', (e) => {
   const reader = new FileReader();
   reader.onload = (e) => {
     const img = filePreview.querySelector('img');
-    const caption = filePreview.querySelector('figcaption');
     img.src = e.target.result;
-    caption.textContent = file.name;
     filePreview.hidden = false;
   };
   reader.readAsDataURL(file);
@@ -328,7 +388,7 @@ locationBtn?.addEventListener('click', () => {
   locationBtn.disabled = true;
   
   navigator.geolocation.getCurrentPosition(
-    (position) => {
+    async (position) => {
       userLocation = {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
@@ -337,8 +397,22 @@ locationBtn?.addEventListener('click', () => {
       
       locationMessage.textContent = '✅ Location access granted';
       locationCoords.textContent = `Lat: ${userLocation.latitude.toFixed(6)}, Lon: ${userLocation.longitude.toFixed(6)}`;
-      locationBtn.textContent = '📍 Location granted';
       
+      // Fetch address for the location
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${userLocation.latitude}&lon=${userLocation.longitude}`
+        );
+        const data = await response.json();
+        if (data && data.display_name) {
+          userLocation.address = data.display_name;
+          locationCoords.textContent = `📍 ${data.display_name}`;
+        }
+      } catch (error) {
+        console.error('Error fetching address:', error);
+      }
+      
+      locationBtn.textContent = '📍 Location granted';
       updateComplaintButton();
     },
     (error) => {
@@ -347,6 +421,249 @@ locationBtn?.addEventListener('click', () => {
       locationBtn.disabled = false;
     }
   );
+});
+
+// ===== MAP LOCATION PICKER (FREE - Using OpenStreetMap) =====
+const mapLocationBtn = document.getElementById('map-location-btn');
+const mapModal = document.getElementById('map-modal');
+const closeMapBtn = document.getElementById('close-map');
+const locationSearchInput = document.getElementById('location-search');
+const searchLocationBtn = document.getElementById('search-location-btn');
+const confirmLocationBtn = document.getElementById('confirm-location-btn');
+const selectedAddressEl = document.getElementById('selected-address');
+
+let map = null;
+let marker = null;
+let selectedLocation = null;
+
+// Initialize map when modal opens
+function initMap() {
+  if (map) return; // Already initialized
+  
+  // Default center (India - Mumbai)
+  const defaultCenter = [19.0760, 72.8777];
+  
+  map = L.map('map').setView(defaultCenter, 12);
+  
+  // Add OpenStreetMap tiles (completely free!)
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 19
+  }).addTo(map);
+  
+  // Click on map to select location
+  map.on('click', async (e) => {
+    const lat = e.latlng.lat;
+    const lng = e.latlng.lng;
+    
+    // Remove old marker if exists
+    if (marker) {
+      map.removeLayer(marker);
+    }
+    
+    // Add new marker
+    marker = L.marker([lat, lng]).addTo(map);
+    
+    // Store selected location
+    selectedLocation = {
+      latitude: lat,
+      longitude: lng
+    };
+    
+    // Get address using reverse geocoding (free Nominatim API)
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
+      );
+      const data = await response.json();
+      
+      if (data.display_name) {
+        selectedAddressEl.textContent = `📍 ${data.display_name}`;
+        selectedLocation.address = data.display_name;
+      } else {
+        selectedAddressEl.textContent = `📍 Lat: ${lat.toFixed(6)}, Lon: ${lng.toFixed(6)}`;
+      }
+    } catch (error) {
+      console.error('Reverse geocoding error:', error);
+      selectedAddressEl.textContent = `📍 Lat: ${lat.toFixed(6)}, Lon: ${lng.toFixed(6)}`;
+    }
+    
+    confirmLocationBtn.disabled = false;
+  });
+}
+
+// Open map modal
+mapLocationBtn?.addEventListener('click', () => {
+  mapModal.style.display = 'flex';
+  initMap();
+  
+  // Try to center on user's current location if available
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const userLat = position.coords.latitude;
+      const userLng = position.coords.longitude;
+      map.setView([userLat, userLng], 13);
+    });
+  }
+  
+  // Refresh map size (fix for hidden div issue)
+  setTimeout(() => {
+    map.invalidateSize();
+  }, 100);
+});
+
+// Close map modal
+closeMapBtn?.addEventListener('click', () => {
+  mapModal.style.display = 'none';
+});
+
+// Close modal on outside click
+mapModal?.addEventListener('click', (e) => {
+  if (e.target === mapModal) {
+    mapModal.style.display = 'none';
+  }
+});
+
+// Search location
+searchLocationBtn?.addEventListener('click', async () => {
+  const query = locationSearchInput.value.trim();
+  
+  if (!query) {
+    alert('Please enter a location to search');
+    return;
+  }
+  
+  try {
+    searchLocationBtn.disabled = true;
+    searchLocationBtn.textContent = '🔍 Searching...';
+    
+    // Use free Nominatim geocoding API
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`
+    );
+    const data = await response.json();
+    
+    if (data.length > 0) {
+      const result = data[0];
+      const lat = parseFloat(result.lat);
+      const lng = parseFloat(result.lon);
+      
+      // Move map to searched location
+      map.setView([lat, lng], 15);
+      
+      // Remove old marker
+      if (marker) {
+        map.removeLayer(marker);
+      }
+      
+      // Add marker
+      marker = L.marker([lat, lng]).addTo(map);
+      
+      // Set selected location
+      selectedLocation = {
+        latitude: lat,
+        longitude: lng,
+        address: result.display_name
+      };
+      
+      selectedAddressEl.textContent = `📍 ${result.display_name}`;
+      confirmLocationBtn.disabled = false;
+    } else {
+      alert('Location not found. Please try a different search term.');
+    }
+  } catch (error) {
+    console.error('Geocoding error:', error);
+    alert('Error searching for location. Please try again.');
+  } finally {
+    searchLocationBtn.disabled = false;
+    searchLocationBtn.textContent = '🔍 Search';
+  }
+});
+
+// "Your Location" button in map
+const myLocationBtn = document.getElementById('my-location-btn');
+myLocationBtn?.addEventListener('click', () => {
+  if (!navigator.geolocation) {
+    alert('Geolocation is not supported by your browser');
+    return;
+  }
+  
+  myLocationBtn.disabled = true;
+  myLocationBtn.textContent = '📍 Locating...';
+  
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+      
+      // Move map to user's location
+      map.setView([lat, lng], 15);
+      
+      // Remove old marker
+      if (marker) {
+        map.removeLayer(marker);
+      }
+      
+      // Add marker
+      marker = L.marker([lat, lng]).addTo(map);
+      
+      // Fetch address
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
+        );
+        const data = await response.json();
+        
+        selectedLocation = {
+          latitude: lat,
+          longitude: lng,
+          address: data.display_name || `Lat: ${lat.toFixed(6)}, Lon: ${lng.toFixed(6)}`
+        };
+        
+        selectedAddressEl.textContent = `📍 ${selectedLocation.address}`;
+        confirmLocationBtn.disabled = false;
+      } catch (error) {
+        console.error('Error fetching address:', error);
+        selectedLocation = {
+          latitude: lat,
+          longitude: lng,
+          address: `Lat: ${lat.toFixed(6)}, Lon: ${lng.toFixed(6)}`
+        };
+        selectedAddressEl.textContent = `📍 ${selectedLocation.address}`;
+        confirmLocationBtn.disabled = false;
+      }
+      
+      myLocationBtn.disabled = false;
+      myLocationBtn.textContent = '📍 Your Location';
+    },
+    (error) => {
+      console.error('Location error:', error);
+      alert('Could not get your location. Please enable location services.');
+      myLocationBtn.disabled = false;
+      myLocationBtn.textContent = '📍 Your Location';
+    }
+  );
+});
+
+// Confirm location
+confirmLocationBtn?.addEventListener('click', () => {
+  if (selectedLocation) {
+    userLocation = {
+      latitude: selectedLocation.latitude,
+      longitude: selectedLocation.longitude,
+      accuracy: 0, // Map selection is precise
+      address: selectedLocation.address || `${selectedLocation.latitude}, ${selectedLocation.longitude}`
+    };
+    
+    locationMessage.textContent = '✅ Location selected from map';
+    locationCoords.textContent = selectedLocation.address || 
+      `Lat: ${selectedLocation.latitude.toFixed(6)}, Lon: ${selectedLocation.longitude.toFixed(6)}`;
+    
+    // Close modal
+    mapModal.style.display = 'none';
+    
+    updateComplaintButton();
+  }
 });
 
 // Update complaint button state
@@ -417,6 +734,11 @@ complaintBtn?.addEventListener('click', async () => {
     formData.append('longitude', userLocation.longitude);
     formData.append('accuracy', userLocation.accuracy);
     
+    // Add address if available from map selection
+    if (userLocation.address) {
+      formData.append('address', userLocation.address);
+    }
+    
     // Add user info if logged in
     const userPhone = localStorage.getItem('userPhone');
     const userId = localStorage.getItem('userId');
@@ -451,13 +773,18 @@ complaintBtn?.addEventListener('click', async () => {
     
     const result = await response.json();
     
-    complaintConfirmation.textContent = `✅ Complaint filed successfully! ID: ${result.complaint.id}`;
-    complaintConfirmation.hidden = false;
+    // Save complaint data to localStorage for success page
+    localStorage.setItem('lastComplaint', JSON.stringify({
+      id: result.complaint.id,
+      mainCategory: result.complaint.mainCategory,
+      subCategory: result.complaint.subCategory,
+      createdAt: result.complaint.createdAt,
+      status: result.complaint.status,
+      location: result.complaint.location || null // Include location data
+    }));
     
-    // Reset form
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
+    // Redirect to success page
+    window.location.href = './success.html';
     
   } catch (error) {
     console.error('Submit error:', error);
@@ -469,10 +796,10 @@ complaintBtn?.addEventListener('click', async () => {
 
 // Check if user is logged in
 document.addEventListener('DOMContentLoaded', () => {
-  const authToken = localStorage.getItem('authToken');
+  const userPhone = localStorage.getItem('userPhone');
   const dashboardLink = document.getElementById('dashboard-link');
   
-  if (authToken && dashboardLink) {
+  if (userPhone && dashboardLink) {
     dashboardLink.style.display = 'inline-block';
   }
   
