@@ -3,10 +3,11 @@
 // You can find them in Firebase Console > Project Settings > General > "Your apps" (Web).
 
 export default {
-  apiKey: "YOUR_FIREBASE_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID",
+  apiKey: "AIzaSyBy4b-D05pfVhveDInq4AOrco3fkMfViUs",
+  authDomain: "otp-fb-30081.firebaseapp.com",
+  projectId: "otp-fb-30081",
+  storageBucket: "otp-fb-30081.appspot.com",
+  messagingSenderId: "849388269837",
+  appId: "1:849388269837:web:7fa39bdd1cff54712ec044",
+  measurementId: "G-5R6KL03LB8"
 };
