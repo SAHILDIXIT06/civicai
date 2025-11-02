@@ -182,7 +182,9 @@ const renderComplaints = (complaints) => {
         ${imageUrl ? `
           <div class="complaint-image-container">
             <img src="${imageUrl}" alt="Complaint image" class="complaint-image" 
-                 onclick="window.open('${imageUrl}', '_blank')" style="cursor: pointer;" />
+                 onclick="window.open('${imageUrl}', '_blank')" 
+                 onerror="this.style.display='none'; this.parentElement.innerHTML='<small style=\\'color: var(--fg-soft)\\'>Image unavailable</small>'" 
+                 style="cursor: pointer;" />
           </div>
         ` : ''}
         
