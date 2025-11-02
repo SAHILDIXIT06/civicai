@@ -354,6 +354,16 @@ app.get('/api/admin/check', async (req, res, next) => {
 
 app.use('/uploads', express.static(uploadDir));
 
+// Serve the frontend statically from the project root so the app can run with a single process
+try {
+  const projectRoot = path.resolve(__dirname, '..', '..');
+  app.use(express.static(projectRoot));
+  console.log(`Static frontend enabled from: ${projectRoot}`);
+  console.log(`Open: http://localhost:${PORT}`);
+} catch (e) {
+  console.warn('Static frontend serving disabled:', e?.message || e);
+}
+
 app.use((error, _req, res, _next) => {
   if (error?.type === 'entity.too.large') {
     console.warn('Rejected payload exceeding limit.');
