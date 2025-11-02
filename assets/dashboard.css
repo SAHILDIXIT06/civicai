@@ -323,11 +323,11 @@
 }
 
 [data-theme="light"] .loading-message {
-  color: #064e3b;
-  border-color: rgba(4, 78, 59, 0.7);
-  background: rgba(209, 250, 229, 0.8);
-  font-weight: 700;
-  text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+  color: #014737;
+  border-color: #10b981;
+  background: #d1fae5;
+  font-weight: 800;
+  text-shadow: none;
 }
 
 .retry-btn {
