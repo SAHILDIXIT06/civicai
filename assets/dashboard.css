@@ -318,15 +318,16 @@
 .loading-message {
   color: #48bb78;
   border-color: rgba(72, 187, 120, 0.3);
-  background: rgba(72, 187, 120, 0.1);
+  background: rgba(237, 244, 241, 0.1);
   font-weight: 600;
 }
 
 [data-theme="light"] .loading-message {
-  color: #065f46;
-  border-color: rgba(6, 95, 70, 0.6);
-  background: rgba(6, 95, 70, 0.12);
+  color: #064e3b;
+  border-color: rgba(4, 78, 59, 0.7);
+  background: rgba(209, 250, 229, 0.8);
   font-weight: 700;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
 }
 
 .retry-btn {
