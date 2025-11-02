@@ -1,6 +1,102 @@
 {
   "complaints": [
     {
+      "id": "e814cf46-8712-44fa-85d8-4aa4d2a84892",
+      "createdAt": "2025-11-02T07:36:37.415Z",
+      "status": "Submitted",
+      "category": "drainage",
+      "mainCategory": "drainage",
+      "subCategory": "drainage-leakage",
+      "description": "Murky, brownish drainage water is actively discharging from a large concrete pipe directly into the river/nalla. This significant outflow is causing visible contamination and appears to be untreated sewage or wastewater, posing a severe environmental and health hazard. Immediate action is required to stop the discharge and prevent further pollution.",
+      "location": {
+        "latitude": 18.5574028,
+        "longitude": 73.9283005,
+        "accuracy": 0,
+        "address": "Old Mundhwa Road, Ward 12, Pune, Pune District, Maharashtra, 411014, India"
+      },
+      "userPhone": "+917058346137",
+      "userId": "user_1762068928856",
+      "userName": null,
+      "image": {
+        "fileName": "e814cf46-8712-44fa-85d8-4aa4d2a84892.jpg",
+        "originalName": "river-pollution-759.jpg",
+        "mimeType": "image/jpeg",
+        "url": "/uploads/e814cf46-8712-44fa-85d8-4aa4d2a84892.jpg"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": null,
+        "suggestedMainCategory": null,
+        "suggestedSubCategory": null,
+        "suggestedDescription": "Murky, brownish drainage water is actively discharging from a large concrete pipe directly into the river/nalla. This significant outflow is causing visible contamination and appears to be untreated sewage or wastewater, posing a severe environmental and health hazard. Immediate action is required to stop the discharge and prevent further pollution.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "id": "44700072-3faa-4a46-afdd-f27638b6feca",
+      "createdAt": "2025-11-02T07:30:48.999Z",
+      "status": "Submitted",
+      "category": "drainage",
+      "mainCategory": "drainage",
+      "subCategory": "drainage-leakage",
+      "description": "A large pipe is actively discharging a significant volume of discolored, turbulent water, likely untreated drainage or sewage, directly into the river/nalla. This indicates a serious issue of water pollution and requires immediate intervention to stop the discharge and assess the source.",
+      "location": {
+        "latitude": 18.5574028,
+        "longitude": 73.9283005,
+        "accuracy": 0,
+        "address": "Old Mundhwa Road, Ward 12, Pune, Pune District, Maharashtra, 411014, India"
+      },
+      "userPhone": "+919011341175",
+      "userId": "user_1762068586224",
+      "userName": null,
+      "image": {
+        "fileName": "44700072-3faa-4a46-afdd-f27638b6feca.jpg",
+        "originalName": "river-pollution-759.jpg",
+        "mimeType": "image/jpeg",
+        "url": "/uploads/44700072-3faa-4a46-afdd-f27638b6feca.jpg"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": null,
+        "suggestedMainCategory": null,
+        "suggestedSubCategory": null,
+        "suggestedDescription": "A large pipe is actively discharging a significant volume of discolored, turbulent water, likely untreated drainage or sewage, directly into the river/nalla. This indicates a serious issue of water pollution and requires immediate intervention to stop the discharge and assess the source.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "id": "3ca9a0ac-9472-4fc6-b243-1f2f027c740d",
+      "createdAt": "2025-11-02T06:07:37.212Z",
+      "status": "Submitted",
+      "category": "drainage",
+      "mainCategory": "drainage",
+      "subCategory": "drainage-leakage",
+      "description": "Evidence of active discharge of drainage or untreated water from a large concrete pipe directly into the river/nalla. The discharged water is visibly discolored and turbulent, indicating significant pollution and a severe environmental concern.",
+      "location": {
+        "latitude": 18.5574028,
+        "longitude": 73.9283005,
+        "accuracy": 286321.6954353146,
+        "address": "Old Mundhwa Road, Ward 12, Pune, Pune District, Maharashtra, 411014, India"
+      },
+      "userPhone": "+919011341175",
+      "userId": "user_1762063584210",
+      "userName": null,
+      "image": {
+        "fileName": "3ca9a0ac-9472-4fc6-b243-1f2f027c740d.jpg",
+        "originalName": "river-pollution-759.jpg",
+        "mimeType": "image/jpeg",
+        "url": "/uploads/3ca9a0ac-9472-4fc6-b243-1f2f027c740d.jpg"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": null,
+        "suggestedMainCategory": null,
+        "suggestedSubCategory": null,
+        "suggestedDescription": "Evidence of active discharge of drainage or untreated water from a large concrete pipe directly into the river/nalla. The discharged water is visibly discolored and turbulent, indicating significant pollution and a severe environmental concern.",
+        "confidence": 0.95
+      }
+    },
+    {
       "id": "bb3d1f20-4d38-404d-914b-88570480d62f",
       "createdAt": "2025-11-01T21:48:25.585Z",
       "status": "Submitted",

@@ -323,11 +323,11 @@
 }
 
 [data-theme="light"] .loading-message {
-  color: #022c22;
-  border-color: #10b981;
-  background: #d1fae5;
-  font-weight: 900;
-  font-size: 1.2rem;
+  color: #065f46 !important;
+  border-color: #10b981 !important;
+  background: #d1fae5 !important;
+  font-weight: 900 !important;
+  font-size: 1.3rem !important;
 }
 
 .retry-btn {
