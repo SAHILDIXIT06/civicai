@@ -12,7 +12,7 @@ const API_BASE_URL = localStorage.getItem('apiBaseUrl') || `http://${window.loca
 const userPhoneEl = document.getElementById('user-phone');
 const logoutBtn = document.getElementById('logout-btn');
 const totalCountEl = document.getElementById('total-count');
-const pendingCountEl = document.getElementById('pending-count');
+const submittedCountEl = document.getElementById('submitted-count');
 const progressCountEl = document.getElementById('progress-count');
 const resolvedCountEl = document.getElementById('resolved-count');
 const complaintsContainer = document.getElementById('complaints-container');
@@ -107,16 +107,16 @@ const updateStats = (complaints) => {
     acc.total++;
     const status = (complaint.status || '').toLowerCase();
     
-    if (status === 'submitted') acc.pending++;
+    if (status === 'submitted') acc.submitted++;
     else if (status.includes('progress')) acc.progress++;
     else if (status === 'resolved') acc.resolved++;
-    else acc.pending++; // default unknown to pending
+    else acc.submitted++; // default unknown to submitted
     
     return acc;
-  }, { total: 0, pending: 0, progress: 0, resolved: 0 });
+  }, { total: 0, submitted: 0, progress: 0, resolved: 0 });
 
   if (totalCountEl) totalCountEl.textContent = stats.total;
-  if (pendingCountEl) pendingCountEl.textContent = stats.pending;
+  if (submittedCountEl) submittedCountEl.textContent = stats.submitted;
   if (progressCountEl) progressCountEl.textContent = stats.progress;
   if (resolvedCountEl) resolvedCountEl.textContent = stats.resolved;
 };
