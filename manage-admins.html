@@ -1,0 +1,499 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Civic AI Tech · Manage Admins</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="./assets/styles.css?v=2" />
+    <link rel="stylesheet" href="./assets/admin.css?v=2" />
+    <style>
+      .manage-admins-container {
+        max-width: 1000px;
+        margin: 2rem auto;
+        padding: 2rem;
+      }
+
+      .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .page-header h1 {
+        font-size: 2rem;
+        color: var(--text-primary);
+      }
+
+      .add-admin-section {
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-color);
+        border-radius: 12px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      .add-admin-section h2 {
+        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+        color: var(--text-primary);
+      }
+
+      .admin-form {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+        align-items: end;
+      }
+
+      .form-field {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .form-field label {
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--text-primary);
+      }
+
+      .form-field input,
+      .form-field select {
+        padding: 0.75rem;
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 1rem;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+      }
+
+      .form-field input:focus,
+      .form-field select:focus {
+        outline: none;
+        border-color: var(--accent-primary);
+      }
+
+      .access-badge {
+        display: inline-block;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        margin: 0.1rem;
+      }
+
+      .access-badge.yes {
+        background: #d1fae5;
+        color: #065f46;
+      }
+
+      .access-badge.no {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      .btn-add {
+        grid-column: 1 / -1;
+        margin-top: 1rem;
+        padding: 1rem 3rem;
+        background: #7c3aed;
+        color: #ffffff !important;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        max-width: 300px;
+      }
+
+      .btn-add:hover {
+        background: #6d28d9;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      }
+
+      .btn-add:disabled {
+        background: var(--border-color);
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .admins-list-section {
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-color);
+        border-radius: 12px;
+        padding: 2rem;
+      }
+
+      .admins-list-section h2 {
+        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+        color: var(--text-primary);
+      }
+
+      .admins-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .admins-table th,
+      .admins-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .admins-table th {
+        font-weight: 600;
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .admins-table td {
+        color: var(--text-primary);
+      }
+
+      .admins-table tbody tr:hover {
+        background: var(--bg-primary);
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .btn-edit {
+        padding: 0.5rem 1rem;
+        background: #3b82f6;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .btn-edit:hover {
+        background: #2563eb;
+      }
+
+      .btn-edit:disabled {
+        background: var(--border-color);
+        cursor: not-allowed;
+      }
+
+      .btn-remove {
+        padding: 0.5rem 1rem;
+        background: #ef4444;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .btn-remove:hover {
+        background: #dc2626;
+      }
+
+      .btn-remove:disabled {
+        background: var(--border-color);
+        cursor: not-allowed;
+      }
+
+      .admin-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        background: #7c3aed;
+        color: white;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-left: 0.5rem;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: var(--text-secondary);
+      }
+
+      .message {
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        font-weight: 500;
+      }
+
+      .message.success {
+        background: #d1fae5;
+        color: #065f46;
+        border: 1px solid #10b981;
+      }
+
+      .message.error {
+        background: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #ef4444;
+      }
+
+      .message.info {
+        background: #dbeafe;
+        color: #1e40af;
+        border: 1px solid #3b82f6;
+      }
+
+      /* Edit Modal */
+      .edit-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .edit-modal.show {
+        display: flex;
+      }
+
+      .edit-modal-content {
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-color);
+        border-radius: 12px;
+        padding: 2rem;
+        max-width: 450px;
+        width: 90%;
+      }
+
+      .edit-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .edit-modal-header h3 {
+        font-size: 1.25rem;
+        color: var(--text-primary);
+      }
+
+      .edit-modal-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--text-secondary);
+      }
+
+      .edit-modal-body .form-field {
+        margin-bottom: 1rem;
+      }
+
+      .edit-modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+      }
+
+      .btn-cancel {
+        padding: 0.75rem 1.5rem;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .btn-cancel:hover {
+        border-color: var(--text-secondary);
+      }
+
+      .btn-save {
+        padding: 0.75rem 1.5rem;
+        background: #10b981;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .btn-save:hover {
+        background: #059669;
+      }
+
+      .btn-save:disabled {
+        background: var(--border-color);
+        cursor: not-allowed;
+      }
+
+      .admin-name-display {
+        font-weight: 600;
+        color: var(--accent-primary);
+      }
+
+      @media (max-width: 768px) {
+        .admin-form {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1rem;
+        align-items: end;
+      }
+
+        .admins-table {
+          font-size: 0.875rem;
+        }
+
+        .admins-table th,
+        .admins-table td {
+          padding: 0.75rem 0.5rem;
+        }
+        .btn-add {
+        grid-column: 1 / -1;
+        margin-top: 1rem;
+        padding: 1rem 3rem;
+        background: #7c3aed;
+        color: #ffffff !important;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        max-width: 300px;
+      }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="manage-admins-container">
+      <div class="page-header">
+        <div>
+          <a class="back-link" href="./admin-portal.html">← Back to Admin Portal</a>
+          <h1>👥 Manage Administrators</h1>
+        </div>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+          <span class="theme-icon">🌙</span>
+        </button>
+      </div>
+
+      <div id="message-container"></div>
+
+      <section class="add-admin-section">
+        <h2>Add New Administrator</h2>
+        <form class="admin-form" id="add-admin-form">
+          <div class="form-field">
+            <label for="admin-name">Name</label>
+            <input 
+              type="text" 
+              id="admin-name" 
+              name="name" 
+              placeholder="Enter admin name"
+              required
+            />
+          </div>
+          <div class="form-field">
+            <label for="admin-phone">Mobile Number</label>
+            <input 
+              type="tel" 
+              id="admin-phone" 
+              name="phone" 
+              placeholder="+919876543210"
+              required
+              pattern="^\+?[0-9]{10,15}$"
+            />
+          </div>
+          <div class="form-field">
+            <label for="admin-dept">Department (optional)</label>
+            <select id="admin-dept" name="departmentId">
+              <option value="">-- Select department --</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="access-complaints">Access to Complaint Management</label>
+            <select id="access-complaints" name="canAccessComplaints">
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="access-manage-admins">Access to Manage Admins</label>
+            <select id="access-manage-admins" name="canManageAdmins">
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-add" id="add-btn">
+            + Add Admin
+          </button>
+        </form>
+      </section>
+
+      <section class="admins-list-section">
+        <h2>Current Administrators</h2>
+        <div id="admins-list-container">
+          <p class="empty-state">Loading administrators...</p>
+        </div>
+      </section>
+    </div>
+
+    <!-- Edit Permissions Modal -->
+    <div class="edit-modal" id="edit-modal">
+      <div class="edit-modal-content">
+        <div class="edit-modal-header">
+          <h3>Edit Admin Permissions</h3>
+          <button class="edit-modal-close" onclick="closeEditModal()">&times;</button>
+        </div>
+        <div class="edit-modal-body">
+          <input type="hidden" id="edit-admin-phone" />
+          <p style="margin-bottom: 1rem;">
+            Editing permissions for: <span class="admin-name-display" id="edit-admin-name"></span>
+          </p>
+          <div class="form-field">
+            <label for="edit-access-complaints">Access to Complaint Management</label>
+            <select id="edit-access-complaints">
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="edit-access-manage-admins">Access to Manage Admins</label>
+            <select id="edit-access-manage-admins">
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+        </div>
+        <div class="edit-modal-footer">
+          <button class="btn-cancel" onclick="closeEditModal()">Cancel</button>
+          <button class="btn-save" id="save-permissions-btn" onclick="saveAdminPermissions()">Save Changes</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="./assets/theme.js"></script>
+    <script type="module" src="./assets/manage-admins.js"></script>
+  </body>
+</html>

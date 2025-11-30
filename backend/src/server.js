@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { promises as fs } from 'node:fs';
 import { analyseImageWithGemini } from './gemini.js';
 import { PMC_CATEGORIES, getMainCategories, getSubCategories, mapAIToPMC } from './categories.js';
+import { sendComplaintEmail, isEmailConfigured } from './emailService.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -122,30 +123,27 @@ app.post('/api/analyse', upload.single('image'), async (req, res, next) => {
     if (!req.file) {
       return res.status(400).json({ error: 'Image file is required for analysis.' });
     }
-
     const imagePath = req.file.path;
-
+    let analysis;
     try {
-      const analysis = await analyseImageWithGemini(imagePath);
-      
-      // 🔥 NEW: Return main and sub-category
-      res.json({
-        category: analysis.category,
-        mainCategory: analysis.mainCategory,      // 🔥 NEW
-        subCategory: analysis.subCategory,        // 🔥 NEW
-        description: analysis.description,
-        confidence: analysis.confidence,
-        provider: 'gemini'
-      });
+      analysis = await analyseImageWithGemini(imagePath);
     } finally {
-      try {
-        await fs.unlink(imagePath);
-      } catch (unlinkError) {
-        console.error('Failed to delete temporary file:', unlinkError);
-      }
+      try { await fs.unlink(imagePath); } catch (unlinkError) { console.error('Failed to delete temporary file:', unlinkError); }
     }
+    // If analysis has zero confidence, indicate failure to frontend but allow manual flow
+    const aiFailed = analysis.confidence === 0;
+    res.json({
+      category: analysis.category,
+      mainCategory: analysis.mainCategory,
+      subCategory: analysis.subCategory,
+      description: analysis.description,
+      confidence: analysis.confidence,
+      provider: 'gemini',
+      aiFailed
+    });
   } catch (error) {
-    next(error);
+    console.error('❌ /api/analyse error:', error);
+    return res.status(500).json({ error: 'AI analysis failed server-side. Please pick category manually.', details: error.message });
   }
 });
 
@@ -325,6 +323,227 @@ app.get('/api/admin-phones', async (_req, res, next) => {
   }
 });
 
+// 🔥 NEW: Get all admins with details
+app.get('/api/admins', async (_req, res, next) => {
+  try {
+    const adminPhonesFile = path.join(dataDir, 'admin_phones.json');
+    
+    // Ensure file exists
+    try {
+      await fs.access(adminPhonesFile);
+    } catch {
+      const defaultAdminPhones = {
+        adminPhones: ['+917058346137', '+919876543210'],
+        admins: [
+          { phone: '+917058346137', name: 'Primary Admin', addedAt: new Date().toISOString() },
+          { phone: '+919876543210', name: 'Secondary Admin', addedAt: new Date().toISOString() }
+        ]
+      };
+      await fs.writeFile(adminPhonesFile, JSON.stringify(defaultAdminPhones, null, 2), 'utf8');
+    }
+    
+    const raw = await fs.readFile(adminPhonesFile, 'utf8');
+    const data = JSON.parse(raw);
+    
+    // Migrate old format if needed
+    if (!data.admins && data.adminPhones) {
+      data.admins = data.adminPhones.map(phone => ({
+        phone,
+        name: 'Admin',
+        addedAt: new Date().toISOString(),
+        departmentId: null,
+        departmentName: null
+      }));
+      await fs.writeFile(adminPhonesFile, JSON.stringify(data, null, 2), 'utf8');
+    }
+    
+    res.json({ admins: data.admins || [] });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// 🔥 NEW: Add new admin
+app.post('/api/admins', async (req, res, next) => {
+  try {
+    const { name, phone, addedBy, departmentId, canAccessComplaints, canManageAdmins } = req.body;
+    
+    if (!name || !phone) {
+      return res.status(400).json({ error: 'Name and phone are required' });
+    }
+    
+    // Validate phone format
+    const phoneRegex = /^\+?[0-9]{10,15}$/;
+    if (!phoneRegex.test(phone)) {
+      return res.status(400).json({ error: 'Invalid phone number format' });
+    }
+    
+    const adminPhonesFile = path.join(dataDir, 'admin_phones.json');
+    const raw = await fs.readFile(adminPhonesFile, 'utf8');
+    const data = JSON.parse(raw);
+    
+    // Initialize arrays if needed
+    if (!data.admins) data.admins = [];
+    if (!data.adminPhones) data.adminPhones = [];
+    
+    // Check if admin already exists
+    if (data.adminPhones.includes(phone)) {
+      return res.status(400).json({ error: 'This phone number is already an administrator' });
+    }
+    
+    // Resolve department if provided
+    let departmentName = null;
+    if (departmentId) {
+      try {
+        const departmentsFile = path.join(dataDir, 'departments.json');
+        const departmentsData = JSON.parse(await fs.readFile(departmentsFile, 'utf8'));
+        const dept = departmentsData.departments.find(d => d.id === departmentId);
+        if (!dept) {
+          return res.status(400).json({ error: 'Invalid departmentId' });
+        }
+        departmentName = dept.name;
+      } catch (e) {
+        console.error('Failed to resolve department:', e);
+        return res.status(500).json({ error: 'Failed to resolve department' });
+      }
+    }
+
+    // Add new admin with access permissions
+    const newAdmin = {
+      phone,
+      name,
+      addedAt: new Date().toISOString(),
+      addedBy: addedBy || null,
+      departmentId: departmentId || null,
+      departmentName,
+      canAccessComplaints: canAccessComplaints !== false,
+      canManageAdmins: canManageAdmins !== false
+    };
+    
+    data.admins.push(newAdmin);
+    data.adminPhones.push(phone);
+    
+    await fs.writeFile(adminPhonesFile, JSON.stringify(data, null, 2), 'utf8');
+    
+    console.log(`? New admin added: ${name} (${phone})`);
+    
+    res.status(201).json({ 
+      message: `Administrator ${name} added successfully`,
+      admin: newAdmin 
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// 🔥 NEW: Remove admin
+app.delete('/api/admins/:phone', async (req, res, next) => {
+  try {
+    const { phone } = req.params;
+    const { removedBy } = req.body;
+    
+    const adminPhonesFile = path.join(dataDir, 'admin_phones.json');
+    const raw = await fs.readFile(adminPhonesFile, 'utf8');
+    const data = JSON.parse(raw);
+    
+    // Check if admin exists
+    if (!data.adminPhones || !data.adminPhones.includes(phone)) {
+      return res.status(404).json({ error: 'Administrator not found' });
+    }
+    
+    // Prevent removing the last admin
+    if (data.adminPhones.length <= 1) {
+      return res.status(400).json({ error: 'Cannot remove the last administrator' });
+    }
+    
+    // Remove from both arrays
+    data.adminPhones = data.adminPhones.filter(p => p !== phone);
+    if (data.admins) {
+      data.admins = data.admins.filter(a => a.phone !== phone);
+    }
+    
+    await fs.writeFile(adminPhonesFile, JSON.stringify(data, null, 2), 'utf8');
+    
+console.log(`??? Admin removed: ${phone} by ${removedBy || 'unknown'}`);
+    
+    res.json({ message: 'Administrator removed successfully' });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ?? NEW: Update admin permissions
+app.put('/api/admins/:phone/permissions', async (req, res, next) => {
+  try {
+    const { phone } = req.params;
+    const { canAccessComplaints, canManageAdmins, updatedBy } = req.body;
+    
+    const adminPhonesFile = path.join(dataDir, 'admin_phones.json');
+    const raw = await fs.readFile(adminPhonesFile, 'utf8');
+    const data = JSON.parse(raw);
+    
+    // Check if admin exists
+    if (!data.adminPhones || !data.adminPhones.includes(phone)) {
+      return res.status(404).json({ error: 'Administrator not found' });
+    }
+    
+    // Find and update the admin in the admins array
+    if (data.admins) {
+      const adminIndex = data.admins.findIndex(a => a.phone === phone);
+      if (adminIndex !== -1) {
+        data.admins[adminIndex].canAccessComplaints = canAccessComplaints;
+        data.admins[adminIndex].canManageAdmins = canManageAdmins;
+        data.admins[adminIndex].permissionsUpdatedAt = new Date().toISOString();
+        data.admins[adminIndex].permissionsUpdatedBy = updatedBy || null;
+      }
+    }
+    
+    await fs.writeFile(adminPhonesFile, JSON.stringify(data, null, 2), 'utf8');
+    
+    console.log(`?? Admin permissions updated: ${phone} by ${updatedBy || 'unknown'}`);
+    console.log(`   - canAccessComplaints: ${canAccessComplaints}`);
+    console.log(`   - canManageAdmins: ${canManageAdmins}`);
+    
+    res.json({ 
+      message: 'Permissions updated successfully',
+      permissions: { canAccessComplaints, canManageAdmins }
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+//  NEW: Get admins by department
+app.get('/api/admins/department/:departmentId', async (req, res, next) => {
+  try {
+    const { departmentId } = req.params;
+    
+    const adminPhonesFile = path.join(dataDir, 'admin_phones.json');
+    const raw = await fs.readFile(adminPhonesFile, 'utf8');
+    const data = JSON.parse(raw);
+    
+    const admins = (data.admins || []).filter(a => a.departmentId === departmentId);
+    
+    res.json({ admins });
+  } catch (error) {
+    next(error);
+  }
+});
+
+//  NEW: Get complaints assigned to specific admin
+app.get('/api/complaints/assigned/:adminPhone', async (req, res, next) => {
+  try {
+    const { adminPhone } = req.params;
+    
+    const complaints = await readComplaints();
+    const assignedComplaints = complaints.filter(c => c.assignedTo === adminPhone);
+    
+    res.json({ complaints: assignedComplaints });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // 🔥 NEW: Admin check endpoint
 app.get('/api/admin/check', async (req, res, next) => {
   try {
@@ -346,8 +565,346 @@ app.get('/api/admin/check', async (req, res, next) => {
     
     const isAdmin = data.adminPhones.includes(phone);
     
-    res.json({ isAdmin, phone });
+    // Get admin details including permissions
+    const adminDetails = data.admins?.find(a => a.phone === phone) || {};
+    
+    res.json({ 
+      isAdmin, 
+      phone,
+      canAccessComplaints: adminDetails.canAccessComplaints !== false,
+      canManageAdmins: adminDetails.canManageAdmins !== false,
+      name: adminDetails.name || null,
+      departmentId: adminDetails.departmentId || null,
+      departmentName: adminDetails.departmentName || null
+    });
   } catch (error) {
+    next(error);
+  }
+});
+
+// 🔥 NEW: Get all departments
+app.get('/api/departments', async (_req, res, next) => {
+  try {
+    const departmentsFile = path.join(dataDir, 'departments.json');
+    const raw = await fs.readFile(departmentsFile, 'utf8');
+    const data = JSON.parse(raw);
+    res.json(data);
+  } catch (error) {
+    console.error('Error reading departments:', error);
+    next(error);
+  }
+});
+
+// 🔥 NEW: Forward complaint to department
+app.post('/api/complaints/:id/forward', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { departmentId, adminPhone, assignedTo, assignedToName } = req.body;
+
+    // Validate admin
+    if (!adminPhone) {
+      return res.status(401).json({ error: 'Admin phone number required' });
+    }
+
+    const adminPhonesFile = path.join(dataDir, 'admin_phones.json');
+    const adminData = JSON.parse(await fs.readFile(adminPhonesFile, 'utf8'));
+    if (!adminData.adminPhones.includes(adminPhone)) {
+      return res.status(403).json({ error: 'Unauthorized: Admin access required' });
+    }
+
+    // Load complaints
+    const complaints = await readComplaints();
+    const complaint = complaints.find(c => c.id === id);
+    if (!complaint) {
+      return res.status(404).json({ error: 'Complaint not found' });
+    }
+
+    // Load departments
+    const departmentsFile = path.join(dataDir, 'departments.json');
+    const departmentsData = JSON.parse(await fs.readFile(departmentsFile, 'utf8'));
+    const department = departmentsData.departments.find(d => d.id === departmentId);
+    if (!department) {
+      return res.status(404).json({ error: 'Department not found' });
+    }
+
+// Check email configuration
+    let emailResult = { success: false, skipped: true, error: 'Email not configured' };
+    if (isEmailConfigured()) {
+      // Send email
+      emailResult = await sendComplaintEmail(complaint, department, adminPhone);
+    } else {
+      console.warn('?? Email not configured. Forwarding without email notification.');
+    }
+
+    // Get admin name from admins list
+    const forwardingAdmin = adminData.admins?.find(a => a.phone === adminPhone);
+    const adminName = forwardingAdmin?.name || null;
+
+    // Update complaint with forwarding info
+    const timestamp = new Date().toISOString();
+    
+    // Initialize forwardingHistory if not exists
+    if (!complaint.forwardingHistory) {
+      complaint.forwardingHistory = [];
+    }
+
+    // Add to history
+    complaint.forwardingHistory.push({
+      departmentId: department.id,
+      departmentName: department.name,
+      timestamp: timestamp,
+      adminPhone: adminPhone,
+      adminName: adminName,
+      assignedTo: assignedTo || null,
+      assignedToName: assignedToName || null,
+      emailStatus: emailResult.success ? 'sent' : (emailResult.skipped ? 'skipped' : 'failed'),
+      error: emailResult.error || undefined,
+      messageId: emailResult.messageId || undefined
+    });
+
+    // Update current forwarding info
+    complaint.forwardedTo = department.id;
+    complaint.forwardedAt = timestamp;
+    complaint.forwardedBy = adminPhone;
+
+    // Assign to specific admin if provided
+    if (assignedTo) {
+      complaint.assignedTo = assignedTo;
+      complaint.assignedToName = assignedToName || null;
+      complaint.assignedAt = timestamp;
+    }
+
+    // Update status if still submitted
+    if (complaint.status === 'Submitted') {
+      complaint.status = 'In Progress';
+    }
+
+    // Save updated complaints
+    await writeComplaints(complaints);
+
+    console.log(`? Complaint ${id.substring(0, 8)} forwarded to ${department.name}`);
+
+    // Determine success message
+    let message;
+    if (emailResult.success) {
+      message = `Complaint forwarded to ${department.name} and email notification sent`;
+    } else if (emailResult.skipped) {
+      message = `Complaint forwarded to ${department.name} (email notification skipped - not configured)`;
+    } else {
+      message = `Complaint forwarded to ${department.name} (email failed: ${emailResult.error})`;
+    }
+
+    res.json({
+      success: true, // Forwarding succeeded even if email failed
+      message: message,
+      complaint: complaint,
+      emailResult: emailResult
+    });
+
+  } catch (error) {
+    console.error('Error forwarding complaint:', error);
+    next(error);
+  }
+});
+
+// 🔥 NEW: Bulk forward complaints
+app.post('/api/complaints/bulk-forward', async (req, res, next) => {
+  try {
+    const { complaintIds, departmentId, adminPhone } = req.body;
+
+    // Validate inputs
+    if (!Array.isArray(complaintIds) || complaintIds.length === 0) {
+      return res.status(400).json({ error: 'complaintIds array is required' });
+    }
+
+    if (!departmentId) {
+      return res.status(400).json({ error: 'departmentId is required' });
+    }
+
+    if (!adminPhone) {
+      return res.status(401).json({ error: 'Admin phone number required' });
+    }
+
+    // Validate admin
+    const adminPhonesFile = path.join(dataDir, 'admin_phones.json');
+    const adminData = JSON.parse(await fs.readFile(adminPhonesFile, 'utf8'));
+    if (!adminData.adminPhones.includes(adminPhone)) {
+      return res.status(403).json({ error: 'Unauthorized: Admin access required' });
+    }
+
+    // Load departments
+    const departmentsFile = path.join(dataDir, 'departments.json');
+    const departmentsData = JSON.parse(await fs.readFile(departmentsFile, 'utf8'));
+    const department = departmentsData.departments.find(d => d.id === departmentId);
+    if (!department) {
+      return res.status(404).json({ error: 'Department not found' });
+    }
+
+    // Check email configuration
+    const emailConfigured = isEmailConfigured();
+    if (!emailConfigured) {
+      console.warn('?? Email not configured. Bulk forwarding without email notifications.');
+    }
+
+    // Load complaints
+    const complaints = await readComplaints();
+    const results = {
+      success: [],
+      failed: []
+    };
+
+    // Process each complaint
+    for (const id of complaintIds) {
+      const complaint = complaints.find(c => c.id === id);
+      if (!complaint) {
+        results.failed.push({ id, reason: 'Complaint not found' });
+        continue;
+      }
+
+      try {
+        // Send email if configured
+        let emailResult = { success: false, skipped: true, error: 'Email not configured' };
+        if (emailConfigured) {
+          emailResult = await sendComplaintEmail(complaint, department, adminPhone);
+        }
+
+        const timestamp = new Date().toISOString();
+
+        // Initialize forwardingHistory if not exists
+        if (!complaint.forwardingHistory) {
+          complaint.forwardingHistory = [];
+        }
+
+        // Add to history
+        complaint.forwardingHistory.push({
+          departmentId: department.id,
+          departmentName: department.name,
+          timestamp: timestamp,
+          adminPhone: adminPhone,
+          emailStatus: emailResult.success ? 'sent' : (emailResult.skipped ? 'skipped' : 'failed'),
+          error: emailResult.error || undefined,
+          messageId: emailResult.messageId || undefined
+        });
+
+        // Update current forwarding info
+        complaint.forwardedTo = department.id;
+        complaint.forwardedAt = timestamp;
+        complaint.forwardedBy = adminPhone;
+
+    // Assign to specific admin if provided
+    if (assignedTo) {
+      complaint.assignedTo = assignedTo;
+      complaint.assignedToName = assignedToName || null;
+      complaint.assignedAt = timestamp;
+    }
+
+        // Update status if still submitted
+        if (complaint.status === 'Submitted') {
+          complaint.status = 'In Progress';
+        }
+
+        if (emailResult.success) {
+          results.success.push({ id, messageId: emailResult.messageId });
+        } else {
+          results.failed.push({ id, reason: emailResult.error });
+        }
+
+      } catch (error) {
+        results.failed.push({ id, reason: error.message });
+      }
+    }
+
+    // Save all updated complaints
+    await writeComplaints(complaints);
+
+    console.log(`📨 Bulk forward complete: ${results.success.length} succeeded, ${results.failed.length} failed`);
+
+    res.json({
+      message: `Forwarded ${results.success.length} of ${complaintIds.length} complaints to ${department.name}`,
+      department: department.name,
+      results: results
+    });
+
+  } catch (error) {
+    console.error('Error in bulk forward:', error);
+    next(error);
+  }
+});
+
+// 🔥 NEW: Update complaint status
+app.patch('/api/complaints/:id/status', upload.single('proofImage'), async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { status, adminPhone } = req.body;
+
+    // Validate admin
+    if (!adminPhone) {
+      return res.status(401).json({ error: 'Admin phone number required' });
+    }
+
+    const adminPhonesFile = path.join(dataDir, 'admin_phones.json');
+    const adminData = JSON.parse(await fs.readFile(adminPhonesFile, 'utf8'));
+    if (!adminData.adminPhones.includes(adminPhone)) {
+      return res.status(403).json({ error: 'Unauthorized: Admin access required' });
+    }
+
+    // Validate status
+    const validStatuses = ['Submitted', 'In Progress', 'Appeal to Resolve', 'Resolved'];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ error: `Invalid status. Must be one of: ${validStatuses.join(', ')}` });
+    }
+
+    // Load and update complaint
+    const complaints = await readComplaints();
+    const complaint = complaints.find(c => c.id === id);
+    if (!complaint) {
+      return res.status(404).json({ error: 'Complaint not found' });
+    }
+
+    const oldStatus = complaint.status;
+    complaint.status = status;
+    complaint.statusUpdatedAt = new Date().toISOString();
+    complaint.statusUpdatedBy = adminPhone;
+
+    // Get admin name
+    const updatingAdmin = adminData.admins?.find(a => a.phone === adminPhone);
+    complaint.statusUpdatedByName = updatingAdmin?.name || null;
+
+    // Handle proof image for Appeal to Resolve
+    if (status === 'Appeal to Resolve') {
+      if (req.file) {
+        complaint.proofOfWork = {
+          filename: req.file.filename,
+          originalName: req.file.originalname,
+          uploadedAt: new Date().toISOString(),
+          uploadedBy: adminPhone,
+          uploadedByName: updatingAdmin?.name || null
+        };
+      } else if (!complaint.proofOfWork) {
+        return res.status(400).json({ error: 'Proof of work image is required for Appeal to Resolve' });
+      }
+    }
+
+    // If changing from Appeal to Resolved, keep the proof image and record resolver
+    if (status === 'Resolved' && oldStatus === 'Appeal to Resolve') {
+      complaint.resolvedAt = new Date().toISOString();
+      complaint.resolvedBy = adminPhone;
+      complaint.resolvedByName = updatingAdmin?.name || null;
+    }
+
+// Save updated complaints
+    await writeComplaints(complaints);
+
+    console.log(`?? Complaint ${id.substring(0, 8)} status updated: ${oldStatus} ? ${status}`);
+
+    res.json({
+      success: true,
+      message: `Status updated from ${oldStatus} to ${status}`,
+      complaint: complaint
+    });
+
+  } catch (error) {
+    console.error('Error updating complaint status:', error);
     next(error);
   }
 });

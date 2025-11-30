@@ -1,6 +1,49 @@
 {
   "adminPhones": [
     "+917058346137",
-    "+919876543210"
+    "+919876543210",
+    "+910123456789",
+    "+919011341175",
+    "+917058346138"
+  ],
+  "admins": [
+    {
+      "phone": "+917058346137",
+      "name": "Admin",
+      "addedAt": "2025-11-30T15:44:54.324Z"
+    },
+    {
+      "phone": "+919876543210",
+      "name": "Admin",
+      "addedAt": "2025-11-30T15:44:54.324Z"
+    },
+    {
+      "phone": "+910123456789",
+      "name": "xyz",
+      "addedAt": "2025-11-30T15:50:57.247Z",
+      "addedBy": "+917058346137",
+      "canAccessComplaints": false,
+      "canManageAdmins": false,
+      "permissionsUpdatedAt": "2025-11-30T19:07:12.544Z",
+      "permissionsUpdatedBy": "+917058346138"
+    },
+    {
+      "phone": "+919011341175",
+      "name": "newadmin",
+      "addedAt": "2025-11-30T15:55:01.734Z",
+      "addedBy": "+910123456789",
+      "canAccessComplaints": false,
+      "canManageAdmins": false,
+      "permissionsUpdatedAt": "2025-11-30T19:07:27.824Z",
+      "permissionsUpdatedBy": "+917058346138"
+    },
+    {
+      "phone": "+917058346138",
+      "name": "SAHIL",
+      "addedAt": "2025-11-30T17:28:30.049Z",
+      "addedBy": "+917058346137",
+      "departmentId": "tree-authority",
+      "departmentName": "Tree Authority"
+    }
   ]
 }

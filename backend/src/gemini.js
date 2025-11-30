@@ -96,16 +96,18 @@ export async function analyseImageWithGemini(imagePath) {
     const imageBuffer = await fs.readFile(imagePath);
     const base64Image = imageBuffer.toString('base64');
 
-    // Determine MIME type
-    const mimeType = imagePath.endsWith('.png')
-      ? 'image/png'
-      : imagePath.endsWith('.jpg') || imagePath.endsWith('.jpeg')
-      ? 'image/jpeg'
-      : imagePath.endsWith('.webp')
-      ? 'image/webp'
-      : imagePath.endsWith('.avif')
-      ? 'image/avif'
-      : 'image/jpeg';
+    // Determine MIME type (expanded for mobile camera formats)
+    const lowerPath = imagePath.toLowerCase();
+    let mimeType = 'image/jpeg';
+    if (lowerPath.endsWith('.png')) mimeType = 'image/png';
+    else if (lowerPath.endsWith('.jpg') || lowerPath.endsWith('.jpeg') || lowerPath.endsWith('.jfif')) mimeType = 'image/jpeg';
+    else if (lowerPath.endsWith('.webp')) mimeType = 'image/webp';
+    else if (lowerPath.endsWith('.avif')) mimeType = 'image/avif';
+    else if (lowerPath.endsWith('.heic') || lowerPath.endsWith('.heif')) {
+      // Gemini may not fully support HEIC; treat as JPEG fallback
+      console.warn('⚠️ Converting HEIC/HEIF to JPEG base64 for analysis');
+      mimeType = 'image/jpeg';
+    }
 
     const prompt = buildPMCCategoriesPrompt();
 
@@ -180,12 +182,16 @@ export async function analyseImageWithGemini(imagePath) {
 
   } catch (error) {
     console.error('❌ Gemini AI Analysis Error:', error);
-    
-    // Check if it's a JSON parsing error
     if (error instanceof SyntaxError) {
       console.error('JSON Parse Error - AI response was not valid JSON');
     }
-    
-    throw new Error(`AI analysis failed: ${error.message}`);
+    // Provide structured fallback so frontend can still proceed
+    return {
+      category: 'other',
+      mainCategory: 'other',
+      subCategory: 'other-issue',
+      description: 'AI analysis failed. Please select category manually.',
+      confidence: 0.0
+    };
   }
 }

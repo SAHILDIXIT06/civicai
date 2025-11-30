@@ -1,6 +1,214 @@
 {
   "complaints": [
     {
+      "id": "149c889f-f186-47b7-986e-05e043c88d48",
+      "createdAt": "2025-11-23T13:18:41.245Z",
+      "status": "Resolved",
+      "category": "drainage",
+      "mainCategory": "drainage",
+      "subCategory": "drainage-leakage",
+      "description": "The image clearly shows a nalla/river with heavily polluted and murky water. Large concrete drainage pipes are visible near the bank, potentially discharging untreated drainage water into the natural water body, causing significant environmental contamination. Accumulation of debris is also evident near the pipe outlets.",
+      "location": {
+        "latitude": 18.4536792,
+        "longitude": 73.8563196,
+        "accuracy": 0,
+        "address": "Katraj, Pune, Pune District, Maharashtra, 411046, India"
+      },
+      "userPhone": "+917058346137",
+      "userId": "user_1763902733033",
+      "userName": null,
+      "image": {
+        "fileName": "149c889f-f186-47b7-986e-05e043c88d48.jpg",
+        "originalName": "1000091593_compressed.jpg",
+        "mimeType": "image/jpeg",
+        "url": "/uploads/149c889f-f186-47b7-986e-05e043c88d48.jpg"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": null,
+        "suggestedMainCategory": null,
+        "suggestedSubCategory": null,
+        "suggestedDescription": "The image clearly shows a nalla/river with heavily polluted and murky water. Large concrete drainage pipes are visible near the bank, potentially discharging untreated drainage water into the natural water body, causing significant environmental contamination. Accumulation of debris is also evident near the pipe outlets.",
+        "confidence": 0.95
+      },
+      "forwardingHistory": [
+        {
+          "departmentId": "tree-authority",
+          "departmentName": "Tree Authority",
+          "timestamp": "2025-11-30T18:38:09.089Z",
+          "adminPhone": "+917058346137",
+          "emailStatus": "skipped",
+          "error": "Email not configured"
+        },
+        {
+          "departmentId": "tree-authority",
+          "departmentName": "Tree Authority",
+          "timestamp": "2025-11-30T19:13:23.433Z",
+          "adminPhone": "+917058346137",
+          "emailStatus": "skipped",
+          "error": "Email not configured"
+        },
+        {
+          "departmentId": "tree-authority",
+          "departmentName": "Tree Authority",
+          "timestamp": "2025-11-30T19:17:52.558Z",
+          "adminPhone": "+917058346137",
+          "adminName": "Admin",
+          "assignedTo": "+917058346138",
+          "assignedToName": "SAHIL",
+          "emailStatus": "skipped",
+          "error": "Email not configured"
+        }
+      ],
+      "forwardedTo": "tree-authority",
+      "forwardedAt": "2025-11-30T19:17:52.558Z",
+      "forwardedBy": "+917058346137",
+      "assignedTo": "+917058346138",
+      "assignedToName": "SAHIL",
+      "assignedAt": "2025-11-30T19:17:52.558Z",
+      "statusUpdatedAt": "2025-11-30T20:16:01.874Z",
+      "statusUpdatedBy": "+917058346138",
+      "statusUpdatedByName": "SAHIL",
+      "proofOfWork": {
+        "filename": "temp_1764533282982.png",
+        "originalName": "Screenshot 2025-11-23 005843.png",
+        "uploadedAt": "2025-11-30T20:08:03.002Z",
+        "uploadedBy": "+917058346138",
+        "uploadedByName": "SAHIL"
+      },
+      "resolvedAt": "2025-11-30T20:16:01.874Z",
+      "resolvedBy": "+917058346138",
+      "resolvedByName": "SAHIL"
+    },
+    {
+      "id": "437f0700-9d24-4f12-8790-ce05bfab48bd",
+      "createdAt": "2025-11-23T12:42:36.676Z",
+      "status": "Submitted",
+      "category": "unauthorized-ads",
+      "mainCategory": "unauthorized-ads",
+      "subCategory": "unauthorized-hoardings",
+      "description": "Multiple large unauthorized hoardings and banners are prominently displayed on public land along the roadside, including a large red banner and other political advertisements. These structures are illegally erected, causing visual clutter and potential obstruction. Immediate action is required for their removal.",
+      "location": {
+        "latitude": 18.5761792,
+        "longitude": 73.8361344,
+        "accuracy": 327666.2449859668,
+        "address": "New Harris Bridge, Pune, Haveli, Pune District, Maharashtra, 411012, India"
+      },
+      "userPhone": "+917058346137",
+      "userId": "user_1763015011209",
+      "userName": null,
+      "image": {
+        "fileName": "437f0700-9d24-4f12-8790-ce05bfab48bd.jpg",
+        "originalName": "DIWALI-HOLIDAY-2025-03-20T092913.755.jpg",
+        "mimeType": "image/jpeg",
+        "url": "/uploads/437f0700-9d24-4f12-8790-ce05bfab48bd.jpg"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": null,
+        "suggestedMainCategory": null,
+        "suggestedSubCategory": null,
+        "suggestedDescription": "Multiple large unauthorized hoardings and banners are prominently displayed on public land along the roadside, including a large red banner and other political advertisements. These structures are illegally erected, causing visual clutter and potential obstruction. Immediate action is required for their removal.",
+        "confidence": 0.98
+      }
+    },
+    {
+      "id": "57b311d2-1799-4c9f-951c-088ad1d2408a",
+      "createdAt": "2025-11-23T12:41:01.805Z",
+      "status": "Submitted",
+      "category": "garbage-sweeping",
+      "mainCategory": "garbage-sweeping",
+      "subCategory": "dead-animal-removal",
+      "description": "A dead leopard is observed lying on a paved road surface. Immediate removal of the animal is required to ensure public hygiene, safety, and prevent any obstruction or health hazards.",
+      "location": {
+        "latitude": 18.5761792,
+        "longitude": 73.8361344,
+        "accuracy": 327666.2449859668,
+        "address": "New Harris Bridge, Pune, Haveli, Pune District, Maharashtra, 411012, India"
+      },
+      "userPhone": "+917058346137",
+      "userId": "user_1763015011209",
+      "userName": null,
+      "image": {
+        "fileName": "57b311d2-1799-4c9f-951c-088ad1d2408a.jpeg",
+        "originalName": "images.jpeg",
+        "mimeType": "image/jpeg",
+        "url": "/uploads/57b311d2-1799-4c9f-951c-088ad1d2408a.jpeg"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": null,
+        "suggestedMainCategory": null,
+        "suggestedSubCategory": null,
+        "suggestedDescription": "A dead leopard is observed lying on a paved road surface. Immediate removal of the animal is required to ensure public hygiene, safety, and prevent any obstruction or health hazards.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "id": "6e657853-c5f5-4b44-8b88-98c815d47048",
+      "createdAt": "2025-11-13T03:31:08.480Z",
+      "status": "Submitted",
+      "category": "unauthorized-ads",
+      "mainCategory": "unauthorized-ads",
+      "subCategory": "unauthorized-hoardings",
+      "description": "Multiple large unauthorized banners/hoardings are displayed prominently along the roadside, some appearing to be attached to utility poles. These banners are illegally placed on public premises and require removal.",
+      "location": {
+        "latitude": 18.5925785,
+        "longitude": 73.7183639,
+        "accuracy": 272348.1102299309,
+        "address": "Om Sai English Medium School, Hinjawadi Phase 2 Road, Mulshi, Pune District, Maharashtra, 411057, India"
+      },
+      "userPhone": "+91907 7341175",
+      "userId": "user_1763004628570",
+      "userName": null,
+      "image": {
+        "fileName": "6e657853-c5f5-4b44-8b88-98c815d47048.jpg",
+        "originalName": "DIWALI-HOLIDAY-2025-03-20T092913.755.jpg",
+        "mimeType": "image/jpeg",
+        "url": "/uploads/6e657853-c5f5-4b44-8b88-98c815d47048.jpg"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": null,
+        "suggestedMainCategory": null,
+        "suggestedSubCategory": null,
+        "suggestedDescription": "Multiple large unauthorized banners/hoardings are displayed prominently along the roadside, some appearing to be attached to utility poles. These banners are illegally placed on public premises and require removal.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "id": "55902288-56a8-4460-adeb-f3b8786091cb",
+      "createdAt": "2025-11-02T16:30:02.231Z",
+      "status": "Submitted",
+      "category": "drainage",
+      "mainCategory": "drainage",
+      "subCategory": "drainage-leakage",
+      "description": "An open large pipe is observed discharging murky, possibly untreated, drainage water directly into the river/nalla. This uncontrolled discharge is causing significant water pollution and requires immediate intervention to stop the leakage and mitigate environmental impact.",
+      "location": {
+        "latitude": 18.5574028,
+        "longitude": 73.9283005,
+        "accuracy": 0,
+        "address": "Old Mundhwa Road, Ward 12, Pune, Pune District, Maharashtra, 411014, India"
+      },
+      "userPhone": "+917058346137",
+      "userId": "user_1762100951961",
+      "userName": null,
+      "image": {
+        "fileName": "55902288-56a8-4460-adeb-f3b8786091cb.jpg",
+        "originalName": "river-pollution-759.jpg",
+        "mimeType": "image/jpeg",
+        "url": "/uploads/55902288-56a8-4460-adeb-f3b8786091cb.jpg"
+      },
+      "analysis": {
+        "provider": "gemini",
+        "suggestedCategory": null,
+        "suggestedMainCategory": null,
+        "suggestedSubCategory": null,
+        "suggestedDescription": "An open large pipe is observed discharging murky, possibly untreated, drainage water directly into the river/nalla. This uncontrolled discharge is causing significant water pollution and requires immediate intervention to stop the leakage and mitigate environmental impact.",
+        "confidence": 0.98
+      }
+    },
+    {
       "id": "e814cf46-8712-44fa-85d8-4aa4d2a84892",
       "createdAt": "2025-11-02T07:36:37.415Z",
       "status": "Submitted",

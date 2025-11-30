@@ -241,8 +241,45 @@ function updateImageRequirement(required) {
   }
 }
 
+// Image compression utility (reduces large mobile photos before upload)
+async function compressImageIfNeeded(file) {
+  try {
+    if (!file || !file.type.startsWith('image/')) return file;
+    // Skip small files
+    if (file.size < 2_500_000) return file; // < ~2.5MB keep original
+    const img = document.createElement('img');
+    const dataUrl = await new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = () => resolve(r.result);
+      r.onerror = reject;
+      r.readAsDataURL(file);
+    });
+    img.src = dataUrl;
+    await new Promise(res => { img.onload = res; });
+    const canvas = document.createElement('canvas');
+    const maxDim = 1600; // limit longest side
+    let { width, height } = img;
+    if (width > height) {
+      if (width > maxDim) { height = Math.round(height * (maxDim / width)); width = maxDim; }
+    } else {
+      if (height > maxDim) { width = Math.round(width * (maxDim / height)); height = maxDim; }
+    }
+    canvas.width = width; canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, width, height);
+    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.82);
+    const binary = atob(compressedDataUrl.split(',')[1]);
+    const array = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) array[i] = binary.charCodeAt(i);
+    return new File([array], file.name.replace(/\.[^.]+$/, '') + '_compressed.jpg', { type: 'image/jpeg' });
+  } catch (e) {
+    console.warn('Image compression skipped:', e);
+    return file; // fallback to original
+  }
+}
+
 // Shared handler for gallery or camera file inputs
-function onFileSelected(file) {
+async function onFileSelected(file) {
   if (!file) {
     selectedFile = null;
     fileStatus.textContent = 'No image selected.';
@@ -252,8 +289,8 @@ function onFileSelected(file) {
     updateComplaintButton();
     return;
   }
-  
-  selectedFile = file;
+  // Compress large mobile photos to avoid backend size/time issues
+  selectedFile = await compressImageIfNeeded(file);
   fileStatus.textContent = `Selected: ${file.name}`;
   
   // Show preview
@@ -301,6 +338,10 @@ analysisBtn?.addEventListener('click', async () => {
     }
     
     analysisResult = await response.json();
+    if (analysisResult.aiFailed) {
+      console.warn('AI reported failure, enabling manual flow.');
+      analysisStatus.textContent = '⚠️ AI could not classify. Please select categories manually.';
+    }
     
     // 🔥 DEBUG: Log what AI returned
     console.log('🤖 AI Analysis Result:', analysisResult);
@@ -309,6 +350,21 @@ analysisBtn?.addEventListener('click', async () => {
     
     // 🔥 STEP 1: Auto-select main category
     if (analysisResult.mainCategory) {
+      // Helper: wait until main categories loaded or timeout
+      const waitForMainCategory = async (target, timeoutMs = 10000) => {
+        const start = performance.now();
+        while (performance.now() - start < timeoutMs) {
+          const exists = Array.from(mainCategorySelect.options).some(o => o.value === target);
+          if (exists) return true;
+          await new Promise(r => setTimeout(r, 300));
+        }
+        return false;
+      };
+
+      const mainReady = await waitForMainCategory(analysisResult.mainCategory);
+      if (!mainReady) {
+        console.warn('Main category never appeared in options within timeout:', analysisResult.mainCategory);
+      }
       console.log('🔍 Looking for main category:', analysisResult.mainCategory);
       console.log('📋 Available main categories:', Array.from(mainCategorySelect.options).map(opt => `"${opt.value}"`));
       
@@ -371,9 +427,8 @@ analysisBtn?.addEventListener('click', async () => {
         };
         
         // Try multiple times with different delays
-        setTimeout(selectSubCategory, 1000);
-        setTimeout(selectSubCategory, 2000);
-        setTimeout(selectSubCategory, 3000);
+        const schedule = [800, 1600, 2500, 3500, 5000, 6500, 8000];
+        schedule.forEach(ms => setTimeout(selectSubCategory, ms));
       }
     }
     
@@ -399,6 +454,15 @@ analysisBtn?.addEventListener('click', async () => {
     analysisBtn.disabled = false;
   }
 });
+
+// Fallback: if user clicks analyze and nothing auto-fills within 9s, surface helper hints
+setInterval(() => {
+  if (analysisResult && descriptionTextarea && !descriptionTextarea.value.trim()) {
+    descriptionTextarea.value = analysisResult.description || 'Describe the issue here (AI fallback).';
+    const inputEvent = new Event('input', { bubbles: true });
+    descriptionTextarea.dispatchEvent(inputEvent);
+  }
+}, 3000);
 
 // Location handling
 locationBtn?.addEventListener('click', () => {

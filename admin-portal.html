@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Civic AI Tech · Admin Portal</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="./assets/styles.css?v=2" />
+    <link rel="stylesheet" href="./assets/admin.css?v=2" />
+    <style>
+      .portal-container {
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 2rem;
+      }
+
+      .portal-header {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+
+      .portal-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
+      }
+
+      .portal-header p {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+      }
+
+      .portal-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+
+      .portal-card {
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-color);
+        border-radius: 12px;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+      }
+
+      .portal-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent-primary);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .portal-card-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+      }
+
+      .portal-card h2 {
+        font-size: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: var(--text-primary);
+      }
+
+      .portal-card p {
+        color: var(--text-secondary);
+        line-height: 1.6;
+      }
+
+      .back-link {
+        display: inline-block;
+        margin-bottom: 1rem;
+        color: var(--accent-primary);
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .back-link:hover {
+        text-decoration: underline;
+      }
+
+      .admin-info {
+        background: var(--bg-secondary);
+        border-left: 4px solid var(--accent-primary);
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+      }
+
+      .admin-info strong {
+        color: var(--accent-primary);
+      }
+
+      .portal-card.hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="portal-container">
+      <a class="back-link" href="./index.html">← Back to Home</a>
+      
+      <div class="admin-info">
+        <p>Logged in as: <strong id="admin-phone">Loading...</strong></p>
+      </div>
+
+      <header class="portal-header">
+        <h1>🛡️ Admin Portal</h1>
+        <p>Manage complaints and system administrators</p>
+      </header>
+
+      <div class="portal-grid" id="portal-grid">
+        <a href="./admin.html" class="portal-card hidden" id="card-complaints">
+          <div class="portal-card-icon">📋</div>
+          <h2>Complaint Management</h2>
+          <p>View, filter, forward, and manage all submitted complaints</p>
+        </a>
+
+        <a href="./manage-admins.html" class="portal-card hidden" id="card-manage-admins">
+          <div class="portal-card-icon">👥</div>
+          <h2>Manage Admins</h2>
+          <p>Add or remove administrators who can access the admin portal</p>
+        </a>
+
+        <a href="./my-work.html" class="portal-card" id="card-my-work">
+          <div class="portal-card-icon">📝</div>
+          <h2>My Work</h2>
+          <p>View complaints assigned to you and track your work progress</p>
+        </a>
+      </div>
+    </div>
+
+    <script src="./assets/theme.js"></script>
+    <script type="module">
+      // Check admin access and permissions
+      const checkAdminAccess = async () => {
+        const userPhone = localStorage.getItem('userPhone');
+        const userRole = localStorage.getItem('userRole');
+        
+        if (!userPhone || userRole !== 'admin') {
+          alert('Access denied. Admin privileges required.');
+          window.location.href = './login.html';
+          return false;
+        }
+
+        // Display admin phone
+        const phoneEl = document.getElementById('admin-phone');
+        if (phoneEl) phoneEl.textContent = userPhone;
+
+        const API_BASE_URL = localStorage.getItem('apiBaseUrl') || `http://${window.location.hostname}:4000`;
+        
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/admin/check?phone=${encodeURIComponent(userPhone)}`);
+          const data = await response.json();
+          
+          if (!response.ok || !data.isAdmin) {
+            alert('Access Denied: You do not have admin privileges.');
+            window.location.href = './index.html';
+            return false;
+          }
+          
+          // Store permissions in localStorage for other pages
+          localStorage.setItem('canAccessComplaints', data.canAccessComplaints);
+          localStorage.setItem('canManageAdmins', data.canManageAdmins);
+          
+          // Show cards based on permissions
+          const complaintsCard = document.getElementById('card-complaints');
+          const manageAdminsCard = document.getElementById('card-manage-admins');
+          
+          if (data.canAccessComplaints && complaintsCard) {
+            complaintsCard.classList.remove('hidden');
+          }
+          
+          if (data.canManageAdmins && manageAdminsCard) {
+            manageAdminsCard.classList.remove('hidden');
+          }
+          
+          return true;
+        } catch (error) {
+          console.error('Admin check error:', error);
+          alert('Access Denied: Unable to verify admin status.');
+          window.location.href = './index.html';
+          return false;
+        }
+      };
+
+      document.addEventListener('DOMContentLoaded', checkAdminAccess);
+    </script>
+  </body>
+</html>

@@ -16,8 +16,27 @@ const roleOptions = document.querySelectorAll('input[name="role"]');
 let currentPhoneNumber = '';
 let selectedRole = 'citizen'; // default role
 
-// Admin phone numbers
-let adminPhones = ['+917058346137', '+919876543210'];
+// Backend API URL
+const API_BASE_URL = localStorage.getItem('apiBaseUrl') || `http://${window.location.hostname}:4000`;
+
+// Admin phone numbers (will be loaded from backend)
+let adminPhones = [];
+
+// Load admin phones from backend
+const loadAdminPhones = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/admin-phones`);
+    if (response.ok) {
+      const data = await response.json();
+      adminPhones = data.adminPhones || [];
+      console.log('📋 Admin phones loaded:', adminPhones);
+    }
+  } catch (error) {
+    console.error('Failed to load admin phones:', error);
+    // Fallback to default
+    adminPhones = ['+917058346137', '+919876543210'];
+  }
+};
 
 // Track selected role
 roleOptions.forEach(radio => {
@@ -129,7 +148,7 @@ const verifyCode = async (code) => {
   
   setTimeout(() => {
     if (selectedRole === 'admin') {
-      window.location.href = './admin.html';
+      window.location.href = './admin-portal.html';
     } else {
       window.location.href = './dashboard.html';
     }
@@ -177,13 +196,16 @@ resendCodeBtn.addEventListener('click', () => {
 });
 
 // Check if already logged in
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  // Load admin phones from backend
+  await loadAdminPhones();
+  
   const userPhone = localStorage.getItem('userPhone');
   const userRole = localStorage.getItem('userRole');
   
   if (userPhone && userRole) {
     if (userRole === 'admin') {
-      window.location.href = './admin.html';
+      window.location.href = './admin-portal.html';
     } else {
       window.location.href = './dashboard.html';
     }

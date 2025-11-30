@@ -363,19 +363,80 @@
 }
 
 @media (max-width: 768px) {
-  .role-selection {
-    grid-template-columns: 1fr;
+  .theme-toggle.floating {
+    top: 1rem;
+    right: 1rem;
+    width: 44px;
+    height: 44px;
+  }
+
+  .auth-container {
+    padding: 1rem;
   }
 
   .auth-card {
-    padding: 1.5rem;
+    padding: 1.75rem;
+  }
+
+  .auth-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .auth-header p {
+    font-size: 0.9rem;
+  }
+
+  .role-selection {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .role-card {
+    padding: 1.25rem;
+  }
+
+  .role-icon {
+    font-size: 2rem;
+  }
+
+  .role-card h3 {
+    font-size: 1.1rem;
+  }
+
+  .role-card p {
+    font-size: 0.85rem;
   }
 
   .phone-input {
     flex-direction: column;
+    gap: 0.75rem;
   }
 
   .country-select {
     width: 100%;
+  }
+
+  .phone-number-input {
+    width: 100%;
+    font-size: 16px; /* Prevents iOS zoom */
+  }
+
+  .submit-button {
+    padding: 0.85rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 1.25rem;
+  }
+
+  .auth-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .role-card {
+    padding: 1rem;
   }
 }

@@ -1,0 +1,268 @@
+{
+  "departments": [
+    {
+      "id": "pmc-bhavan",
+      "name": "PMC Bhavan Department",
+      "primaryEmail": "pmcbhavan@pmc.gov.in",
+      "ccEmails": [],
+      "contactPerson": "PMC Building Manager",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "birth-death",
+      "name": "Birth and Death Registration",
+      "primaryEmail": "birthdeath@pmc.gov.in",
+      "ccEmails": [],
+      "contactPerson": "Registrar",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "building-permission",
+      "name": "Building Permission Department",
+      "primaryEmail": "buildingpermission@pmc.gov.in",
+      "ccEmails": ["developmentcontrol@pmc.gov.in"],
+      "contactPerson": "Chief Architect",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "city-development",
+      "name": "City Development Plan",
+      "primaryEmail": "citydevelopment@pmc.gov.in",
+      "ccEmails": ["planning@pmc.gov.in"],
+      "contactPerson": "Town Planner",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "communicable-disease",
+      "name": "Communicable Disease Control",
+      "primaryEmail": "diseasecontrol@pmc.gov.in",
+      "ccEmails": ["health@pmc.gov.in"],
+      "contactPerson": "Health Officer",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "drainage",
+      "name": "Drainage Department",
+      "primaryEmail": "drainage@pmc.gov.in",
+      "ccEmails": ["sewerage@pmc.gov.in"],
+      "contactPerson": "Drainage Engineer",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "encroachment",
+      "name": "Encroachment Removal Department",
+      "primaryEmail": "encroachment@pmc.gov.in",
+      "ccEmails": ["enforcement@pmc.gov.in"],
+      "contactPerson": "Encroachment Officer",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "mosquito",
+      "name": "Mosquito & Fogging Department",
+      "primaryEmail": "mosquito@pmc.gov.in",
+      "ccEmails": ["health@pmc.gov.in"],
+      "contactPerson": "Vector Control Officer",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "garbage-depot",
+      "name": "Garbage Depot Management",
+      "primaryEmail": "garbagedepot@pmc.gov.in",
+      "ccEmails": ["swm@pmc.gov.in"],
+      "contactPerson": "SWM Supervisor",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "garbage-sweeping",
+      "name": "Garbage Sweeping & Collection",
+      "primaryEmail": "sweeping@pmc.gov.in",
+      "ccEmails": ["swm@pmc.gov.in"],
+      "contactPerson": "Sanitation Inspector",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "garden",
+      "name": "Garden & Horticulture Department",
+      "primaryEmail": "garden@pmc.gov.in",
+      "ccEmails": ["horticulture@pmc.gov.in"],
+      "contactPerson": "Garden Superintendent",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "information-technology",
+      "name": "Information Technology Department",
+      "primaryEmail": "it@pmc.gov.in",
+      "ccEmails": [],
+      "contactPerson": "IT Manager",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "license",
+      "name": "License Department",
+      "primaryEmail": "license@pmc.gov.in",
+      "ccEmails": [],
+      "contactPerson": "License Officer",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "marriage",
+      "name": "Marriage Registration",
+      "primaryEmail": "marriage@pmc.gov.in",
+      "ccEmails": [],
+      "contactPerson": "Marriage Registrar",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "hospital",
+      "name": "PMC Hospital Department",
+      "primaryEmail": "hospital@pmc.gov.in",
+      "ccEmails": ["medical@pmc.gov.in"],
+      "contactPerson": "Medical Superintendent",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "property-tax",
+      "name": "Property Tax Department",
+      "primaryEmail": "propertytax@pmc.gov.in",
+      "ccEmails": ["revenue@pmc.gov.in"],
+      "contactPerson": "Tax Assessor",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "road",
+      "name": "Road Department",
+      "primaryEmail": "roads@pmc.gov.in",
+      "ccEmails": ["infrastructure@pmc.gov.in"],
+      "contactPerson": "Roads Engineer",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "slaughterhouse",
+      "name": "Slaughterhouse Department",
+      "primaryEmail": "slaughterhouse@pmc.gov.in",
+      "ccEmails": ["veterinary@pmc.gov.in"],
+      "contactPerson": "Veterinary Officer",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "stray-animals",
+      "name": "Stray Animals Control",
+      "primaryEmail": "strayanimals@pmc.gov.in",
+      "ccEmails": ["animalwelfare@pmc.gov.in"],
+      "contactPerson": "Animal Control Officer",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "street-lights",
+      "name": "Street Light Department",
+      "primaryEmail": "streetlights@pmc.gov.in",
+      "ccEmails": ["electrical@pmc.gov.in"],
+      "contactPerson": "Electrical Engineer",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "tree-authority",
+      "name": "Tree Authority",
+      "primaryEmail": "trees@pmc.gov.in",
+      "ccEmails": ["environment@pmc.gov.in"],
+      "contactPerson": "Tree Officer",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "unauthorized-ads",
+      "name": "Unauthorized Advertising Control",
+      "primaryEmail": "advertising@pmc.gov.in",
+      "ccEmails": ["enforcement@pmc.gov.in"],
+      "contactPerson": "Advertisement Officer",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "water-supply",
+      "name": "Water Supply Department",
+      "primaryEmail": "watersupply@pmc.gov.in",
+      "ccEmails": ["hydraulic@pmc.gov.in"],
+      "contactPerson": "Water Supply Engineer",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "anti-corruption",
+      "name": "Anti-Corruption Department",
+      "primaryEmail": "anticorruption@pmc.gov.in",
+      "ccEmails": ["vigilance@pmc.gov.in"],
+      "contactPerson": "Vigilance Officer",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "accounts",
+      "name": "Accounts Department",
+      "primaryEmail": "accounts@pmc.gov.in",
+      "ccEmails": ["finance@pmc.gov.in"],
+      "contactPerson": "Chief Accountant",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "fire-department",
+      "name": "Fire & Emergency Services",
+      "primaryEmail": "fire@pmc.gov.in",
+      "ccEmails": ["emergency@pmc.gov.in"],
+      "contactPerson": "Fire Chief",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "election",
+      "name": "Election Department",
+      "primaryEmail": "election@pmc.gov.in",
+      "ccEmails": [],
+      "contactPerson": "Election Officer",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "education",
+      "name": "Education Department",
+      "primaryEmail": "education@pmc.gov.in",
+      "ccEmails": ["schools@pmc.gov.in"],
+      "contactPerson": "Education Officer",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "security",
+      "name": "Security Department",
+      "primaryEmail": "security@pmc.gov.in",
+      "ccEmails": [],
+      "contactPerson": "Security Officer",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "disability-welfare",
+      "name": "Disability Welfare Department",
+      "primaryEmail": "disabilitywelfare@pmc.gov.in",
+      "ccEmails": ["socialwelfare@pmc.gov.in"],
+      "contactPerson": "Welfare Officer",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "town-planning",
+      "name": "Town Planning Department",
+      "primaryEmail": "townplanning@pmc.gov.in",
+      "ccEmails": ["urbanplanning@pmc.gov.in"],
+      "contactPerson": "Town Planning Officer",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "sports",
+      "name": "Sports & Recreation Department",
+      "primaryEmail": "sports@pmc.gov.in",
+      "ccEmails": [],
+      "contactPerson": "Sports Officer",
+      "phone": "+91-20-XXXX-XXXX"
+    },
+    {
+      "id": "other",
+      "name": "General Administration",
+      "primaryEmail": "general@pmc.gov.in",
+      "ccEmails": ["admin@pmc.gov.in"],
+      "contactPerson": "General Manager",
+      "phone": "+91-20-XXXX-XXXX"
+    }
+  ]
+}

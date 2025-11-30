@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Civic AI Tech · My Work</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="./assets/styles.css?v=2" />
+    <link rel="stylesheet" href="./assets/admin.css?v=2" />
+    <style>
+      /* Additional styles for My Work page */
+      .my-work-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .my-work-header h1 {
+        font-size: clamp(1.9rem, 4vw, 2.4rem);
+        letter-spacing: 0.04em;
+      }
+
+      .admin-info-bar {
+        background: var(--card-bg);
+        border: 1px solid var(--line);
+        border-left: 4px solid var(--primary);
+        padding: 0.75rem 1.25rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+        color: var(--fg-soft);
+      }
+
+      .admin-info-bar strong {
+        color: var(--primary);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="admin-shell">
+      <header class="admin-header">
+        <div class="my-work-header">
+          <a class="admin-back" href="./admin-portal.html">← Back to Admin Portal</a>
+        </div>
+        <div class="admin-actions">
+          <button class="refresh-button" data-role="refresh">🔄 Refresh</button>
+        </div>
+      </header>
+
+      <div class="admin-info-bar">
+        <p>Logged in as: <strong id="admin-phone">Loading...</strong></p>
+      </div>
+
+      <h1 style="margin-bottom: 1.5rem;">📝 My Work</h1>
+
+      <main class="admin-main">
+        <!-- Summary Cards -->
+        <section class="summary-grid">
+          <article class="summary-card">
+            <strong data-stat="total">0</strong>
+            <span class="summary-label">Total Assigned</span>
+          </article>
+          <article class="summary-card">
+            <strong data-stat="in-progress">0</strong>
+            <span class="summary-label">In Progress</span>
+          </article>
+          <article class="summary-card">
+            <strong data-stat="resolved">0</strong>
+            <span class="summary-label">Resolved</span>
+          </article>
+        </section>
+
+        <!-- Complaints Table -->
+        <section class="table-card">
+          <div class="table-card__header">
+            <h2>Assigned Complaints</h2>
+            <div class="filter-controls">
+              <div class="filter-group">
+                <label for="filter-status">Status:</label>
+                <select id="filter-status" data-role="status-filter" title="Filter by status">
+                  <option value="">All Statuses</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Resolved">Resolved</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <p class="dashboard-message" data-role="message">Loading assigned complaints…</p>
+          
+          <div class="table-wrapper">
+            <table>
+              <caption class="sr-only">Complaints assigned to you</caption>
+              <thead>
+                <tr>
+                  <th scope="col" class="col-index">#</th>
+                  <th scope="col">ID</th>
+                  <th scope="col">Created</th>
+                  <th scope="col">Main Category</th>
+                  <th scope="col">Sub-Category</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Complainer</th>
+                  <th scope="col">Location</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Image</th>
+                  <th scope="col">Forwarded At</th>
+                  <th scope="col" class="col-actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody data-role="rows"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Status Change Modal -->
+    <div id="status-modal" class="modal-overlay" style="display: none;">
+      <div class="modal-content modal-small">
+        <div class="modal-header">
+          <h3>Change Status</h3>
+          <button type="button" class="modal-close" data-role="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="status-select">New Status:</label>
+            <select id="status-select" data-role="status-select" required>
+              <option value="">-- Select Status --</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Appeal to Resolve">Appeal to Resolve</option>
+            </select>
+          </div>
+          <div class="form-group" id="proof-upload-group" style="display: none;">
+            <label for="proof-image">Proof of Work (Required):</label>
+            <input type="file" id="proof-image" accept="image/*" data-role="proof-image" />
+            <small style="color: var(--text-secondary); display: block; margin-top: 0.5rem;">
+              Upload an image showing the completed work as proof
+            </small>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-role="close-modal">Cancel</button>
+          <button type="button" class="btn-primary" data-role="confirm-status">Update Status</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="./assets/theme.js"></script>
+    <script src="./assets/my-work.js"></script>
+  </body>
+</html>
