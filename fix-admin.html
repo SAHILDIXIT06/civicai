@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quick Fix - Admin Login</title>
     <style>
         body {
@@ -14,8 +15,14 @@
             margin: 0;
             color: white;
         }
+        .note-text {
+            font-size: 0.9rem;
+            margin-top: 30px;
+            opacity: 0.8;
+        }
         .card {
             background: rgba(255,255,255,0.1);
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
             padding: 40px;
             border-radius: 20px;
@@ -31,7 +38,6 @@
             border: none;
             border-radius: 10px;
             font-size: 16px;
-            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
         }
@@ -74,7 +80,7 @@
             ✅ Clear & Login as Admin
         </button>
         
-        <p style="font-size: 0.9rem; margin-top: 30px; opacity: 0.8;">
+        <p class="note-text">
             This will clear your current login and redirect you to the login page.<br>
             Make sure to select "🛡️ Admin Login" before entering your phone number!
         </p>

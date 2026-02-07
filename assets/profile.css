@@ -1,14 +1,30 @@
 .profile-container {
   min-height: 100vh;
-  background: radial-gradient(circle at top, var(--bg-secondary), var(--bg));
-  transition: background 0.3s ease;
+  background: radial-gradient(circle at top, #1a1a2e, #030305);
+  display: flex;
+  flex-direction: column;
+}
+
+[data-theme="light"] .profile-container {
+  background: #f0f2f5;
 }
 
 .profile-header {
-  background: var(--card-bg);
-  border-bottom: 1px solid var(--line);
+  background: rgba(3, 3, 5, 0.8);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--primary);
   padding: 1rem 0;
-  transition: background 0.3s ease, border-color 0.3s ease;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 0 20px rgba(0, 243, 255, 0.1);
+}
+
+[data-theme="light"] .profile-header {
+  background: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .profile-nav {
@@ -20,10 +36,31 @@
   justify-content: space-between;
 }
 
+.brand {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 10px var(--primary-glow);
+}
+
+[data-theme="light"] .brand {
+  color: #00838f;
+  text-shadow: none;
+}
+
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
+}
+
+.input-disabled {
+  background: rgba(255, 255, 255, 0.05);
+  cursor: not-allowed;
 }
 
 .nav-link {
@@ -31,134 +68,236 @@
   text-decoration: none;
   font-weight: 500;
   padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  transition: color 0.2s ease, background 0.2s ease;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  font-family: 'Fira Code', monospace;
+  border: 1px solid transparent;
+}
+
+[data-theme="light"] .nav-link {
+  color: #666;
 }
 
 .nav-link:hover {
-  color: var(--fg);
-  background: rgba(255, 255, 255, 0.08);
+  color: var(--primary);
+  background: rgba(0, 243, 255, 0.05);
+  border-color: var(--primary);
+  box-shadow: 0 0 10px rgba(0, 243, 255, 0.1);
+}
+
+[data-theme="light"] .nav-link:hover {
+  color: #00838f;
+  background: rgba(0, 188, 212, 0.05);
+  border-color: #00bcd4;
+  box-shadow: none;
 }
 
 .logout-button {
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--line);
-  border-radius: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  border: 1px solid var(--secondary);
+  border-radius: 4px;
   background: transparent;
-  color: var(--fg);
+  color: var(--secondary);
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: all 0.3s ease;
+  font-family: 'JetBrains Mono', monospace;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+[data-theme="light"] .logout-button {
+  border: 1px solid #7b1fa2;
+  color: #7b1fa2;
 }
 
 .logout-button:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--secondary);
+  color: #fff;
+  box-shadow: 0 0 15px rgba(188, 19, 254, 0.4);
+}
+
+[data-theme="light"] .logout-button:hover {
+  background: #7b1fa2;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(123, 31, 162, 0.3);
 }
 
 .profile-main {
+  flex: 1;
   max-width: 800px;
+  width: 100%;
   margin: 0 auto;
   padding: 3rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 .profile-header-section {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
 }
 
 .profile-header-section h1 {
+  font-family: 'JetBrains Mono', monospace;
   font-size: 2.5rem;
+  color: var(--primary);
+  text-transform: uppercase;
   margin-bottom: 0.5rem;
-  color: var(--fg);
+  text-shadow: 0 0 10px var(--primary-glow);
+}
+
+[data-theme="light"] .profile-header-section h1 {
+  color: #00838f;
+  text-shadow: none;
 }
 
 .profile-header-section p {
+  font-family: 'Fira Code', monospace;
   color: var(--fg-soft);
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .profile-form-container {
-  background: var(--card-bg);
+  background: rgba(3, 3, 5, 0.6);
   border: 1px solid var(--line);
-  border-radius: 1.25rem;
+  border-radius: 4px;
   padding: 2.5rem;
-  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(0, 243, 255, 0.05);
 }
 
 [data-theme="light"] .profile-form-container {
-  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.08);
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.profile-form-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--primary);
+  box-shadow: 0 0 10px var(--primary);
+}
+
+[data-theme="light"] .profile-form-container::before {
+  box-shadow: none;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 .photo-section {
-  text-align: center;
-  margin-bottom: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
   padding-bottom: 2rem;
   border-bottom: 1px solid var(--line);
 }
 
+[data-theme="light"] .photo-section {
+  border-bottom: 1px solid #eee;
+}
+
 .photo-container {
   position: relative;
-  display: inline-block;
-  margin-bottom: 1rem;
+  width: 120px;
+  height: 120px;
 }
 
 .profile-photo {
-  width: 120px;
-  height: 120px;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid var(--primary);
-  background: var(--card-bg);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-  transition: all 0.3s ease;
+  border: 2px solid var(--primary);
+  box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
 }
 
-.profile-photo:hover {
-  transform: scale(1.05);
-  box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+[data-theme="light"] .profile-photo {
+  border: 2px solid #00bcd4;
+  box-shadow: 0 2px 8px rgba(0, 188, 212, 0.2);
 }
 
 .photo-upload-btn {
   position: absolute;
   bottom: 0;
-  right: 0;
-  background: linear-gradient(135deg, var(--primary), var(--primary-light));
-  color: white;
-  border: 3px solid var(--bg);
+  right: -10px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  padding: 0.5rem;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
   transition: all 0.3s ease;
-  text-indent: -9999px;
+  width: 40px;
+  height: 40px;
+  font-size: 0; /* Hide text, show icon only if needed, but here we have text inside label */
   overflow: hidden;
 }
 
-.photo-upload-btn:hover {
-  transform: scale(1.15);
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.5);
+/* Adjusting for the text inside the label in the HTML */
+.photo-upload-btn {
+  width: auto;
+  height: auto;
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  right: 50%;
+  transform: translateX(50%) translateY(50%);
+  bottom: 0;
+  font-size: 0.8rem;
+  font-family: 'Fira Code', monospace;
+  gap: 0.5rem;
+  background: rgba(0, 0, 0, 0.9);
+  white-space: nowrap;
 }
 
-.photo-upload-btn svg {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+[data-theme="light"] .photo-upload-btn {
+  background: #ffffff;
+  border: 1px solid #00bcd4;
+  color: #00bcd4;
+}
+
+.photo-upload-btn:hover {
+  background: var(--primary);
+  color: #000;
+  box-shadow: 0 0 15px var(--primary-glow);
+}
+
+[data-theme="light"] .photo-upload-btn:hover {
+  background: #00bcd4;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 188, 212, 0.3);
 }
 
 .photo-hint {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.8rem;
   color: var(--fg-soft);
-  font-size: 0.9rem;
-  margin: 0;
 }
 
 .form-fields {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .form-field {
@@ -168,51 +307,64 @@
 }
 
 .form-field label {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9rem;
+  color: var(--secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   font-weight: 600;
-  color: var(--fg);
-  font-size: 0.95rem;
 }
 
 .form-field input,
 .form-field textarea {
-  padding: 0.9rem 1.1rem;
-  border: 2px solid var(--line);
-  border-radius: 0.75rem;
-  background: var(--bg-secondary);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0.75rem 1rem;
   color: var(--fg);
+  font-family: 'Fira Code', monospace;
   font-size: 1rem;
-  font-family: inherit;
   transition: all 0.3s ease;
 }
 
 [data-theme="light"] .form-field input,
 [data-theme="light"] .form-field textarea {
-  background: white;
-  border-color: rgba(0, 0, 0, 0.15);
+  background: #ffffff;
+  border: 1px solid #ccc;
+  color: #333;
 }
 
 .form-field input:focus,
 .form-field textarea:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
+  background: rgba(0, 243, 255, 0.02);
 }
 
 [data-theme="light"] .form-field input:focus,
 [data-theme="light"] .form-field textarea:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+  border-color: #00bcd4;
+  box-shadow: 0 0 0 2px rgba(0, 188, 212, 0.2);
+  background: #ffffff;
 }
 
-.form-field textarea {
-  resize: vertical;
-  min-height: 100px;
+.form-field input[readonly] {
+  opacity: 0.7;
+  cursor: not-allowed;
+  border-color: transparent;
+  background: rgba(255, 255, 255, 0.01);
+}
+
+[data-theme="light"] .form-field input[readonly] {
+  background: #f5f5f5;
+  border-color: #e0e0e0;
 }
 
 .form-field small {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.75rem;
   color: var(--fg-soft);
-  font-size: 0.85rem;
 }
 
 .form-actions {
@@ -223,170 +375,93 @@
 
 .save-btn {
   flex: 1;
-  padding: 0.85rem 1.5rem;
-  border-radius: 999px;
-  border: none;
-  background: linear-gradient(135deg, var(--primary), var(--primary-light));
-  color: white;
+  padding: 0.85rem;
+  background: rgba(0, 243, 255, 0.1);
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
   font-weight: 600;
-  font-size: 1rem;
+  text-transform: uppercase;
   cursor: pointer;
   transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
 }
 
-.save-btn::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
+[data-theme="light"] .save-btn {
+  background: rgba(0, 188, 212, 0.1);
 }
 
-.save-btn:hover::before {
-  width: 300px;
-  height: 300px;
+.save-btn:hover {
+  background: var(--primary);
+  color: #000;
+  box-shadow: 0 0 20px var(--primary-glow);
+  transform: translateY(-2px);
 }
 
-.save-btn:hover:not(:disabled) {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5), 0 0 60px rgba(102, 126, 234, 0.3);
-}
-
-.save-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  background: linear-gradient(135deg, #4b5563, #374151);
+[data-theme="light"] .save-btn:hover {
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 188, 212, 0.3);
 }
 
 .cancel-btn {
   padding: 0.85rem 1.5rem;
-  border-radius: 999px;
-  border: 2px solid var(--line);
   background: transparent;
-  color: var(--fg);
+  border: 1px solid var(--line);
+  color: var(--fg-soft);
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
   font-weight: 600;
-  font-size: 1rem;
+  text-transform: uppercase;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .cancel-btn:hover {
-  background: rgba(102, 126, 234, 0.1);
-  border-color: var(--primary);
-  transform: translateY(-2px);
+  border-color: var(--fg);
+  color: var(--fg);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .profile-status {
   margin-top: 1.5rem;
   padding: 1rem;
-  border-radius: 0.75rem;
+  border-radius: 4px;
   text-align: center;
+  font-family: 'Fira Code', monospace;
   font-weight: 500;
 }
 
 .profile-status.success {
-  background: rgba(72, 187, 120, 0.15);
-  border: 1px solid rgba(72, 187, 120, 0.3);
-  color: #48bb78;
-}
-
-[data-theme="light"] .profile-status.success {
-  background: rgba(72, 187, 120, 0.1);
-  color: #059669;
-  border-color: rgba(72, 187, 120, 0.4);
+  background: rgba(10, 255, 10, 0.1);
+  border: 1px solid var(--success);
+  color: var(--success);
+  box-shadow: 0 0 15px rgba(10, 255, 10, 0.2);
 }
 
 .profile-status.error {
-  background: rgba(255, 99, 132, 0.15);
-  border: 1px solid rgba(255, 99, 132, 0.3);
-  color: #ff6384;
-}
-
-[data-theme="light"] .profile-status.error {
-  background: rgba(255, 99, 132, 0.1);
-  color: #dc2626;
-  border-color: rgba(255, 99, 132, 0.4);
-}
-
-.profile-status.info {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--line);
-  color: var(--fg-soft);
+  background: rgba(255, 0, 60, 0.1);
+  border: 1px solid var(--error);
+  color: var(--error);
+  box-shadow: 0 0 15px rgba(255, 0, 60, 0.2);
 }
 
 @media (max-width: 768px) {
-  .profile-container {
-    padding: 1.5rem 1rem;
-  }
-
   .profile-nav {
     flex-direction: column;
     gap: 1rem;
-    padding: 0 1rem;
-  }
-
-  .profile-nav .brand {
-    font-size: 1rem;
+    padding: 1rem;
   }
 
   .nav-actions {
-    flex-wrap: wrap;
-    gap: 0.5rem;
+    width: 100%;
+    justify-content: center;
   }
 
-  .profile-main {
-    padding: 1.5rem 1rem;
-  }
-
-  .profile-card {
+  .profile-form-container {
     padding: 1.5rem;
-  }
-
-  .profile-header h1 {
-    font-size: 1.75rem;
-  }
-
-  .form-group label {
-    font-size: 0.9rem;
-  }
-
-  .form-group input {
-    font-size: 16px; /* Prevents iOS zoom */
   }
 
   .form-actions {
     flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .save-btn,
-  .cancel-btn {
-    width: 100%;
-    padding: 0.85rem 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .profile-container {
-    padding: 1rem 0.75rem;
-  }
-
-  .profile-card {
-    padding: 1.25rem;
-  }
-
-  .profile-header h1 {
-    font-size: 1.5rem;
-  }
-
-  .profile-header p {
-    font-size: 0.85rem;
   }
 }

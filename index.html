@@ -24,9 +24,9 @@
             <span class="theme-icon">🌙</span>
           </button>
           <a class="nav-link" href="./login.html" id="login-link">Login</a>
-          <a class="nav-link" href="./dashboard.html" id="dashboard-link" style="display: none;">My Dashboard</a>
-          <a class="nav-link" href="./admin-portal.html" id="admin-link" style="display: none;">Admin</a>
-          <button class="nav-link logout-btn" id="logout-link" style="display: none;">Logout</button>
+          <a class="nav-link" href="./dashboard.html" id="dashboard-link">My Dashboard</a>
+          <a class="nav-link" href="./admin-portal.html" id="admin-link">Admin</a>
+          <button class="nav-link logout-btn" id="logout-link">Logout</button>
         </div>
       </nav>
     </header>
@@ -145,10 +145,10 @@
               <!-- Removed capture attribute so users can choose Camera or Gallery on mobile -->
               <input type="file" id="issue-file" accept="image/*" />
               <!-- Dedicated camera input for users who want to capture directly -->
-              <input type="file" id="issue-camera" accept="image/*" capture="environment" hidden />
+              <input type="file" id="issue-camera" accept="image/*" hidden />
             </label>
             <div class="upload-actions">
-              <button type="button" id="choose-gallery" class="analysis-button" style="border-style: dashed;">📁 Choose from Gallery</button>
+              <button type="button" id="choose-gallery" class="analysis-button analysis-button--dashed">📁 Choose from Gallery</button>
               <button type="button" id="use-camera" class="analysis-button">📷 Use Camera</button>
             </div>
             <p id="file-status" class="file-status">No image selected.</p>
@@ -193,7 +193,7 @@
           </div>
 
           <!-- Map Modal -->
-          <div id="map-modal" class="map-modal" style="display: none;">
+          <div id="map-modal" class="map-modal">
             <div class="map-modal-content">
               <div class="map-modal-header">
                 <h3>📍 Select Issue Location</h3>
@@ -207,7 +207,7 @@
                   class="location-search-input"
                 />
                 <button type="button" id="search-location-btn" class="search-btn">🔍 Search</button>
-                <button type="button" id="my-location-btn" class="search-btn" style="background: linear-gradient(135deg, #10b981, #059669);">
+                <button type="button" id="my-location-btn" class="search-btn search-btn--success">
                   📍 Your Location
                 </button>
               </div>

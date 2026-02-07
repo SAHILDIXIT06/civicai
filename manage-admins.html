@@ -24,21 +24,43 @@
 
       .page-header h1 {
         font-size: 2rem;
-        color: var(--text-primary);
+        color: var(--primary);
+        font-family: 'JetBrains Mono', monospace;
+        text-transform: uppercase;
+        text-shadow: 0 0 10px var(--primary-glow);
+      }
+
+      [data-theme="light"] .page-header h1 {
+        color: #00838f;
+        text-shadow: none;
       }
 
       .add-admin-section {
-        background: var(--bg-secondary);
-        border: 2px solid var(--border-color);
+        background: var(--card-bg);
+        border: 1px solid var(--line);
         border-radius: 12px;
         padding: 2rem;
         margin-bottom: 2rem;
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 0 20px rgba(0, 243, 255, 0.05);
+      }
+
+      [data-theme="light"] .add-admin-section {
+        background: #ffffff;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       }
 
       .add-admin-section h2 {
         margin-bottom: 1.5rem;
         font-size: 1.5rem;
-        color: var(--text-primary);
+        color: var(--primary);
+        font-family: 'JetBrains Mono', monospace;
+      }
+
+      [data-theme="light"] .add-admin-section h2 {
+        color: #00838f;
       }
 
       .admin-form {
@@ -56,23 +78,46 @@
       .form-field label {
         margin-bottom: 0.5rem;
         font-weight: 500;
-        color: var(--text-primary);
+        color: var(--secondary);
+        font-family: 'Fira Code', monospace;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+      }
+
+      [data-theme="light"] .form-field label {
+        color: #666;
       }
 
       .form-field input,
       .form-field select {
         padding: 0.75rem;
-        border: 2px solid var(--border-color);
+        border: 1px solid var(--line);
         border-radius: 8px;
         font-size: 1rem;
-        background: var(--bg-primary);
-        color: var(--text-primary);
+        background: rgba(0, 0, 0, 0.6);
+        color: var(--fg);
+        font-family: 'Fira Code', monospace;
+        transition: all 0.3s ease;
+      }
+
+      [data-theme="light"] .form-field input,
+      [data-theme="light"] .form-field select {
+        background: #ffffff;
+        border: 1px solid #ccc;
+        color: #333;
       }
 
       .form-field input:focus,
       .form-field select:focus {
         outline: none;
-        border-color: var(--accent-primary);
+        border-color: var(--primary);
+        box-shadow: 0 0 15px var(--primary-glow);
+      }
+
+      [data-theme="light"] .form-field input:focus,
+      [data-theme="light"] .form-field select:focus {
+        border-color: #00bcd4;
+        box-shadow: 0 0 0 2px rgba(0, 188, 212, 0.2);
       }
 
       .access-badge {
@@ -82,57 +127,103 @@
         font-size: 0.7rem;
         font-weight: 600;
         margin: 0.1rem;
+        font-family: 'JetBrains Mono', monospace;
       }
 
       .access-badge.yes {
-        background: #d1fae5;
-        color: #065f46;
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+        border: 1px solid #10b981;
+      }
+
+      [data-theme="light"] .access-badge.yes {
+        background: rgba(16, 185, 129, 0.1);
+        color: #2e7d32;
+        border: 1px solid #2e7d32;
       }
 
       .access-badge.no {
-        background: #fee2e2;
-        color: #991b1b;
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+        border: 1px solid #ef4444;
+      }
+
+      [data-theme="light"] .access-badge.no {
+        background: rgba(239, 68, 68, 0.1);
+        color: #c62828;
+        border: 1px solid #c62828;
       }
 
       .btn-add {
         grid-column: 1 / -1;
         margin-top: 1rem;
         padding: 1rem 3rem;
-        background: #7c3aed;
-        color: #ffffff !important;
+        background: var(--primary);
+        color: #000;
         border: none;
         border-radius: 8px;
         font-size: 1.1rem;
         font-weight: 700;
         cursor: pointer;
         transition: all 0.2s ease;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        box-shadow: 0 0 15px var(--primary-glow);
         max-width: 300px;
+        font-family: 'JetBrains Mono', monospace;
+        text-transform: uppercase;
+      }
+
+      [data-theme="light"] .btn-add {
+        background: #00bcd4;
+        color: #fff;
+        box-shadow: 0 4px 12px rgba(0, 188, 212, 0.3);
       }
 
       .btn-add:hover {
-        background: #6d28d9;
+        background: var(--primary-light);
+        color: #fff;
         transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        box-shadow: 0 0 20px var(--primary-glow);
+      }
+
+      [data-theme="light"] .btn-add:hover {
+        background: #0097a7;
+        box-shadow: 0 6px 16px rgba(0, 188, 212, 0.4);
       }
 
       .btn-add:disabled {
-        background: var(--border-color);
+        background: var(--line);
         cursor: not-allowed;
         transform: none;
       }
 
       .admins-list-section {
-        background: var(--bg-secondary);
-        border: 2px solid var(--border-color);
+        background: var(--card-bg);
+        border: 1px solid var(--line);
         border-radius: 12px;
         padding: 2rem;
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+      }
+
+      [data-theme="light"] .admins-list-section {
+        background: #ffffff;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       }
 
       .admins-list-section h2 {
         margin-bottom: 1.5rem;
         font-size: 1.5rem;
-        color: var(--text-primary);
+        color: var(--primary);
+        font-family: 'JetBrains Mono', monospace;
+      }
+
+      [data-theme="light"] .admins-list-section h2 {
+        color: #00838f;
+      }
+
+      .edit-modal-note {
+        margin-bottom: 1rem;
       }
 
       .admins-table {
@@ -144,23 +235,35 @@
       .admins-table td {
         padding: 1rem;
         text-align: left;
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--line);
+        color: var(--fg);
+        font-family: 'Fira Code', monospace;
+      }
+
+      [data-theme="light"] .admins-table th,
+      [data-theme="light"] .admins-table td {
+        border-bottom: 1px solid #eee;
+        color: #333;
       }
 
       .admins-table th {
         font-weight: 600;
-        color: var(--text-secondary);
+        color: var(--secondary);
         font-size: 0.875rem;
         text-transform: uppercase;
         letter-spacing: 0.05em;
       }
 
-      .admins-table td {
-        color: var(--text-primary);
+      [data-theme="light"] .admins-table th {
+        color: #666;
       }
 
       .admins-table tbody tr:hover {
-        background: var(--bg-primary);
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      [data-theme="light"] .admins-table tbody tr:hover {
+        background: #f9fafb;
       }
 
       .action-buttons {
@@ -171,43 +274,69 @@
 
       .btn-edit {
         padding: 0.5rem 1rem;
-        background: #3b82f6;
-        color: white;
-        border: none;
+        background: rgba(59, 130, 246, 0.2);
+        color: #60a5fa;
+        border: 1px solid #3b82f6;
         border-radius: 6px;
         font-size: 0.875rem;
         font-weight: 500;
         cursor: pointer;
         transition: all 0.2s ease;
+        font-family: 'JetBrains Mono', monospace;
+      }
+
+      [data-theme="light"] .btn-edit {
+        background: #e3f2fd;
+        color: #1976d2;
+        border: 1px solid #1976d2;
       }
 
       .btn-edit:hover {
-        background: #2563eb;
+        background: #3b82f6;
+        color: white;
+      }
+
+      [data-theme="light"] .btn-edit:hover {
+        background: #1976d2;
+        color: white;
       }
 
       .btn-edit:disabled {
-        background: var(--border-color);
+        background: var(--line);
         cursor: not-allowed;
       }
 
       .btn-remove {
         padding: 0.5rem 1rem;
-        background: #ef4444;
-        color: white;
-        border: none;
+        background: rgba(239, 68, 68, 0.2);
+        color: #f87171;
+        border: 1px solid #ef4444;
         border-radius: 6px;
         font-size: 0.875rem;
         font-weight: 500;
         cursor: pointer;
         transition: all 0.2s ease;
+        font-family: 'JetBrains Mono', monospace;
+      }
+
+      [data-theme="light"] .btn-remove {
+        background: #ffebee;
+        color: #c62828;
+        border: 1px solid #c62828;
       }
 
       .btn-remove:hover {
-        background: #dc2626;
+        background: #ef4444;
+        color: white;
+      }
+
+      [data-theme="light"] .btn-remove:hover {
+        background: #c62828;
+        color: white;
       }
 
       .btn-remove:disabled {
-        background: var(--border-color);
+        background: var(--line);
         cursor: not-allowed;
       }
 
@@ -468,7 +597,7 @@
         </div>
         <div class="edit-modal-body">
           <input type="hidden" id="edit-admin-phone" />
-          <p style="margin-bottom: 1rem;">
+          <p class="edit-modal-note">
             Editing permissions for: <span class="admin-name-display" id="edit-admin-name"></span>
           </p>
           <div class="form-field">

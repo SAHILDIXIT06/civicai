@@ -40,6 +40,14 @@
             gap: 10px;
             margin: 10px 0;
         }
+        #diagnosis {
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+        #rawDataSection {
+            display: none;
+        }
         .label {
             font-weight: 600;
             color: #a0d8ff;
@@ -145,7 +153,7 @@
         
         <div class="section">
             <h2>❗ Diagnosis</h2>
-            <div id="diagnosis" style="padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px;">
+            <div id="diagnosis">
                 Click "Check Backend Now" to diagnose...
             </div>
         </div>
@@ -156,7 +164,7 @@
             <button class="btn-check" onclick="viewRawData()">📊 View Raw localStorage Data</button>
         </div>
         
-        <div class="section" id="rawDataSection" style="display: none;">
+        <div class="section" id="rawDataSection">
             <h2>📊 Raw Data</h2>
             <pre id="rawData"></pre>
         </div>
