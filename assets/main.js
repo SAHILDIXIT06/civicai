@@ -338,9 +338,15 @@ analysisBtn?.addEventListener('click', async () => {
     }
     
     analysisResult = await response.json();
-    if (analysisResult.aiFailed) {
+    
+    // 🔥 FIX: Check for explicit failure from backend (confidence: 0)
+    if (analysisResult.aiFailed || analysisResult.confidence === 0) {
       console.warn('AI reported failure, enabling manual flow.');
       analysisStatus.textContent = '⚠️ AI could not classify. Please select categories manually.';
+      // Also update the description box
+      descriptionTextarea.value = analysisResult.description || 'AI analysis failed. Please select category manually.';
+      analysisBtn.disabled = false; // Re-enable button
+      return; // Stop further processing
     }
     
     // 🔥 DEBUG: Log what AI returned

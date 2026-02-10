@@ -8,12 +8,14 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "@supabase/supabase-js": "^2.95.3",
     "axios": "^1.13.1",
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
     "express": "^4.19.2",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.10.1",
+    "pg": "^8.11.3",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
