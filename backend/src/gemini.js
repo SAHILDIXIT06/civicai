@@ -190,7 +190,7 @@ export async function analyseImageWithGemini(imagePath) {
       category: 'other',
       mainCategory: 'other',
       subCategory: 'other-issue',
-      description: 'AI analysis failed. Please select category manually.',
+      description: `AI analysis failed. The model returned an invalid response. Please select categories manually.`,
       confidence: 0.0
     };
   }
