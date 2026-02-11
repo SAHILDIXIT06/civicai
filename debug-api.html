@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Debug</title>
+  <style>
+    body { font-family: monospace; padding: 20px; background: #1a1a1a; color: #0f0; }
+    button { padding: 10px 20px; margin: 10px 5px; cursor: pointer; background: #333; color: #0f0; border: 1px solid #0f0; }
+    button:hover { background: #0f0; color: #000; }
+    pre { background: #000; padding: 15px; border: 1px solid #0f0; overflow-x: auto; }
+    .error { color: #f00; }
+    .success { color: #0f0; }
+  </style>
+</head>
+<body>
+  <h1>API Endpoint Debug</h1>
+  
+  <div>
+    <button onclick="testHealth()">Test /api/health</button>
+    <button onclick="testAdminPhones()">Test /api/admin-phones</button>
+    <button onclick="testAdmins()">Test /api/admins</button>
+    <button onclick="testComplaints()">Test /api/complaints</button>
+  </div>
+  
+  <h2>Results:</h2>
+  <div id="results"></div>
+
+  <script>
+    const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+      ? 'http://localhost:4000' 
+      : '';
+    
+    const results = document.getElementById('results');
+
+    function log(title, data, isError = false) {
+      const div = document.createElement('div');
+      div.innerHTML = `
+        <h3 class="${isError ? 'error' : 'success'}">${title}</h3>
+        <pre>${JSON.stringify(data, null, 2)}</pre>
+      `;
+      results.appendChild(div);
+    }
+
+    async function testEndpoint(name, url) {
+      try {
+        log(`Testing: ${name}`, { url, method: 'GET' });
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (!response.ok) {
+          log(`❌ ${name} - Error`, { status: response.status, statusText: response.statusText, data }, true);
+        } else {
+          log(`✅ ${name} - Success`, data);
+        }
+      } catch (error) {
+        log(`❌ ${name} - Exception`, { error: error.message, stack: error.stack }, true);
+      }
+    }
+
+    async function testHealth() {
+      results.innerHTML = '';
+      await testEndpoint('Health Check', `${API_BASE_URL}/api/health`);
+    }
+
+    async function testAdminPhones() {
+      results.innerHTML = '';
+      await testEndpoint('Admin Phones', `${API_BASE_URL}/api/admin-phones`);
+    }
+
+    async function testAdmins() {
+      results.innerHTML = '';
+      await testEndpoint('Admins', `${API_BASE_URL}/api/admins`);
+    }
+
+    async function testComplaints() {
+      results.innerHTML = '';
+      await testEndpoint('Complaints', `${API_BASE_URL}/api/complaints`);
+    }
+
+    // Auto-run all tests on load
+    window.addEventListener('load', async () => {
+      await testHealth();
+      await testAdminPhones();
+      await testAdmins();
+      await testComplaints();
+    });
+  </script>
+</body>
+</html>
