@@ -39,13 +39,23 @@ const toSnakeCase = (obj) => {
 // Complaints Database Operations
 export const complaintsDB = {
   async getAll() {
-    if (!supabase) throw new Error('Database not configured');
+    if (!supabase) {
+      console.error('❌ Supabase client not initialized!');
+      throw new Error('Database not configured');
+    }
+    
+    console.log('🔍 Querying Supabase for complaints...');
     const { data, error } = await supabase
       .from('complaints')
       .select('*')
       .order('created_at', { ascending: false });
     
-    if (error) throw error;
+    if (error) {
+      console.error('❌ Supabase query error:', error);
+      throw error;
+    }
+    
+    console.log(`✅ Query successful, ${data?.length || 0} rows returned`);
     return data.map(toCamelCase);
   },
 

@@ -103,10 +103,15 @@ app.post('/api/analyse', upload.single('image'), async (req, res) => {
 });
 
 app.get('/api/complaints', async (_req, res, next) => { 
-  try { 
+  try {
+    console.log('📋 Fetching all complaints from database...');
     const complaints = await complaintsDB.getAll();
+    console.log(`✅ Retrieved ${complaints.length} complaints`);
     res.json({ complaints }); 
-  } catch (e) { next(e); } 
+  } catch (e) { 
+    console.error('❌ Error in GET /api/complaints:', e);
+    next(e); 
+  } 
 });
 
 app.post('/api/complaints', upload.single('image'), async (req, res, next) => {
@@ -538,12 +543,25 @@ try {
   console.warn('Static frontend serving disabled:', e?.message || e); 
 }
 
-app.use((error, _req, res, _next) => {
+app.use((error, req, res, _next) => {
   if (error?.type === 'entity.too.large') {
     return res.status(413).json({ message: 'Upload too large. Please choose an image under ~20 MB or reduce its resolution.' });
   }
-  console.error('API error:', error);
-  res.status(500).json({ message: 'Unexpected server error.' });
+  
+  // Log detailed error info
+  console.error('=== API ERROR ===');
+  console.error('Path:', req.method, req.path);
+  console.error('Error:', error);
+  console.error('Stack:', error?.stack);
+  console.error('================');
+  
+  // Return detailed error in development, generic in production
+  const isDev = process.env.NODE_ENV !== 'production';
+  res.status(500).json({ 
+    message: 'Unexpected server error.',
+    error: isDev || true ? error.message : undefined, // Always show for now to debug
+    details: isDev || true ? error.stack : undefined
+  });
 });
 
 export default app;
