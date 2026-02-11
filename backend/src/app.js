@@ -13,9 +13,19 @@ import { complaintsDB, adminsDB, departmentsDB, supabase } from './database.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const uploadDir = path.join(__dirname, '..', 'uploads');
 
-await fs.mkdir(uploadDir, { recursive: true });
+// Use /tmp on Vercel (read-only filesystem elsewhere), local uploads dir for dev
+const isVercel = process.env.VERCEL === '1';
+const uploadDir = isVercel ? '/tmp/uploads' : path.join(__dirname, '..', 'uploads');
+
+// Create upload directory (might fail on Vercel, that's ok)
+try {
+  await fs.mkdir(uploadDir, { recursive: true });
+} catch (err) {
+  if (err.code !== 'EEXIST') {
+    console.warn('Warning: Could not create upload directory:', err.message);
+  }
+}
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -28,11 +38,10 @@ app.use(cors({ origin: allowedOriginSetting }));
 app.use(express.json({ limit: '25mb' }));
 app.use(express.urlencoded({ extended: true, limit: '25mb' }));
 
-const uploadsDir = path.join(__dirname, '..', 'uploads');
-
+// Multer upload configuration
 const upload = multer({
   storage: multer.diskStorage({
-    destination: (req, file, cb) => { cb(null, uploadsDir); },
+    destination: (req, file, cb) => { cb(null, uploadDir); },
     filename: (req, file, cb) => { const ext = path.extname(file.originalname); cb(null, `temp_${Date.now()}${ext}`); }
   }),
   limits: { fileSize: 10 * 1024 * 1024 }
