@@ -319,7 +319,12 @@ cameraInput?.addEventListener('change', (e) => onFileSelected(e.target.files?.[0
 
 // Explicit action buttons so users can pick gallery or camera on mobile
 chooseGalleryBtn?.addEventListener('click', () => fileInput?.click());
-useCameraBtn?.addEventListener('click', () => cameraInput?.click());
+useCameraBtn?.addEventListener('click', () => {
+  if (!cameraInput) return;
+  // Reset to ensure the camera prompt appears on repeat captures
+  cameraInput.value = '';
+  cameraInput.click();
+});
 
 // AI Analysis
 analysisBtn?.addEventListener('click', async () => {
