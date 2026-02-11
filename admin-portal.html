@@ -206,7 +206,7 @@
         const phoneEl = document.getElementById('admin-phone');
         if (phoneEl) phoneEl.textContent = userPhone;
 
-        const API_BASE_URL = localStorage.getItem('apiBaseUrl') || `http://${window.location.hostname}:4000`;
+        const API_BASE_URL = localStorage.getItem('apiBaseUrl') || (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:4000' : '');
         
         try {
           const response = await fetch(`${API_BASE_URL}/api/admin/check?phone=${encodeURIComponent(userPhone)}`);
