@@ -102,10 +102,20 @@ app.post('/api/analyse', upload.single('image'), async (req, res) => {
   }
 });
 
-app.get('/api/complaints', async (_req, res, next) => { 
+app.get('/api/complaints', async (req, res, next) => { 
   try {
-    console.log('📋 Fetching all complaints from database...');
-    const complaints = await complaintsDB.getAll();
+    console.log('📋 Fetching complaints from database...');
+    const { userPhone } = req.query;
+    
+    let complaints;
+    if (userPhone) {
+      console.log(`🔍 Filtering by userPhone: ${userPhone}`);
+      complaints = await complaintsDB.getByPhone(userPhone);
+    } else {
+      console.log('🔍 Fetching all complaints');
+      complaints = await complaintsDB.getAll();
+    }
+    
     console.log(`✅ Retrieved ${complaints.length} complaints`);
     res.json({ complaints }); 
   } catch (e) { 

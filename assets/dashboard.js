@@ -76,19 +76,16 @@ const loadUserComplaints = async () => {
   try {
     complaintsContainer.innerHTML = '<div class="loading-message">Loading your complaints...</div>';
     
-    const response = await fetch(`${API_BASE_URL}/api/complaints`);
+    // Fetch only current user's complaints using query parameter
+    const response = await fetch(`${API_BASE_URL}/api/complaints?userPhone=${encodeURIComponent(currentUser.phone)}`);
     if (!response.ok) {
-      throw new Error("Unable to load complaints.");
+      const errorData = await response.json();
+      console.error('API Error:', errorData);
+      throw new Error(errorData.error || errorData.message || "Unable to load complaints.");
     }
     
     const payload = await response.json();
-    const allComplaints = Array.isArray(payload.complaints) ? payload.complaints : [];
-    
-    // 🔥 IMPORTANT FIX: Filter complaints by current user's phone number
-    const userComplaints = allComplaints.filter(complaint => 
-      complaint.userPhone === currentUser.phone || 
-      complaint.userId === currentUser.id
-    );
+    const userComplaints = Array.isArray(payload.complaints) ? payload.complaints : [];
     
     updateStats(userComplaints);
     renderComplaints(userComplaints);
