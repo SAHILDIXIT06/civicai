@@ -130,7 +130,7 @@ app.post('/api/complaints', upload.single('image'), async (req, res, next) => {
     if (req.file) { 
       const ext = path.extname(req.file.originalname); 
       const fileName = `${complaintId}${ext}`; 
-      await fs.rename(req.file.path, path.join(uploadsDir, fileName)); 
+      await fs.rename(req.file.path, path.join(uploadDir, fileName)); 
       imageData = { fileName, originalName: req.file.originalname, mimeType: req.file.mimetype, url: `/uploads/${fileName}` }; 
     }
     
