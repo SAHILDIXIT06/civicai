@@ -34,6 +34,45 @@ const allowedOriginSetting = process.env.CLIENT_ORIGIN
   ? process.env.CLIENT_ORIGIN.split(',').map((value) => value.trim())
   : true;
 
+// Helper: Upload file to Supabase Storage
+const uploadToSupabaseStorage = async (fileBuffer, fileName, mimeType) => {
+  if (!supabase) {
+    throw new Error('Supabase not configured');
+  }
+  
+  const storagePath = `complaints/${randomUUID()}-${Date.now()}-${fileName}`;
+  
+  console.log(`📤 Uploading to Supabase Storage: ${storagePath}`);
+  
+  const { data, error } = await supabase
+    .storage
+    .from('complaint-images')
+    .upload(storagePath, fileBuffer, {
+      contentType: mimeType,
+      upsert: false
+    });
+  
+  if (error) {
+    console.error('❌ Supabase upload error:', error);
+    throw error;
+  }
+  
+  // Get public URL
+  const { data: { publicUrl } } = supabase
+    .storage
+    .from('complaint-images')
+    .getPublicUrl(storagePath);
+  
+  console.log(`✅ Uploaded to Supabase Storage: ${publicUrl}`);
+  
+  return {
+    fileName,
+    storagePath,
+    url: publicUrl,
+    mimeType
+  };
+};
+
 app.use(cors({ origin: allowedOriginSetting }));
 app.use(express.json({ limit: '25mb' }));
 app.use(express.urlencoded({ extended: true, limit: '25mb' }));
@@ -143,10 +182,28 @@ app.post('/api/complaints', upload.single('image'), async (req, res, next) => {
     
     let imageData = null;
     if (req.file) { 
-      const ext = path.extname(req.file.originalname); 
-      const fileName = `${complaintId}${ext}`; 
-      await fs.rename(req.file.path, path.join(uploadDir, fileName)); 
-      imageData = { fileName, originalName: req.file.originalname, mimeType: req.file.mimetype, url: `/uploads/${fileName}` }; 
+      try {
+        // Read file from temp location
+        const fileBuffer = await fs.readFile(req.file.path);
+        
+        // Upload to Supabase Storage
+        imageData = await uploadToSupabaseStorage(
+          fileBuffer,
+          req.file.originalname,
+          req.file.mimetype
+        );
+        
+        // Clean up temp file
+        try {
+          await fs.unlink(req.file.path);
+        } catch (err) {
+          console.warn('Could not delete temp file:', err.message);
+        }
+      } catch (uploadErr) {
+        console.error('❌ Error uploading image:', uploadErr);
+        // Continue without image rather than failing entire complaint
+        imageData = null;
+      }
     }
     
     const complaint = { 
@@ -542,7 +599,8 @@ app.patch('/api/complaints/:id/status', upload.single('proofImage'), async (req,
   }
 });
 
-app.use('/uploads', express.static(uploadDir));
+// Note: Not serving local uploads anymore - using Supabase Storage instead
+// app.use('/uploads', express.static(uploadDir));
 
 try {
   const projectRoot = path.resolve(__dirname, '..', '..');
