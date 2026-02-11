@@ -89,9 +89,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Backend API base URL
-// Default: use current host's IP and port 4000
-// Override: set localStorage.apiBaseUrl to use an HTTPS tunnel for mobile (e.g., ngrok/localtunnel)
-const API_BASE_URL = localStorage.getItem('apiBaseUrl') || `http://${window.location.hostname}:4000`;
+// Localhost: use port 4000
+// Production (Vercel): use relative paths
+// Override: set localStorage.apiBaseUrl for tunnels (ngrok/localtunnel)
+const API_BASE_URL = localStorage.getItem('apiBaseUrl') || 
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+    ? 'http://localhost:4000' 
+    : '');
 
 // DOM Elements
 const mainCategorySelect = document.getElementById('main-category');

@@ -5,8 +5,11 @@
     if (api) localStorage.setItem('apiBaseUrl', api);
   } catch {}
 })();
-// Backend API base URL with optional override for HTTPS tunnels
-const API_BASE_URL = localStorage.getItem('apiBaseUrl') || `http://${window.location.hostname}:4000`;
+// Backend API base URL - relative path on production, localhost:4000 for local dev
+const API_BASE_URL = localStorage.getItem('apiBaseUrl') || 
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+    ? 'http://localhost:4000' 
+    : '');
 
 const tableBody = document.querySelector('[data-role="rows"]');
 const messageEl = document.querySelector('[data-role="message"]');

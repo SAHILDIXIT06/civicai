@@ -16,8 +16,11 @@ const roleOptions = document.querySelectorAll('input[name="role"]');
 let currentPhoneNumber = '';
 let selectedRole = 'citizen'; // default role
 
-// Backend API URL
-const API_BASE_URL = localStorage.getItem('apiBaseUrl') || `http://${window.location.hostname}:4000`;
+// Backend API URL - relative path on production, localhost:4000 for local dev
+const API_BASE_URL = localStorage.getItem('apiBaseUrl') || 
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+    ? 'http://localhost:4000' 
+    : '');
 
 // Admin phone numbers (will be loaded from backend)
 let adminPhones = [];

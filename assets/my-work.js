@@ -1,7 +1,10 @@
 // My Work - Shows complaints assigned to the current admin (Table Format)
 
-// Backend API base URL
-const API_BASE_URL = localStorage.getItem('apiBaseUrl') || `http://${window.location.hostname}:4000`;
+// Backend API base URL - relative path on production, localhost:4000 for local dev
+const API_BASE_URL = localStorage.getItem('apiBaseUrl') || 
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+    ? 'http://localhost:4000' 
+    : '');
 
 // DOM Elements
 const tableBody = document.querySelector('[data-role="rows"]');
