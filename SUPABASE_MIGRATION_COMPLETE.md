@@ -1,6 +1,7 @@
 # 🚀 Next Steps - Complete Supabase Migration
 
-## What We Fixed
+## What We Fixed  
+
 ✅ Schema now drops and recreates tables properly
 ✅ database.js uses SERVICE_ROLE_KEY (not anon key)
 ✅ Migration script matches schema exactly  
@@ -10,6 +11,7 @@
 ## Before You Continue
 
 ### Step 1: Update Your .env File
+
 Open `backend/.env` and make sure you have:
 
 ```env
@@ -25,11 +27,13 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key-here
 ⚠️ **IMPORTANT**: Use **SERVICE_ROLE_KEY**, NOT the anon/public key!
 
 ### Step 2: Re-run the Schema in Supabase
+
 Go to Supabase SQL Editor and run: `backend/schema.sql`
 
 This will DROP existing tables and recreate them with the correct structure.
 
 ### Step 3: Run Migration Script
+
 ```bash
 node backend/src/migrate-to-supabase.js
 ```
@@ -37,6 +41,7 @@ node backend/src/migrate-to-supabase.js
 This will copy all your JSON data into Supabase tables.
 
 ### Step 4: Test Locally
+
 ```bash
 npm run dev
 # or
@@ -44,7 +49,9 @@ cd backend && npm run dev
 ```
 
 Check:
-- http://localhost:4000/api/health - should show `"database": "connected"`
+
+- https ://localhost:4000/api/health - should show `"database": "connected"`
+
 - File a test complaint
 - Check Supabase Dashboard → Table Editor for data
 
@@ -54,12 +61,14 @@ Check:
 Go to Vercel Dashboard → Your Project → Settings → Environment Variables
 
 Add:
+
 - `SUPABASE_URL`
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `GEMINI_API_KEY`
-- `CLIENT_ORIGIN` (your vercel domain, e.g., https://yourapp.vercel.app)
+- `CLIENT_ORIGIN` (your vercel domain, e.g., https ://yourapp.vercel.app)
 
 **5b. Deploy**
+
 ```bash
 vercel --prod
 ```
