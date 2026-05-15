@@ -323,6 +323,7 @@ useCameraBtn?.addEventListener('click', () => {
   if (!cameraInput) return;
   // Reset to ensure the camera prompt appears on repeat captures
   cameraInput.value = '';
+  cameraInput.setAttribute('capture', 'environment');
   cameraInput.click();
 });
 
